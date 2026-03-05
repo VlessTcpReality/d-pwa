@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.vlesstcpreality.twa",
+        "sha256_cert_fingerprints": ["95:48:87:DB:68:5A:87:DD:BB:B2:51:FC:EA:67:54:E1:7D:C7:50:05:D2:EB:44:25:AC:AE:78:D1:C1:1E:4A:B2"]
+      }
+    }]
