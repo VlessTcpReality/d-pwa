@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Фиолетовый фон -->
+  <rect width="512" height="512" rx="100" fill="#6b21a8"/>
+  
+  <!-- Золотая монетка -->
+  <circle cx="256" cy="240" r="130" fill="#f59e0b" opacity="0.15"/>
+  <circle cx="256" cy="240" r="115" fill="#f59e0b"/>
+  <circle cx="256" cy="240" r="95" fill="#d97706"/>
+  
+  <!-- Знак рубля на монетке -->
+  <text
+    x="256"
+    y="270"
+    font-family="Arial, sans-serif"
+    font-size="110"
+    font-weight="bold"
+    fill="#f59e0b"
+    text-anchor="middle"
+    dominant-baseline="middle">₽</text>
+
+  <!-- Блик на монетке для объёма -->
+  <ellipse cx="220" cy="195" rx="30" ry="18" fill="white" opacity="0.25" transform="rotate(-30 220 195)"/>
+</svg>
