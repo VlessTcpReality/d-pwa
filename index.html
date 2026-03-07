@@ -728,6 +728,22 @@ display:none;align-items:center;justify-content:center;padding:20px;
 .cat-add-dialog-panel{
 background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 }
+.home-upcoming-row{display:flex;gap:12px;margin-bottom:20px}
+.home-upcoming-block{flex:1;min-width:0;border-radius:var(--radius);padding:12px 14px;background:#fff;box-shadow:var(--shadow)}
+.home-upcoming-block.income{border-top:3px solid var(--green-500)}
+.home-upcoming-block.expense{border-top:3px solid #f97316}
+.home-upcoming-heading{font-size:.82rem;font-weight:700;margin-bottom:8px;line-height:inherit}
+.home-upcoming-heading.income{color:var(--green-600)}
+.home-upcoming-heading.expense{color:#ea580c}
+.home-upcoming-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px}
+.home-upcoming-item{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:.8rem;color:var(--gray-700)}
+.home-upcoming-item-left{display:flex;flex-direction:column;flex:1;min-width:0;gap:1px}
+.home-upcoming-item-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.home-upcoming-item-date{font-size:.72rem;color:var(--gray-400)}
+.home-upcoming-item-amount{font-weight:700;flex-shrink:0;font-size:.8rem}
+.home-upcoming-item-amount.income{color:var(--green-600)}
+.home-upcoming-item-amount.expense{color:#ea580c}
+.home-upcoming-empty{font-size:.8rem;color:var(--gray-400)}
 </style>
 </head>
 <body>
@@ -765,6 +781,16 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <div class="btn-row">
 <button class="btn btn-deposit" aria-label="Пополнить баланс" id="btn-open-deposit">Пополнить</button>
 <button class="btn btn-transfer" aria-label="Сделать перевод" id="btn-open-transfer">Перевести</button>
+</div>
+<div class="home-upcoming-row" id="home-upcoming-row">
+<div class="home-upcoming-block income" role="region" aria-labelledby="lbl-upcoming-income">
+<h2 class="home-upcoming-heading income" id="lbl-upcoming-income">Ближайшие доходы</h2>
+<ul class="home-upcoming-list" id="home-upcoming-income" aria-label="Список ближайших доходов"></ul>
+</div>
+<div class="home-upcoming-block expense" role="region" aria-labelledby="lbl-upcoming-expense">
+<h2 class="home-upcoming-heading expense" id="lbl-upcoming-expense">Ближайшие расходы</h2>
+<ul class="home-upcoming-list" id="home-upcoming-expense" aria-label="Список ближайших расходов"></ul>
+</div>
 </div>
 </div>
 
@@ -1514,6 +1540,48 @@ function renderHome(){
   document.querySelector('.card-balance').setAttribute('aria-label','Ваш текущий баланс: ' + fmt(balance));
   renderBudgetCard();
   renderActiveAccount();
+  renderHomeUpcoming();
+}
+
+function renderHomeUpcoming(){
+  var all = store.get('calendarEvents') || [];
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var MONTHS_SHORT = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  function fmtDate(dateStr){
+    var p = dateStr.split('-').map(Number);
+    return p[2] + '\u00a0' + MONTHS_SHORT[p[1]-1];
+  }
+  function filterUpcoming(type){
+    return all
+      .filter(function(ev){
+        var p = ev.date.split('-').map(Number);
+        return ev.type === type && new Date(p[0], p[1]-1, p[2]) >= today;
+      })
+      .sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
+      .slice(0,3);
+  }
+  function renderList(items, type, containerId){
+    var el = document.getElementById(containerId);
+    if(!el) return;
+    if(items.length === 0){
+      el.innerHTML = '<li class="home-upcoming-empty">' + (type === 'income' ? 'Нет ближайших доходов' : 'Нет ближайших расходов') + '</li>';
+      return;
+    }
+    el.innerHTML = items.map(function(ev){
+      var dateLabel = fmtDate(ev.date);
+      var ariaText = escapeAttr(ev.label + ', ' + fmt(ev.amount) + ', ' + dateLabel);
+      return '<li class="home-upcoming-item" aria-label="' + ariaText + '">' +
+        '<span class="home-upcoming-item-left">' +
+          '<span class="home-upcoming-item-name">' + escapeHtml(ev.label) + '</span>' +
+          '<span class="home-upcoming-item-date" aria-hidden="true">' + escapeHtml(dateLabel) + '</span>' +
+        '</span>' +
+        '<span class="home-upcoming-item-amount ' + type + '" aria-hidden="true">' + fmt(ev.amount) + '</span>' +
+      '</li>';
+    }).join('');
+  }
+  renderList(filterUpcoming('income'), 'income', 'home-upcoming-income');
+  renderList(filterUpcoming('expense'), 'expense', 'home-upcoming-expense');
 }
 
 function getActiveAccount(){
