@@ -553,12 +553,6 @@ transition:border-color .15s,background .15s;flex:1;justify-content:center;
 .radio-label-inline:has(input:checked){border-color:var(--indigo-500);background:var(--indigo-50)}
 .radio-label-inline input[type="radio"]{width:16px;height:16px;accent-color:var(--indigo-600);flex-shrink:0}
 .calendar-empty-msg{text-align:center;padding:20px;color:var(--gray-500);font-size:.9rem}
-.notif-status{
-font-size:.82rem;color:var(--gray-500);margin-top:6px;
-padding:8px 12px;background:var(--gray-100);border-radius:8px;
-}
-.notif-status.granted{color:var(--green-700);background:#f0fdf4}
-.notif-status.denied{color:var(--red-600);background:#fef2f2}
 </style>
 </head>
 <body>
@@ -691,7 +685,6 @@ padding:8px 12px;background:var(--gray-100);border-radius:8px;
 <input type="text" id="cal-event-label" placeholder="Например: Продукты" aria-required="true">
 <div class="error-text" id="err-cal-label">Поле «Описание» не заполнено</div>
 </div>
-<div id="cal-notif-status" class="notif-status" aria-live="polite"></div>
 <button type="button" class="btn btn-primary" style="width:100%;margin-top:4px" id="btn-cal-add-event">Добавить в календарь</button>
 </div>
 </div>
@@ -1126,7 +1119,7 @@ tabs.forEach(function(tab){
     var titleId = screenId.replace('screen-','') + '-title';
     showScreen(screenId, titleId);
     if(screenId === 'screen-history') { renderHistory(); populateAccountSelects(); }
-    if(screenId === 'screen-budget') { renderBudgetScreen(); renderCalendar(); updateNotifStatus(); }
+    if(screenId === 'screen-budget') { renderBudgetScreen(); renderCalendar(); }
     if(screenId === 'screen-home') renderHome();
     history.pushState({screen: screenId}, '');
   });
@@ -1583,7 +1576,6 @@ document.getElementById('btn-back-budget').addEventListener('click', function(){
   showScreen('screen-budget','budget-title');
   renderBudgetScreen();
   renderCalendar();
-  updateNotifStatus();
   selectTab('tab-budget');
 });
 
@@ -2488,49 +2480,11 @@ document.getElementById('btn-cal-add-event').addEventListener('click', function(
   store.set('calendarEvents', events);
   labelInput.value = ''; amountInput.value = '';
   renderCalendar();
-  if(!('Notification' in window) || Notification.permission === 'granted'){
-    scheduleCalendarNotifications();
-  } else {
-    requestNotificationPermission().then(function(granted){
-      if(granted) scheduleCalendarNotifications();
-    });
-  }
+  scheduleCalendarNotifications();
   var typeRu = type === 'expense' ? 'Расходы' : 'Доходы';
   announcePolite('Событие добавлено: ' + typeRu + ', ' + labelVal);
   showToast('Событие добавлено в календарь');
 });
-
-function updateNotifStatus(){
-  var statusEl = document.getElementById('cal-notif-status');
-  if(!statusEl) return;
-  if(!('Notification' in window)){
-    statusEl.textContent = 'Уведомления не поддерживаются в этом браузере';
-    statusEl.className = 'notif-status denied';
-    return;
-  }
-  if(Notification.permission === 'granted'){
-    statusEl.textContent = 'Уведомления включены ✓';
-    statusEl.className = 'notif-status granted';
-  } else if(Notification.permission === 'denied'){
-    statusEl.textContent = 'Уведомления заблокированы. Разрешите в настройках браузера';
-    statusEl.className = 'notif-status denied';
-  } else {
-    statusEl.textContent = 'Нажмите «Добавить в календарь», чтобы включить уведомления';
-    statusEl.className = 'notif-status';
-  }
-}
-
-function requestNotificationPermission(){
-  if(!('Notification' in window)) return Promise.resolve(false);
-  if(Notification.permission === 'granted'){ updateNotifStatus(); return Promise.resolve(true); }
-  if(Notification.permission === 'denied'){ updateNotifStatus(); return Promise.resolve(false); }
-  return Notification.requestPermission().then(function(perm){
-    updateNotifStatus();
-    return perm === 'granted';
-  });
-}
-
-function fmt2(n){ return n.toLocaleString('ru-RU', {style:'currency', currency:'RUB', maximumFractionDigits:2}); }
 
 function scheduleCalendarNotifications(){
   if(!('Notification' in window) || Notification.permission !== 'granted') return;
@@ -2541,8 +2495,7 @@ function scheduleCalendarNotifications(){
     var eventDate = new Date(parts[0], parts[1]-1, parts[2]);
     var typeRu = ev.type === 'expense' ? 'расходы' : 'доходы';
     var amountStr = ev.amount ? ', сумма: ' + fmt(ev.amount) : '';
-    var body = ev.type === 'expense' ? 'Расходы: ' : 'Доходы: ';
-    body += ev.label + amountStr;
+    var body = (ev.type === 'expense' ? 'Расходы: ' : 'Доходы: ') + ev.label + amountStr;
     var twoDaysBefore = new Date(eventDate);
     twoDaysBefore.setDate(twoDaysBefore.getDate() - 2);
     twoDaysBefore.setHours(12, 0, 0, 0);
@@ -2567,9 +2520,22 @@ function scheduleCalendarNotifications(){
   });
 }
 
+function initNotifications(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'granted'){
+    scheduleCalendarNotifications();
+    return;
+  }
+  if(Notification.permission === 'default'){
+    Notification.requestPermission().then(function(perm){
+      if(perm === 'granted') scheduleCalendarNotifications();
+    });
+  }
+}
+
 renderCalendar();
 populateAccountSelects();
-updateNotifStatus();
+initNotifications();
 
 })();
 </script>
