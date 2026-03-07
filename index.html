@@ -553,6 +553,31 @@ transition:border-color .15s,background .15s;flex:1;justify-content:center;
 .radio-label-inline:has(input:checked){border-color:var(--indigo-500);background:var(--indigo-50)}
 .radio-label-inline input[type="radio"]{width:16px;height:16px;accent-color:var(--indigo-600);flex-shrink:0}
 .calendar-empty-msg{text-align:center;padding:20px;color:var(--gray-500);font-size:.9rem}
+.cal-filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.cal-filter-label{font-size:.82rem;font-weight:600;color:var(--gray-600);flex-shrink:0}
+.cal-filter-select{
+flex:1;min-width:0;padding:10px 14px;border:2px solid var(--indigo-200);
+border-radius:var(--radius);font-size:.9rem;background:#fff;
+color:var(--gray-800);cursor:pointer;outline:none;font-family:inherit;
+transition:border-color .15s;
+}
+.cal-filter-select:focus{border-color:var(--indigo-500)}
+.cal-upcoming{
+background:linear-gradient(135deg,var(--indigo-50),var(--purple-50));
+border:1px solid var(--indigo-200);border-radius:var(--radius);
+padding:12px 14px;margin-bottom:14px;
+}
+.cal-upcoming-title{font-size:.82rem;font-weight:700;color:var(--gray-600);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.cal-upcoming-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:4px}
+.cal-upcoming-item{
+font-size:.88rem;color:var(--gray-700);display:flex;align-items:center;gap:8px;
+}
+.cal-upcoming-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cal-upcoming-dot.expense{background:var(--red-500)}
+.cal-upcoming-dot.income{background:var(--green-600)}
+.cal-upcoming-dot.mixed{background:var(--indigo-500)}
+.cal-upcoming-date{font-weight:700;color:var(--indigo-700);min-width:36px;flex-shrink:0}
+.cal-upcoming-empty{font-size:.88rem;color:var(--gray-400)}
 .about-section{margin-bottom:28px}
 .about-section h2{font-size:1.1rem;font-weight:700;color:var(--gray-900);margin-bottom:16px}
 .about-link{
@@ -828,7 +853,17 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 
 <section class="calendar-section" aria-label="Календарь доходов и расходов">
 <div class="card" style="background:#fff;padding:16px">
-<h2 style="font-size:1.1rem;font-weight:700;color:var(--gray-900);margin-bottom:16px">Календарь доходов и расходов</h2>
+<h2 style="font-size:1.1rem;font-weight:700;color:var(--gray-900);margin-bottom:12px">Календарь доходов и расходов</h2>
+<div class="cal-upcoming" aria-label="Ближайшие события">
+<div class="cal-upcoming-title" aria-hidden="true">Ближайшие события</div>
+<ul class="cal-upcoming-list" id="cal-upcoming-list" aria-label="Список ближайших событий"></ul>
+</div>
+<div class="cal-filter-bar" role="group" aria-label="Фильтр по категории">
+<label class="cal-filter-label" for="cal-cat-filter">Категория:</label>
+<select class="cal-filter-select" id="cal-cat-filter" aria-label="Фильтровать календарь по категории">
+<option value="all">Все категории</option>
+</select>
+</div>
 <div class="calendar-nav">
 <button class="calendar-nav-btn" id="cal-prev" aria-label="Предыдущий месяц">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -861,6 +896,21 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <label for="cal-event-label">Описание</label>
 <input type="text" id="cal-event-label" placeholder="Например: Продукты" aria-required="true">
 <div class="error-text" id="err-cal-label">Поле «Описание» не заполнено</div>
+</div>
+<div class="cat-block">
+<span class="cat-block-label" id="cal-cat-label">Категория</span>
+<div class="cat-row" role="group" aria-labelledby="cal-cat-label">
+<button type="button" class="cat-select-btn" id="btn-cal-cat-popup" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбрать категорию события">
+<span class="cat-select-name" id="cal-cat-name">Все категории</span>
+<svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-add-btn" id="btn-cal-cat-add" aria-label="Добавить новую категорию">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-del-btn" id="btn-cal-cat-del" aria-label="Удалить выбранную категорию">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+</button>
+</div>
 </div>
 <button type="button" class="btn btn-primary" style="width:100%;margin-top:4px" id="btn-cal-add-event">Добавить в календарь</button>
 </div>
@@ -1687,6 +1737,8 @@ var catState = {
   depositSelected: 'all',
   transferSelected: 'all',
   filterSelected:  'all',
+  calendarSelected: 'all',
+  calendarEventId: null,
   openerCtx: null
 };
 
@@ -1714,13 +1766,18 @@ function openCatPopup(ctx){
   catState.openerCtx = ctx;
   var sel = ctx === 'deposit' ? catState.depositSelected
           : ctx === 'transfer' ? catState.transferSelected
+          : ctx === 'calendar' ? catState.calendarSelected
+          : ctx === 'calendarEvent' ? (catState.calendarEventId ? ((store.get('calendarEvents')||[]).find(function(e){ return e.id === catState.calendarEventId; })?.category || 'all') : 'all')
           : catState.filterSelected;
   renderCatPopupList(sel);
   document.getElementById('cat-popup').classList.add('active');
   var btnId = ctx === 'deposit' ? 'btn-deposit-cat-popup'
             : ctx === 'transfer' ? 'btn-transfer-cat-popup'
+            : ctx === 'calendar' ? 'btn-cal-cat-popup'
+            : ctx === 'calendarEvent' ? 'btn-cal-event-cat-' + catState.calendarEventId
             : 'btn-filter-cat-popup';
-  document.getElementById(btnId).setAttribute('aria-expanded','true');
+  var btn = document.getElementById(btnId);
+  if(btn) btn.setAttribute('aria-expanded','true');
   setTimeout(function(){
     var item = document.querySelector('#cat-popup-list [aria-selected="true"]')
             || document.querySelector('#cat-popup-list .cat-popup-item');
@@ -1733,6 +1790,8 @@ function closeCatPopup(){
   var ctx = catState.openerCtx;
   var btnId = ctx === 'deposit' ? 'btn-deposit-cat-popup'
             : ctx === 'transfer' ? 'btn-transfer-cat-popup'
+            : ctx === 'calendar' ? 'btn-cal-cat-popup'
+            : ctx === 'calendarEvent' ? 'btn-cal-event-cat-' + catState.calendarEventId
             : 'btn-filter-cat-popup';
   var btn = document.getElementById(btnId);
   if(btn){ btn.setAttribute('aria-expanded','false'); btn.focus(); }
@@ -1745,6 +1804,22 @@ function applyCatSelection(catId){
     catState.depositSelected = catId; nameId = 'deposit-cat-name';
   } else if(ctx === 'transfer'){
     catState.transferSelected = catId; nameId = 'transfer-cat-name';
+  } else if(ctx === 'calendar'){
+    catState.calendarSelected = catId; nameId = 'cal-cat-name';
+  } else if(ctx === 'calendarEvent'){
+    var evId = catState.calendarEventId;
+    var events = store.get('calendarEvents') || [];
+    var ev = events.find(function(e){ return e.id === evId; });
+    if(ev){
+      ev.category = catId !== 'all' ? catId : null;
+      ev.categoryName = catId !== 'all' ? getCatName(catId) : null;
+      store.set('calendarEvents', events);
+    }
+    closeCatPopup();
+    renderCalendarEvents();
+    renderCalendar();
+    announcePolite('Категория события: ' + getCatName(catId));
+    return;
   } else {
     catState.filterSelected = catId; nameId = 'filter-cat-name';
   }
@@ -1770,6 +1845,7 @@ document.getElementById('cat-popup').addEventListener('keydown', function(e){
 document.getElementById('btn-deposit-cat-popup').addEventListener('click', function(){ openCatPopup('deposit'); });
 document.getElementById('btn-transfer-cat-popup').addEventListener('click', function(){ openCatPopup('transfer'); });
 document.getElementById('btn-filter-cat-popup').addEventListener('click', function(){ openCatPopup('filter'); });
+document.getElementById('btn-cal-cat-popup').addEventListener('click', function(){ openCatPopup('calendar'); });
 
 /* --- диалог добавления категории --- */
 var catAddCtx = null;
@@ -1785,13 +1861,16 @@ function openCatAddDialog(ctx){
 
 function closeCatAddDialog(){
   document.getElementById('cat-add-dialog').classList.remove('active');
-  var btnId = catAddCtx === 'deposit' ? 'btn-deposit-cat-add' : 'btn-transfer-cat-add';
+  var btnId = catAddCtx === 'deposit' ? 'btn-deposit-cat-add'
+            : catAddCtx === 'calendar' ? 'btn-cal-cat-add'
+            : 'btn-transfer-cat-add';
   var btn = document.getElementById(btnId);
   if(btn) btn.focus();
 }
 
 document.getElementById('btn-deposit-cat-add').addEventListener('click', function(){ openCatAddDialog('deposit'); });
 document.getElementById('btn-transfer-cat-add').addEventListener('click', function(){ openCatAddDialog('transfer'); });
+document.getElementById('btn-cal-cat-add').addEventListener('click', function(){ openCatAddDialog('calendar'); });
 document.getElementById('btn-cancel-add-cat').addEventListener('click', closeCatAddDialog);
 document.getElementById('cat-add-dialog').addEventListener('click', function(e){ if(e.target === this) closeCatAddDialog(); });
 document.getElementById('cat-add-dialog').addEventListener('keydown', function(e){ if(e.key === 'Escape') closeCatAddDialog(); });
@@ -1815,12 +1894,17 @@ document.getElementById('btn-confirm-add-cat').addEventListener('click', functio
     catState.depositSelected = newId;
     var el = document.getElementById('deposit-cat-name');
     if(el) el.textContent = name;
+  } else if(ctx === 'calendar'){
+    catState.calendarSelected = newId;
+    var elCal = document.getElementById('cal-cat-name');
+    if(elCal) elCal.textContent = name;
   } else {
     catState.transferSelected = newId;
     var el2 = document.getElementById('transfer-cat-name');
     if(el2) el2.textContent = name;
   }
   closeCatAddDialog();
+  populateCalCatFilter();
   announcePolite('Категория «' + name + '» добавлена и выбрана');
   showToast('Категория «' + name + '» добавлена');
 });
@@ -1851,11 +1935,22 @@ function deleteCatFor(ctx){
     var t = document.getElementById('transfer-cat-name');
     if(t) t.textContent = 'Все категории';
   }
+  if(catState.calendarSelected === selId){
+    catState.calendarSelected = 'all';
+    var cal = document.getElementById('cal-cat-name');
+    if(cal) cal.textContent = 'Все категории';
+  }
   if(catState.filterSelected === selId){
     catState.filterSelected = 'all';
     var f = document.getElementById('filter-cat-name');
     if(f) f.textContent = 'Все категории';
   }
+  var calEvents = store.get('calendarEvents') || [];
+  calEvents.forEach(function(ev){ if(ev.category === selId){ ev.category = null; ev.categoryName = null; } });
+  store.set('calendarEvents', calEvents);
+  var calF = document.getElementById('cal-cat-filter');
+  if(calF && calF.value === selId){ calF.value = 'all'; }
+  populateCalCatFilter();
   announcePolite('Категория «' + cat.name + '» удалена');
   showToast('Категория удалена');
 }
@@ -1863,6 +1958,7 @@ function deleteCatFor(ctx){
 document.getElementById('btn-deposit-cat-del').addEventListener('click', function(){ deleteCatFor('deposit'); });
 document.getElementById('btn-transfer-cat-del').addEventListener('click', function(){ deleteCatFor('transfer'); });
 document.getElementById('btn-filter-cat-del').addEventListener('click', function(){ deleteCatFor('filter'); });
+document.getElementById('btn-cal-cat-del').addEventListener('click', function(){ deleteCatFor('calendar'); });
 
 /* --- счётчик активных фильтров --- */
 function updateFiltersBadge(){
@@ -2925,10 +3021,65 @@ var WEEKDAYS_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 
 function calDateKey(y, m, d){ return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0'); }
 
+function renderUpcomingEvents(){
+  var list = document.getElementById('cal-upcoming-list');
+  if(!list) return;
+  var all = store.get('calendarEvents') || [];
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var upcoming = all.filter(function(ev){
+    var p = ev.date.split('-').map(Number);
+    var d = new Date(p[0], p[1]-1, p[2]);
+    return d >= today;
+  }).sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  var grouped = [];
+  var seen = {};
+  upcoming.forEach(function(ev){
+    if(!seen[ev.date]){
+      seen[ev.date] = true;
+      grouped.push(ev.date);
+    }
+  });
+  var top3 = grouped.slice(0,3);
+  if(top3.length === 0){
+    list.innerHTML = '<li class="cal-upcoming-empty">Нет ближайших событий</li>';
+    return;
+  }
+  list.innerHTML = top3.map(function(date){
+    var dayEvs = upcoming.filter(function(e){ return e.date === date; });
+    var hasExpense = dayEvs.some(function(e){ return e.type === 'expense'; });
+    var hasIncome = dayEvs.some(function(e){ return e.type === 'income'; });
+    var dotCls = (hasExpense && hasIncome) ? 'mixed' : hasExpense ? 'expense' : 'income';
+    var p = date.split('-').map(Number);
+    var d = new Date(p[0], p[1]-1, p[2]);
+    var isToday = d.getTime() === today.getTime();
+    var label = isToday ? 'Сегодня' : p[2] + ' ' + MONTH_NAMES_RU[p[1]-1].toLowerCase().slice(0,3) + '.';
+    var names = dayEvs.map(function(e){ return e.label; }).slice(0,2).join(', ') + (dayEvs.length > 2 ? '…' : '');
+    return '<li class="cal-upcoming-item" aria-label="' + escapeAttr(label + ': ' + names) + '">' +
+      '<span class="cal-upcoming-dot ' + dotCls + '" aria-hidden="true"></span>' +
+      '<span class="cal-upcoming-date">' + label + '</span>' +
+      '<span>' + escapeHtml(names) + '</span>' +
+      '</li>';
+  }).join('');
+}
+
+function populateCalCatFilter(){
+  var sel = document.getElementById('cal-cat-filter');
+  if(!sel) return;
+  var cats = getCategories();
+  var current = sel.value;
+  sel.innerHTML = '<option value="all">Все категории</option>' +
+    cats.map(function(c){ return '<option value="' + escapeAttr(c.id) + '">' + escapeHtml(c.name) + '</option>'; }).join('');
+  if(current && current !== 'all') sel.value = current;
+}
+
 function renderCalendar(){
   var year = calState.year, month = calState.month, selectedDay = calState.selectedDay;
   document.getElementById('cal-month-label').textContent = MONTH_NAMES_RU[month] + ' ' + year;
-  var events = store.get('calendarEvents') || [];
+  var allEvents = store.get('calendarEvents') || [];
+  var calCatFilter = document.getElementById('cal-cat-filter');
+  var activeCatFilter = calCatFilter ? calCatFilter.value : 'all';
+  var events = activeCatFilter === 'all' ? allEvents : allEvents.filter(function(ev){ return ev.category === activeCatFilter; });
   var eventsByDay = {};
   events.forEach(function(ev){
     if(!eventsByDay[ev.date]) eventsByDay[ev.date] = [];
@@ -2973,6 +3124,8 @@ function renderCalendar(){
     }
   }
   grid.innerHTML = html;
+  populateCalCatFilter();
+  renderUpcomingEvents();
   renderCalendarEvents();
 }
 
@@ -2981,7 +3134,8 @@ function renderCalendarEvents(){
   var eventsEl = document.getElementById('cal-events');
   if(!eventsEl) return;
   if(!selectedDay){ eventsEl.innerHTML = '<div class="calendar-empty-msg">Выберите день в календаре</div>'; return; }
-  var events = (store.get('calendarEvents') || []).filter(function(e){ return e.date === selectedDay; });
+  var allEvents = store.get('calendarEvents') || [];
+  var events = allEvents.filter(function(e){ return e.date === selectedDay; });
   var parts = selectedDay.split('-');
   var dateLabel = parseInt(parts[2]) + ' ' + MONTH_NAMES_RU[parseInt(parts[1])-1] + ' ' + parts[0];
   var html = '<h3 style="font-size:.95rem;font-weight:700;color:var(--gray-700);margin-bottom:10px">' + dateLabel + '</h3>';
@@ -2993,8 +3147,10 @@ function renderCalendarEvents(){
       var amountLabel = ev.amount ? ' — ' + fmt(ev.amount) : '';
       var amountHtml = ev.amount ? '<div class="calendar-event-amount">' + fmt(ev.amount) + '</div>' : '';
       html += '<div class="calendar-event-item ' + ev.type + '" role="article" aria-label="' + escapeAttr(typeRu + ': ' + ev.label + amountLabel) + '">';
-      html += '<div><div class="calendar-event-type ' + ev.type + '">' + typeRu + '</div>';
-      html += '<div class="calendar-event-label">' + escapeHtml(ev.label) + '</div>' + amountHtml + '</div>';
+      html += '<div style="flex:1;min-width:0"><div class="calendar-event-type ' + ev.type + '">' + typeRu + '</div>';
+      html += '<div class="calendar-event-label">' + escapeHtml(ev.label) + '</div>' + amountHtml;
+      if(ev.categoryName){ html += '<div style="font-size:.78rem;color:var(--indigo-600);margin-top:3px;font-weight:600">' + escapeHtml(ev.categoryName) + '</div>'; }
+      html += '</div>';
       html += '<button class="calendar-event-delete" data-cal-delete="' + escapeAttr(ev.id) + '" aria-label="Удалить событие: ' + escapeAttr(ev.label) + '">';
       html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
       html += '</button></div>';
@@ -3039,6 +3195,13 @@ document.getElementById('cal-next').addEventListener('click', function(){
   renderCalendar();
 });
 
+document.getElementById('cal-cat-filter').addEventListener('change', function(){
+  calState.selectedDay = null;
+  renderCalendar();
+  var catName = this.options[this.selectedIndex].text;
+  announcePolite('Фильтр по категории: ' + catName);
+});
+
 document.getElementById('btn-cal-add-event').addEventListener('click', function(){
   if(!calState.selectedDay){
     announceAssertive('Сначала выберите день в календаре');
@@ -3065,10 +3228,15 @@ document.getElementById('btn-cal-add-event').addEventListener('click', function(
   }
   var typeEl = document.querySelector('input[name="cal-event-type"]:checked');
   var type = typeEl ? typeEl.value : 'expense';
+  var catId = catState.calendarSelected !== 'all' ? catState.calendarSelected : null;
+  var catName = catId ? getCatName(catId) : null;
   var events = store.get('calendarEvents') || [];
-  events.push({ id: 'cev_' + Date.now(), date: calState.selectedDay, type: type, label: labelVal, amount: parseFloat(amountVal) });
+  events.push({ id: 'cev_' + Date.now(), date: calState.selectedDay, type: type, label: labelVal, amount: parseFloat(amountVal), category: catId, categoryName: catName });
   store.set('calendarEvents', events);
   labelInput.value = ''; amountInput.value = '';
+  catState.calendarSelected = 'all';
+  var ccn = document.getElementById('cal-cat-name');
+  if(ccn) ccn.textContent = 'Все категории';
   renderCalendar();
   scheduleCalendarNotifications();
   var typeRu = type === 'expense' ? 'Расходы' : 'Доходы';
