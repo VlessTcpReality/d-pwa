@@ -619,6 +619,90 @@ outline-offset:3px;
 .slider-dot.active{background:var(--indigo-600);transform:scale(1.35)}
 .slider-dot:focus-visible{outline:3px solid var(--sky-400)}
 .slider-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+/* === история: шапка с кнопкой фильтров === */
+.history-header-row{
+display:flex;align-items:center;gap:10px;padding-bottom:2px;
+}
+.history-header-row .screen-title{margin-bottom:0;flex:1}
+.btn-open-filters{
+display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
+padding:9px 14px;border:2px solid var(--indigo-200);border-radius:var(--radius);
+background:#fff;font-size:.88rem;font-weight:600;color:var(--indigo-600);
+cursor:pointer;transition:border-color .15s,background .15s;outline-offset:3px;
+}
+.btn-open-filters svg{width:17px;height:17px;flex-shrink:0}
+.btn-open-filters:hover,.btn-open-filters:focus{border-color:var(--indigo-400);background:var(--indigo-50)}
+.btn-open-filters:focus-visible{outline:3px solid var(--sky-400)}
+.filters-badge{
+display:inline-flex;align-items:center;justify-content:center;
+min-width:18px;height:18px;border-radius:9px;background:var(--indigo-600);
+color:#fff;font-size:.72rem;font-weight:700;padding:0 4px;
+}
+/* === блок категорий (в формах) === */
+.cat-block{margin-bottom:16px}
+.cat-block-label{
+display:block;font-size:.82rem;font-weight:600;color:var(--gray-600);margin-bottom:6px;
+}
+.cat-row{display:flex;align-items:stretch;gap:0}
+.cat-select-btn{
+flex:1;min-width:0;padding:14px 14px;
+border:2px solid var(--indigo-200);border-radius:var(--radius) 0 0 var(--radius);
+background:#fff;font-size:.97rem;font-weight:600;color:var(--gray-800);
+cursor:pointer;display:flex;align-items:center;gap:8px;
+transition:border-color .15s;outline-offset:3px;text-align:left;
+}
+.cat-select-btn:hover,.cat-select-btn:focus{border-color:var(--indigo-400)}
+.cat-select-btn:focus-visible{outline:3px solid var(--sky-400);z-index:1;position:relative}
+.cat-select-btn[aria-expanded="true"]{border-color:var(--indigo-500)}
+.cat-select-btn[aria-expanded="true"] .cat-chevron{transform:rotate(180deg)}
+.cat-select-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-chevron{width:18px;height:18px;flex-shrink:0;color:var(--gray-500);transition:transform .2s}
+.cat-icon-btn{
+width:46px;border:2px solid var(--indigo-200);background:#fff;
+cursor:pointer;display:flex;align-items:center;justify-content:center;
+color:var(--indigo-600);transition:background .15s,border-color .15s;outline-offset:3px;
+}
+.cat-icon-btn:hover,.cat-icon-btn:focus{background:var(--indigo-50);border-color:var(--indigo-400)}
+.cat-icon-btn:focus-visible{outline:3px solid var(--sky-400);position:relative;z-index:1}
+.cat-icon-btn svg{width:20px;height:20px}
+.cat-add-btn{border-left:none}
+.cat-del-btn{border-left:none;border-radius:0 var(--radius) var(--radius) 0;color:var(--red-600)}
+.cat-del-btn:hover,.cat-del-btn:focus{background:#fef2f2;border-color:var(--red-400)}
+/* === попап выбора категории === */
+.cat-popup{
+position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;
+display:none;align-items:flex-end;justify-content:center;
+}
+.cat-popup.active{display:flex}
+.cat-popup-panel{
+background:#fff;border-radius:20px 20px 0 0;padding:0 0 24px;
+width:100%;max-width:480px;max-height:72vh;display:flex;flex-direction:column;
+}
+.cat-popup-title{
+font-size:1.05rem;font-weight:700;color:var(--gray-900);
+padding:20px 20px 12px;outline:none;
+}
+.cat-popup-list{overflow-y:auto;flex:1;list-style:none;padding:0 8px}
+.cat-popup-item{
+padding:14px 16px;border-radius:var(--radius);font-size:.97rem;cursor:pointer;
+display:flex;align-items:center;justify-content:space-between;gap:8px;
+outline-offset:3px;transition:background .12s;
+}
+.cat-popup-item:hover{background:var(--indigo-50)}
+.cat-popup-item:focus-visible{outline:3px solid var(--sky-400)}
+.cat-popup-item[aria-selected="true"]{
+background:var(--indigo-50);color:var(--indigo-700);font-weight:600;
+}
+.cat-popup-item-check{width:18px;height:18px;color:var(--indigo-600);flex-shrink:0}
+/* === диалог добавления категории === */
+.cat-add-dialog{
+position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;
+display:none;align-items:center;justify-content:center;padding:20px;
+}
+.cat-add-dialog.active{display:flex}
+.cat-add-dialog-panel{
+background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
+}
 </style>
 </head>
 <body>
@@ -684,31 +768,58 @@ outline-offset:3px;
 </div>
 
 <div id="screen-history" class="screen">
+<div class="history-header-row">
 <h1 class="screen-title" id="history-title" tabindex="-1">История</h1>
-<div class="history-filters" role="region" aria-label="Фильтры истории">
-<fieldset>
-<legend>Тип транзакций</legend>
+<button class="btn-open-filters" id="btn-open-filters" aria-label="Открыть фильтры">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg>
+Фильтры
+<span id="filters-badge" class="filters-badge" aria-hidden="true" style="display:none"></span>
+</button>
+</div>
+<div id="history-summary" class="history-summary" aria-live="polite"></div>
+<div id="history-container" class="content-pad"></div>
+</div>
+
+<div id="screen-filters" class="screen">
+<button class="btn-back" id="btn-back-filters" aria-label="Назад к истории">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+Назад
+</button>
+<h1 class="screen-title" id="filters-title" tabindex="-1">Фильтры</h1>
+<div class="content-pad" style="padding-top:0">
+<fieldset style="border:none;padding:0;margin:0 0 20px">
+<legend style="font-size:.82rem;font-weight:600;color:var(--gray-600);margin-bottom:8px;display:block">Тип транзакций</legend>
 <div class="filter-radio-group">
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="all" checked> Показать все</label>
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="deposit"> Только пополнения</label>
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="transfer"> Только переводы</label>
 </div>
 </fieldset>
-<div class="filter-period-group">
-<label for="history-filter-account">Счёт</label>
+<div style="margin-bottom:20px">
+<label for="history-filter-account" style="font-size:.82rem;font-weight:600;color:var(--gray-600);display:block;margin-bottom:6px">Счёт</label>
 <select id="history-filter-account" class="select-field" aria-label="Фильтр по счёту"></select>
 </div>
-<div class="filter-period-group">
-<label for="history-filter-period">Период (в днях, пусто — за всё время)</label>
-<input type="number" id="history-filter-period" inputmode="numeric" placeholder="Например: 30">
+<div class="cat-block" id="filter-cat-block">
+<span class="cat-block-label" id="filter-cat-label">Категория</span>
+<div class="cat-row" role="group" aria-labelledby="filter-cat-label">
+<button type="button" class="cat-select-btn" id="btn-filter-cat-popup" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбрать категорию для фильтра">
+<span class="cat-select-name" id="filter-cat-name">Все категории</span>
+<svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-del-btn" id="btn-filter-cat-del" aria-label="Удалить выбранную категорию" style="border-radius:0 var(--radius) var(--radius) 0">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+</button>
+</div>
+</div>
+<div style="margin-bottom:24px">
+<label for="history-filter-period" style="font-size:.82rem;font-weight:600;color:var(--gray-600);display:block;margin-bottom:6px">Период (в днях, пусто — за всё время)</label>
+<input type="number" id="history-filter-period" inputmode="numeric" placeholder="Например: 30" class="select-field" style="width:100%">
 </div>
 <div class="filter-actions">
 <button class="btn btn-primary" id="btn-apply-filters">Применить</button>
 <button class="btn btn-secondary" id="btn-reset-filters">Сбросить</button>
 </div>
 </div>
-<div id="history-summary" class="history-summary" aria-live="polite"></div>
-<div id="history-container" class="content-pad"></div>
 </div>
 
 <div id="screen-budget" class="screen">
@@ -792,6 +903,21 @@ outline-offset:3px;
 <label for="deposit-account-select">Счёт</label>
 <select id="deposit-account-select" class="select-field" aria-label="Выберите счёт для пополнения"></select>
 </div>
+<div class="cat-block">
+<span class="cat-block-label" id="deposit-cat-label">Категория</span>
+<div class="cat-row" role="group" aria-labelledby="deposit-cat-label">
+<button type="button" class="cat-select-btn" id="btn-deposit-cat-popup" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбрать категорию пополнения">
+<span class="cat-select-name" id="deposit-cat-name">Все категории</span>
+<svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-add-btn" id="btn-deposit-cat-add" aria-label="Добавить новую категорию">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-del-btn" id="btn-deposit-cat-del" aria-label="Удалить выбранную категорию">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+</button>
+</div>
+</div>
 <div class="form-group" id="fg-deposit-amount">
 <label for="deposit-amount">Сумма</label>
 <input type="number" id="deposit-amount" inputmode="decimal" placeholder="Введите сумму" required aria-required="true">
@@ -816,6 +942,21 @@ outline-offset:3px;
 <div class="form-group">
 <label for="transfer-account-select">Счёт списания</label>
 <select id="transfer-account-select" class="select-field" aria-label="Выберите счёт для списания"></select>
+</div>
+<div class="cat-block">
+<span class="cat-block-label" id="transfer-cat-label">Категория</span>
+<div class="cat-row" role="group" aria-labelledby="transfer-cat-label">
+<button type="button" class="cat-select-btn" id="btn-transfer-cat-popup" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбрать категорию перевода">
+<span class="cat-select-name" id="transfer-cat-name">Все категории</span>
+<svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-add-btn" id="btn-transfer-cat-add" aria-label="Добавить новую категорию">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+</button>
+<button type="button" class="cat-icon-btn cat-del-btn" id="btn-transfer-cat-del" aria-label="Удалить выбранную категорию">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+</button>
+</div>
 </div>
 <div class="form-group" id="fg-transfer-amount">
 <label for="transfer-amount">Сумма</label>
@@ -1011,6 +1152,30 @@ outline-offset:3px;
 </div>
 </div>
 
+<!-- попап выбора категории -->
+<div id="cat-popup" class="cat-popup" role="dialog" aria-modal="true" aria-label="Выбор категории">
+<div class="cat-popup-panel">
+<h2 class="cat-popup-title" id="cat-popup-title" tabindex="-1">Выберите категорию</h2>
+<ul class="cat-popup-list" id="cat-popup-list" role="listbox" aria-label="Список категорий"></ul>
+</div>
+</div>
+
+<!-- диалог добавления категории -->
+<div id="cat-add-dialog" class="cat-add-dialog" role="dialog" aria-modal="true" aria-label="Добавить категорию">
+<div class="cat-add-dialog-panel">
+<h2 style="font-size:1.05rem;font-weight:700;margin-bottom:16px;color:var(--gray-900);outline:none" id="cat-add-title" tabindex="-1">Новая категория</h2>
+<div class="form-group" id="fg-new-cat-name">
+<label for="new-cat-name">Название категории</label>
+<input type="text" id="new-cat-name" placeholder="Например: Продукты" aria-required="true">
+<div class="error-text" id="err-new-cat-name">Поле «Название» не заполнено</div>
+</div>
+<div class="btn-row" style="margin-bottom:0">
+<button class="btn btn-primary" id="btn-confirm-add-cat">Добавить</button>
+<button class="btn btn-secondary" id="btn-cancel-add-cat">Отмена</button>
+</div>
+</div>
+</div>
+
 <div id="profile-overlay" class="overlay" role="dialog" aria-label="Меню профиля" aria-modal="true">
 <div class="overlay-panel" role="menu">
 <h2 class="overlay-title" id="profile-menu-title" tabindex="-1">Профиль</h2>
@@ -1112,7 +1277,8 @@ var store = {
       supportMessages:[],
       accounts:[{id:'main', name:'Основной счёт', balance:0}],
       activeAccountId:'main',
-      calendarEvents:[]
+      calendarEvents:[],
+      categories:[]
     };
   },
   load: function(){
@@ -1124,6 +1290,7 @@ var store = {
       if(!d.accounts) d.accounts = [{id:'main', name:'Основной счёт', balance:0}];
       if(!d.activeAccountId) d.activeAccountId = 'main';
       if(!d.calendarEvents) d.calendarEvents = [];
+      if(!d.categories) d.categories = [];
       this._data = d;
     } catch(e) {
       this._data = this._defaults();
@@ -1214,7 +1381,7 @@ function notImplemented(){
   showToast(msg, 4000);
 }
 
-var screens = ['screen-home','screen-history','screen-budget','screen-services','screen-deposit','screen-transfer','screen-budget-manage','screen-support','screen-notes','screen-note-edit','screen-shopping','screen-calculator','screen-about'];
+var screens = ['screen-home','screen-history','screen-budget','screen-services','screen-deposit','screen-transfer','screen-budget-manage','screen-support','screen-notes','screen-note-edit','screen-shopping','screen-calculator','screen-about','screen-filters'];
 var currentScreen = 'screen-home';
 var subScreen = false;
 
@@ -1255,7 +1422,7 @@ tabs.forEach(function(tab){
     var screenId = tab.getAttribute('aria-controls');
     var titleId = screenId.replace('screen-','') + '-title';
     showScreen(screenId, titleId);
-    if(screenId === 'screen-history') { renderHistory(); populateAccountSelects(); }
+    if(screenId === 'screen-history') { renderHistory(); }
     if(screenId === 'screen-budget') { renderBudgetScreen(); renderCalendar(); }
     if(screenId === 'screen-home') renderHome();
     history.pushState({screen: screenId}, '');
@@ -1510,9 +1677,228 @@ function getFilterPeriod(){
 }
 
 function getFilterAccount(){
-  const sel = document.getElementById('history-filter-account');
+  var sel = document.getElementById('history-filter-account');
   return sel ? sel.value : 'all';
 }
+
+/* ======================== КАТЕГОРИИ ======================== */
+
+var catState = {
+  depositSelected: 'all',
+  transferSelected: 'all',
+  filterSelected:  'all',
+  openerCtx: null
+};
+
+function getCategories(){ return store.get('categories') || []; }
+
+function getCatName(id){
+  if(!id || id === 'all') return 'Все категории';
+  var c = getCategories().find(function(c){ return c.id === id; });
+  return c ? c.name : 'Все категории';
+}
+
+function renderCatPopupList(selectedId){
+  var cats = getCategories();
+  var items = [{id:'all', name:'Все категории'}].concat(cats);
+  document.getElementById('cat-popup-list').innerHTML = items.map(function(c){
+    var sel = c.id === selectedId;
+    return '<li class="cat-popup-item" role="option" tabindex="0" aria-selected="' + (sel?'true':'false') + '" data-cat-id="' + escapeAttr(c.id) + '">' +
+      '<span>' + escapeHtml(c.name) + '</span>' +
+      (sel ? '<svg class="cat-popup-item-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '<span style="width:18px;flex-shrink:0"></span>') +
+      '</li>';
+  }).join('');
+}
+
+function openCatPopup(ctx){
+  catState.openerCtx = ctx;
+  var sel = ctx === 'deposit' ? catState.depositSelected
+          : ctx === 'transfer' ? catState.transferSelected
+          : catState.filterSelected;
+  renderCatPopupList(sel);
+  document.getElementById('cat-popup').classList.add('active');
+  var btnId = ctx === 'deposit' ? 'btn-deposit-cat-popup'
+            : ctx === 'transfer' ? 'btn-transfer-cat-popup'
+            : 'btn-filter-cat-popup';
+  document.getElementById(btnId).setAttribute('aria-expanded','true');
+  setTimeout(function(){
+    var item = document.querySelector('#cat-popup-list [aria-selected="true"]')
+            || document.querySelector('#cat-popup-list .cat-popup-item');
+    if(item) item.focus();
+  }, 100);
+}
+
+function closeCatPopup(){
+  document.getElementById('cat-popup').classList.remove('active');
+  var ctx = catState.openerCtx;
+  var btnId = ctx === 'deposit' ? 'btn-deposit-cat-popup'
+            : ctx === 'transfer' ? 'btn-transfer-cat-popup'
+            : 'btn-filter-cat-popup';
+  var btn = document.getElementById(btnId);
+  if(btn){ btn.setAttribute('aria-expanded','false'); btn.focus(); }
+}
+
+function applyCatSelection(catId){
+  var ctx = catState.openerCtx;
+  var nameId;
+  if(ctx === 'deposit'){
+    catState.depositSelected = catId; nameId = 'deposit-cat-name';
+  } else if(ctx === 'transfer'){
+    catState.transferSelected = catId; nameId = 'transfer-cat-name';
+  } else {
+    catState.filterSelected = catId; nameId = 'filter-cat-name';
+  }
+  var el = document.getElementById(nameId);
+  if(el) el.textContent = getCatName(catId);
+  closeCatPopup();
+  announcePolite('Выбрана категория: ' + getCatName(catId));
+}
+
+document.getElementById('cat-popup').addEventListener('click', function(e){
+  var item = e.target.closest('[data-cat-id]');
+  if(item){ applyCatSelection(item.dataset.catId); return; }
+  if(e.target === this) closeCatPopup();
+});
+document.getElementById('cat-popup').addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){ closeCatPopup(); return; }
+  if(e.key === 'Enter'){
+    var item = e.target.closest('[data-cat-id]');
+    if(item) applyCatSelection(item.dataset.catId);
+  }
+});
+
+document.getElementById('btn-deposit-cat-popup').addEventListener('click', function(){ openCatPopup('deposit'); });
+document.getElementById('btn-transfer-cat-popup').addEventListener('click', function(){ openCatPopup('transfer'); });
+document.getElementById('btn-filter-cat-popup').addEventListener('click', function(){ openCatPopup('filter'); });
+
+/* --- диалог добавления категории --- */
+var catAddCtx = null;
+
+function openCatAddDialog(ctx){
+  catAddCtx = ctx;
+  document.getElementById('new-cat-name').value = '';
+  document.getElementById('fg-new-cat-name').classList.remove('has-error');
+  document.getElementById('new-cat-name').classList.remove('error');
+  document.getElementById('cat-add-dialog').classList.add('active');
+  setTimeout(function(){ document.getElementById('cat-add-title').focus(); }, 100);
+}
+
+function closeCatAddDialog(){
+  document.getElementById('cat-add-dialog').classList.remove('active');
+  var btnId = catAddCtx === 'deposit' ? 'btn-deposit-cat-add' : 'btn-transfer-cat-add';
+  var btn = document.getElementById(btnId);
+  if(btn) btn.focus();
+}
+
+document.getElementById('btn-deposit-cat-add').addEventListener('click', function(){ openCatAddDialog('deposit'); });
+document.getElementById('btn-transfer-cat-add').addEventListener('click', function(){ openCatAddDialog('transfer'); });
+document.getElementById('btn-cancel-add-cat').addEventListener('click', closeCatAddDialog);
+document.getElementById('cat-add-dialog').addEventListener('click', function(e){ if(e.target === this) closeCatAddDialog(); });
+document.getElementById('cat-add-dialog').addEventListener('keydown', function(e){ if(e.key === 'Escape') closeCatAddDialog(); });
+
+document.getElementById('btn-confirm-add-cat').addEventListener('click', function(){
+  var input = document.getElementById('new-cat-name');
+  var name = input.value.trim();
+  if(!name){
+    document.getElementById('fg-new-cat-name').classList.add('has-error');
+    input.classList.add('error');
+    announceAssertive('Произошла ошибка: Название категории не заполнено');
+    input.focus();
+    return;
+  }
+  var cats = getCategories();
+  var newId = 'cat_' + Date.now();
+  cats.push({id:newId, name:name});
+  store.set('categories', cats);
+  var ctx = catAddCtx;
+  if(ctx === 'deposit'){
+    catState.depositSelected = newId;
+    var el = document.getElementById('deposit-cat-name');
+    if(el) el.textContent = name;
+  } else {
+    catState.transferSelected = newId;
+    var el2 = document.getElementById('transfer-cat-name');
+    if(el2) el2.textContent = name;
+  }
+  closeCatAddDialog();
+  announcePolite('Категория «' + name + '» добавлена и выбрана');
+  showToast('Категория «' + name + '» добавлена');
+});
+
+/* --- удаление категории --- */
+function deleteCatFor(ctx){
+  var selId = ctx === 'deposit' ? catState.depositSelected
+            : ctx === 'transfer' ? catState.transferSelected
+            : catState.filterSelected;
+  if(!selId || selId === 'all'){
+    announceAssertive('Выберите конкретную категорию для удаления');
+    showToast('Выберите конкретную категорию для удаления', 3000);
+    return;
+  }
+  var cats = getCategories();
+  var cat = cats.find(function(c){ return c.id === selId; });
+  if(!cat) return;
+  if(!confirm('Удалить категорию «' + cat.name + '»?')) return;
+  store.set('categories', cats.filter(function(c){ return c.id !== selId; }));
+  /* сбросить выбор везде, где была эта категория */
+  if(catState.depositSelected === selId){
+    catState.depositSelected = 'all';
+    var d = document.getElementById('deposit-cat-name');
+    if(d) d.textContent = 'Все категории';
+  }
+  if(catState.transferSelected === selId){
+    catState.transferSelected = 'all';
+    var t = document.getElementById('transfer-cat-name');
+    if(t) t.textContent = 'Все категории';
+  }
+  if(catState.filterSelected === selId){
+    catState.filterSelected = 'all';
+    var f = document.getElementById('filter-cat-name');
+    if(f) f.textContent = 'Все категории';
+  }
+  announcePolite('Категория «' + cat.name + '» удалена');
+  showToast('Категория удалена');
+}
+
+document.getElementById('btn-deposit-cat-del').addEventListener('click', function(){ deleteCatFor('deposit'); });
+document.getElementById('btn-transfer-cat-del').addEventListener('click', function(){ deleteCatFor('transfer'); });
+document.getElementById('btn-filter-cat-del').addEventListener('click', function(){ deleteCatFor('filter'); });
+
+/* --- счётчик активных фильтров --- */
+function updateFiltersBadge(){
+  var badge = document.getElementById('filters-badge');
+  var btn = document.getElementById('btn-open-filters');
+  if(!badge) return;
+  var n = 0;
+  if(getActiveFilterType() !== 'all') n++;
+  if(getFilterAccount() !== 'all') n++;
+  if(catState.filterSelected !== 'all') n++;
+  if(getFilterPeriod() !== null) n++;
+  if(n > 0){
+    badge.textContent = n;
+    badge.style.display = '';
+    var word = n === 1 ? 'один' : n === 2 ? 'два' : n === 3 ? 'три' : n === 4 ? 'четыре' : String(n);
+    if(btn) btn.setAttribute('aria-label', 'Фильтры. Применено фильтров ' + word);
+  } else {
+    badge.style.display = 'none';
+    if(btn) btn.setAttribute('aria-label', 'Открыть фильтры');
+  }
+}
+
+/* --- экран фильтров --- */
+document.getElementById('btn-open-filters').addEventListener('click', function(){
+  populateAccountSelects();
+  showScreen('screen-filters','filters-title');
+  history.pushState({screen:'screen-filters'}, '');
+});
+
+document.getElementById('btn-back-filters').addEventListener('click', function(){
+  showScreen('screen-history','history-title');
+  selectTab('tab-history');
+  renderHistory();
+});
+
+/* ======================== ИСТОРИЯ ======================== */
 
 function renderHistory(){
   populateAccountSelects();
@@ -1522,19 +1908,19 @@ function renderHistory(){
   var filterType = getActiveFilterType();
   var filterPeriod = getFilterPeriod();
   var filterAccount = getFilterAccount();
+  var filterCat = catState.filterSelected;
 
   var filtered = transactions.slice();
-  if(filterType !== 'all'){
-    filtered = filtered.filter(t => t.type === filterType);
-  }
-  if(filterAccount && filterAccount !== 'all'){
-    filtered = filtered.filter(t => t.account === filterAccount);
-  }
+  if(filterType !== 'all') filtered = filtered.filter(function(t){ return t.type === filterType; });
+  if(filterAccount && filterAccount !== 'all') filtered = filtered.filter(function(t){ return t.account === filterAccount; });
+  if(filterCat && filterCat !== 'all') filtered = filtered.filter(function(t){ return t.category === filterCat; });
   if(filterPeriod !== null){
     var cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - filterPeriod);
-    filtered = filtered.filter(t => new Date(t.date) >= cutoff);
+    filtered = filtered.filter(function(t){ return new Date(t.date) >= cutoff; });
   }
+
+  updateFiltersBadge();
 
   if(filtered.length === 0){
     var emptyMsg = transactions.length === 0 ? 'История пуста' : 'Нет транзакций по выбранным фильтрам';
@@ -1543,13 +1929,11 @@ function renderHistory(){
     return;
   }
 
-  var totalDeposits = 0;
-  var totalTransfers = 0;
-  filtered.forEach(t => {
+  var totalDeposits = 0, totalTransfers = 0;
+  filtered.forEach(function(t){
     if(t.type === 'deposit') totalDeposits += t.amount;
     else totalTransfers += t.amount;
   });
-
   var summaryParts = [];
   if(filterType === 'all' || filterType === 'deposit') summaryParts.push('Пополнения: ' + fmt(totalDeposits));
   if(filterType === 'all' || filterType === 'transfer') summaryParts.push('Переводы: ' + fmt(totalTransfers));
@@ -1557,33 +1941,34 @@ function renderHistory(){
   summaryEl.textContent = summaryParts.join(' | ') + periodText;
 
   var sorted = filtered.slice().reverse();
-  var grouped = {};
-  var dateOrder = [];
-  sorted.forEach(t => {
+  var grouped = {}, dateOrder = [];
+  sorted.forEach(function(t){
     var key = formatDateKey(t.date);
     if(!grouped[key]){ grouped[key] = []; dateOrder.push(key); }
     grouped[key].push(t);
   });
   var html = '';
-  dateOrder.forEach(dateKey => {
+  dateOrder.forEach(function(dateKey){
     html += '<h2 class="history-date-heading" tabindex="-1">' + dateKey + '</h2>';
     html += '<ul class="history-list" role="list">';
-    grouped[dateKey].forEach(t => {
+    grouped[dateKey].forEach(function(t){
       var typeLabel = t.type === 'deposit' ? 'Зачисление' : 'Перевод';
       var detail = t.type === 'deposit' ? 'Источник: ' + t.source : 'Получатель: ' + t.recipient;
+      var accPart = t.accountName ? ', счёт: ' + t.accountName : '';
+      var catPart = t.categoryName ? ', категория: ' + t.categoryName : '';
       var accLabel = t.accountName ? ' · Счёт: ' + t.accountName : '';
+      var catLabel = t.categoryName ? ' · Категория: ' + t.categoryName : '';
       var timeStr = formatTime(t.date);
-      var fullAriaLabel = t.type === 'deposit'
-        ? `Зачисление на сумму ${fmt(t.amount)}, источник: ${t.source}${accLabel ? ', счёт: ' + t.accountName : ''}, ${dateKey}, ${timeStr}`
-        : `Перевод на сумму ${fmt(t.amount)}, получатель: ${t.recipient}${accLabel ? ', счёт: ' + t.accountName : ''}, ${dateKey}, ${timeStr}`;
+      var fullAriaLabel = (t.type === 'deposit' ? 'Зачисление на сумму ' : 'Перевод на сумму ')
+        + fmt(t.amount) + ', ' + detail + accPart + catPart + ', ' + dateKey + ', ' + timeStr;
       var typeClass = t.type === 'deposit' ? 'deposit' : 'transfer';
       var sign = t.type === 'deposit' ? '+' : '\u2212';
-      html += `<li class="history-item" role="listitem" aria-label="${escapeAttr(fullAriaLabel)}">`;
+      html += '<li class="history-item" role="listitem" aria-label="' + escapeAttr(fullAriaLabel) + '">';
       html += '<div aria-hidden="true">';
-      html += `<div class="h-type ${typeClass}">${typeLabel}</div>`;
-      html += `<div class="h-amount">${sign} ${fmt(t.amount)}</div>`;
-      html += `<div class="h-detail">${detail}${accLabel}</div>`;
-      html += `<div class="h-date">${timeStr}</div>`;
+      html += '<div class="h-type ' + typeClass + '">' + typeLabel + '</div>';
+      html += '<div class="h-amount">' + sign + ' ' + fmt(t.amount) + '</div>';
+      html += '<div class="h-detail">' + detail + accLabel + catLabel + '</div>';
+      html += '<div class="h-date">' + timeStr + '</div>';
       html += '</div></li>';
     });
     html += '</ul>';
@@ -1592,16 +1977,22 @@ function renderHistory(){
 }
 
 document.getElementById('btn-apply-filters').addEventListener('click', function(){
+  showScreen('screen-history','history-title');
+  selectTab('tab-history');
   renderHistory();
   announcePolite('Фильтры применены');
 });
 
 document.getElementById('btn-reset-filters').addEventListener('click', function(){
-  var radios = document.querySelectorAll('input[name="history-filter-type"]');
-  radios.forEach(r => { r.checked = r.value === 'all'; });
+  document.querySelectorAll('input[name="history-filter-type"]').forEach(function(r){ r.checked = r.value === 'all'; });
   document.getElementById('history-filter-period').value = '';
-  const accSel = document.getElementById('history-filter-account');
+  var accSel = document.getElementById('history-filter-account');
   if(accSel) accSel.value = 'all';
+  catState.filterSelected = 'all';
+  var fn = document.getElementById('filter-cat-name');
+  if(fn) fn.textContent = 'Все категории';
+  showScreen('screen-history','history-title');
+  selectTab('tab-history');
   renderHistory();
   announcePolite('Фильтры сброшены');
 });
@@ -1679,11 +2070,14 @@ document.getElementById('btn-open-deposit').addEventListener('click', function()
   clearFormErrors('deposit-form');
   document.getElementById('deposit-amount').value = '';
   document.getElementById('deposit-source').value = '';
+  catState.depositSelected = 'all';
+  var dcn = document.getElementById('deposit-cat-name');
+  if(dcn) dcn.textContent = 'Все категории';
   populateAccountSelects();
   const acc = getActiveAccount();
   const sel = document.getElementById('deposit-account-select');
   if(sel) sel.value = acc.id;
-  showScreen('screen-deposit','deposit-amount');
+  showScreen('screen-deposit','deposit-title');
   history.pushState({screen:'screen-deposit'}, '');
 });
 
@@ -1691,11 +2085,14 @@ document.getElementById('btn-open-transfer').addEventListener('click', function(
   clearFormErrors('transfer-form');
   document.getElementById('transfer-amount').value = '';
   document.getElementById('transfer-recipient').value = '';
+  catState.transferSelected = 'all';
+  var tcn = document.getElementById('transfer-cat-name');
+  if(tcn) tcn.textContent = 'Все категории';
   populateAccountSelects();
   const acc = getActiveAccount();
   const sel = document.getElementById('transfer-account-select');
   if(sel) sel.value = acc.id;
-  showScreen('screen-transfer','transfer-amount');
+  showScreen('screen-transfer','transfer-title');
   history.pushState({screen:'screen-transfer'}, '');
 });
 
@@ -1732,10 +2129,15 @@ document.getElementById('deposit-form').addEventListener('submit', function(e){
   store.set('balance', totalBalance);
   const transactions = store.get('transactions') || [];
   const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
-  transactions.push({type:'deposit', amount, source, account: accountId, accountName: accName, date:new Date().toISOString()});
+  const catId = catState.depositSelected !== 'all' ? catState.depositSelected : null;
+  const catName = catId ? getCatName(catId) : null;
+  transactions.push({type:'deposit', amount, source, account:accountId, accountName:accName, category:catId, categoryName:catName, date:new Date().toISOString()});
   store.set('transactions', transactions);
   document.getElementById('deposit-amount').value = '';
   document.getElementById('deposit-source').value = '';
+  catState.depositSelected = 'all';
+  var dcn = document.getElementById('deposit-cat-name');
+  if(dcn) dcn.textContent = 'Все категории';
   showScreen('screen-home','home-title');
   renderHome();
   selectTab('tab-home');
@@ -1753,13 +2155,33 @@ document.getElementById('transfer-form').addEventListener('submit', function(e){
   const accountId = document.getElementById('transfer-account-select')?.value || getActiveAccount().id;
   const accounts = store.get('accounts') || [];
   const accIdx = accounts.findIndex(a => a.id === accountId);
+  const accBalance = accIdx >= 0 ? accounts[accIdx].balance : 0;
+  const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
+  if(accBalance <= 0){
+    const msg = 'Недостаточно средств: баланс счёта «' + accName + '» равен нулю';
+    announceAssertive('Произошла ошибка: ' + msg);
+    showToast(msg, 4000);
+    document.getElementById('transfer-amount').focus();
+    return;
+  }
+  if(amount > accBalance){
+    const msg = 'Недостаточно средств: на счёте «' + accName + '» только ' + fmt(accBalance);
+    announceAssertive('Произошла ошибка: ' + msg);
+    showToast(msg, 4000);
+    const inp = document.getElementById('transfer-amount');
+    document.getElementById('fg-transfer-amount').classList.add('has-error');
+    inp.classList.add('error');
+    inp.focus();
+    return;
+  }
   if(accIdx >= 0) accounts[accIdx].balance -= amount;
   store.set('accounts', accounts);
   const totalBalance = accounts.reduce((s, a) => s + a.balance, 0);
   store.set('balance', totalBalance);
   const transactions = store.get('transactions') || [];
-  const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
-  transactions.push({type:'transfer', amount, recipient, account: accountId, accountName: accName, date:new Date().toISOString()});
+  const catId = catState.transferSelected !== 'all' ? catState.transferSelected : null;
+  const catName = catId ? getCatName(catId) : null;
+  transactions.push({type:'transfer', amount, recipient, account:accountId, accountName:accName, category:catId, categoryName:catName, date:new Date().toISOString()});
   store.set('transactions', transactions);
   const budget = store.get('budget');
   if(budget){
@@ -1768,6 +2190,9 @@ document.getElementById('transfer-form').addEventListener('submit', function(e){
   }
   document.getElementById('transfer-amount').value = '';
   document.getElementById('transfer-recipient').value = '';
+  catState.transferSelected = 'all';
+  var tcn = document.getElementById('transfer-cat-name');
+  if(tcn) tcn.textContent = 'Все категории';
   showScreen('screen-home','home-title');
   renderHome();
   selectTab('tab-home');
@@ -2448,6 +2873,12 @@ window.addEventListener('popstate', function(e){
       showScreen('screen-home','home-title');
       renderHome();
       selectTab('tab-home');
+      return;
+    }
+    if(currentScreen === 'screen-filters'){
+      showScreen('screen-history','history-title');
+      selectTab('tab-history');
+      renderHistory();
       return;
     }
     if(currentScreen === 'screen-shopping' || currentScreen === 'screen-calculator'){
