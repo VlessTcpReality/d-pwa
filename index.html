@@ -732,18 +732,18 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 .home-upcoming-block{flex:1;min-width:0;border-radius:var(--radius);padding:12px 14px;background:#fff;box-shadow:var(--shadow)}
 .home-upcoming-block.income{border-top:3px solid var(--green-500)}
 .home-upcoming-block.expense{border-top:3px solid #f97316}
-.home-upcoming-heading{font-size:.82rem;font-weight:700;margin-bottom:8px;line-height:inherit}
+.home-upcoming-heading{font-size:.85rem;font-weight:700;margin-bottom:8px;line-height:inherit}
 .home-upcoming-heading.income{color:var(--green-600)}
 .home-upcoming-heading.expense{color:#ea580c}
-.home-upcoming-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px}
-.home-upcoming-item{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:.8rem;color:var(--gray-700)}
+.home-upcoming-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:4px}
+.home-upcoming-item{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:.84rem;color:var(--gray-700)}
 .home-upcoming-item-left{display:flex;flex-direction:column;flex:1;min-width:0;gap:1px}
 .home-upcoming-item-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
-.home-upcoming-item-date{font-size:.72rem;color:var(--gray-400)}
-.home-upcoming-item-amount{font-weight:700;flex-shrink:0;font-size:.8rem}
+.home-upcoming-item-date{font-size:.75rem;color:var(--gray-400)}
+.home-upcoming-item-amount{font-weight:700;flex-shrink:0;font-size:.84rem}
 .home-upcoming-item-amount.income{color:var(--green-600)}
 .home-upcoming-item-amount.expense{color:#ea580c}
-.home-upcoming-empty{font-size:.8rem;color:var(--gray-400)}
+.home-upcoming-empty{font-size:.84rem;color:var(--gray-400)}
 </style>
 </head>
 <body>
@@ -1336,6 +1336,7 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <div id="aria-live-polite" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 <div id="aria-live-assertive" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
 <div class="toast" id="toast" role="status"></div>
+<div id="action-status" class="sr-only" tabindex="-1" aria-label=""></div>
 
 </div>
 
@@ -1432,12 +1433,14 @@ function announcePolite(msg){
   var el = document.getElementById('aria-live-polite');
   el.textContent = '';
   setTimeout(function(){ el.textContent = msg; }, 100);
+  setTimeout(function(){ el.textContent = ''; }, 4000);
 }
 
 function announceAssertive(msg){
   var el = document.getElementById('aria-live-assertive');
   el.textContent = '';
   setTimeout(function(){ el.textContent = msg; }, 100);
+  setTimeout(function(){ el.textContent = ''; }, 4000);
 }
 
 var toastTimer = null;
@@ -1448,6 +1451,7 @@ function showToast(msg, duration){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function(){
     t.classList.remove('visible');
+    t.textContent = '';
   }, duration || 3000);
 }
 
@@ -1455,6 +1459,14 @@ function notImplemented(){
   var msg = 'Такая функциональность пока не реализована, пожалуйста, обратитесь к команде поддержки';
   announcePolite(msg);
   showToast(msg, 4000);
+}
+
+// После успешного действия — фокус на скрытый статус, не на заголовок экрана
+function focusActionStatus(msg){
+  var el = document.getElementById('action-status');
+  el.setAttribute('aria-label', msg);
+  setTimeout(function(){ el.focus(); }, 200);
+  setTimeout(function(){ el.setAttribute('aria-label', ''); }, 4000);
 }
 
 var screens = ['screen-home','screen-history','screen-budget','screen-services','screen-deposit','screen-transfer','screen-budget-manage','screen-support','screen-notes','screen-note-edit','screen-shopping','screen-calculator','screen-about','screen-filters'];
@@ -1559,7 +1571,7 @@ function renderHomeUpcoming(){
         return ev.type === type && new Date(p[0], p[1]-1, p[2]) >= today;
       })
       .sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
-      .slice(0,3);
+      .slice(0,4);
   }
   function renderList(items, type, containerId){
     var el = document.getElementById(containerId);
@@ -2302,10 +2314,11 @@ document.getElementById('deposit-form').addEventListener('submit', function(e){
   catState.depositSelected = 'all';
   var dcn = document.getElementById('deposit-cat-name');
   if(dcn) dcn.textContent = 'Все категории';
-  showScreen('screen-home','home-title');
+  showScreen('screen-home', null);
   renderHome();
   selectTab('tab-home');
   announcePolite('Операция успешно выполнена');
+  focusActionStatus('Операция успешно выполнена');
   showToast('Операция успешно выполнена');
 });
 
@@ -2357,10 +2370,11 @@ document.getElementById('transfer-form').addEventListener('submit', function(e){
   catState.transferSelected = 'all';
   var tcn = document.getElementById('transfer-cat-name');
   if(tcn) tcn.textContent = 'Все категории';
-  showScreen('screen-home','home-title');
+  showScreen('screen-home', null);
   renderHome();
   selectTab('tab-home');
   announcePolite('Операция успешно выполнена');
+  focusActionStatus('Операция успешно выполнена');
   showToast('Операция успешно выполнена');
 });
 
@@ -2478,9 +2492,10 @@ document.getElementById('confirm-yes').addEventListener('click', function(){
   renderHistory();
   renderBudgetScreen();
   populateAccountSelects();
-  showScreen('screen-home','home-title');
+  showScreen('screen-home', null);
   selectTab('tab-home');
   announcePolite('Все данные очищены');
+  focusActionStatus('Все данные очищены');
   showToast('Все данные очищены');
 });
 
