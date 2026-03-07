@@ -423,6 +423,142 @@ background:rgba(15,23,42,.5);z-index:200;display:none;
 align-items:center;justify-content:center;
 }
 .confirm-delete-shopping.active{display:flex}
+.accounts-section{margin-bottom:16px}
+.account-select-btn{
+width:100%;padding:14px 16px;border:2px solid var(--indigo-200);
+border-radius:var(--radius);background:#fff;font-size:1rem;font-weight:600;
+color:var(--gray-800);cursor:pointer;display:flex;align-items:center;
+justify-content:space-between;gap:8px;transition:border-color .15s;
+outline-offset:3px;
+}
+.account-select-btn:focus-visible{outline:3px solid var(--sky-400)}
+.account-select-btn:hover{border-color:var(--indigo-400)}
+.account-select-btn .account-select-name{flex:1;text-align:left}
+.account-select-btn .account-select-balance{font-size:.85rem;color:var(--indigo-600);font-weight:700}
+.account-select-btn svg{width:20px;height:20px;color:var(--gray-500);flex-shrink:0;transition:transform .2s}
+.account-select-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.account-actions-row{display:flex;gap:12px;margin-top:10px}
+.account-actions-row .btn{flex:1;padding:12px 10px;font-size:.88rem}
+.accounts-popup{
+position:fixed;top:0;left:0;right:0;bottom:0;
+background:rgba(15,23,42,.4);z-index:300;display:none;
+align-items:flex-end;justify-content:center;
+}
+.accounts-popup.active{display:flex}
+.accounts-popup-panel{
+background:#fff;border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+width:100%;max-width:430px;max-height:75vh;
+padding:24px 20px env(safe-area-inset-bottom,20px);
+box-shadow:var(--shadow-lg);overflow-y:auto;
+}
+.accounts-popup-title{font-size:1.1rem;font-weight:700;color:var(--gray-900);margin-bottom:16px;outline:none}
+.accounts-list-popup{list-style:none;padding:0;margin-bottom:16px}
+.account-popup-item{
+display:flex;align-items:center;justify-content:space-between;
+padding:14px 12px;border-radius:var(--radius);cursor:pointer;
+border:2px solid transparent;transition:border-color .15s,background .15s;
+margin-bottom:6px;
+}
+.account-popup-item:hover,.account-popup-item:focus{background:var(--indigo-50);outline:none}
+.account-popup-item.selected{border-color:var(--indigo-400);background:var(--indigo-50)}
+.account-popup-item-name{font-size:1rem;font-weight:600;color:var(--gray-800)}
+.account-popup-item-balance{font-size:.85rem;color:var(--indigo-600);font-weight:700}
+.add-account-form{
+background:var(--indigo-50);border-radius:var(--radius);
+padding:16px;border:1px solid var(--indigo-200);
+}
+.add-account-form .form-group{margin-bottom:12px}
+.add-account-form .form-group:last-of-type{margin-bottom:0}
+.select-field{
+width:100%;padding:14px 16px;border:2px solid var(--gray-200);
+border-radius:var(--radius);font-size:1rem;background:var(--gray-50);
+transition:border-color .15s;outline:none;font-family:inherit;
+color:var(--gray-800);cursor:pointer;
+}
+.select-field:focus{border-color:var(--indigo-500)}
+.calendar-section{margin-bottom:20px}
+.calendar-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.calendar-nav-title{font-size:1.05rem;font-weight:700;color:var(--gray-900)}
+.calendar-nav-btn{
+width:40px;height:40px;border:2px solid var(--indigo-200);border-radius:50%;
+background:#fff;color:var(--indigo-600);cursor:pointer;
+display:flex;align-items:center;justify-content:center;
+transition:background .15s,border-color .15s;outline-offset:3px;flex-shrink:0;
+}
+.calendar-nav-btn:hover,.calendar-nav-btn:focus{background:var(--indigo-50);border-color:var(--indigo-400)}
+.calendar-nav-btn:focus-visible{outline:3px solid var(--sky-400)}
+.calendar-nav-btn svg{width:20px;height:20px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+.calendar-weekday{
+text-align:center;font-size:.72rem;font-weight:700;color:var(--gray-500);
+padding:4px 2px;text-transform:uppercase;
+}
+.calendar-day{
+aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+border-radius:50%;font-size:.85rem;font-weight:600;cursor:pointer;
+border:2px solid transparent;transition:background .15s,border-color .15s;
+position:relative;outline-offset:2px;background:none;
+color:var(--gray-700);
+}
+.calendar-day:focus-visible{outline:3px solid var(--sky-400)}
+.calendar-day.other-month{color:var(--gray-300)}
+.calendar-day.today{border-color:var(--indigo-400);color:var(--indigo-600)}
+.calendar-day.selected{background:var(--indigo-600);color:#fff;border-color:var(--indigo-600)}
+.calendar-day.has-expense::after{
+content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+width:5px;height:5px;border-radius:50%;background:var(--red-500);
+}
+.calendar-day.has-income::after{
+content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+width:5px;height:5px;border-radius:50%;background:var(--green-600);
+}
+.calendar-day.has-both::after{
+content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+width:10px;height:5px;border-radius:3px;
+background:linear-gradient(to right,var(--red-500) 50%,var(--green-600) 50%);
+}
+.calendar-day.selected::after{border-color:#fff}
+.calendar-events-section{margin-top:12px}
+.calendar-event-item{
+background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:10px;
+box-shadow:var(--shadow);border-left:4px solid var(--gray-300);
+display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+}
+.calendar-event-item.expense{border-left-color:var(--red-500)}
+.calendar-event-item.income{border-left-color:var(--green-600)}
+.calendar-event-type{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.calendar-event-type.expense{color:var(--red-600)}
+.calendar-event-type.income{color:var(--green-600)}
+.calendar-event-label{font-size:.93rem;color:var(--gray-800);font-weight:600}
+.calendar-event-amount{font-size:.9rem;color:var(--gray-600)}
+.calendar-event-delete{
+width:32px;height:32px;border:none;border-radius:50%;background:var(--gray-100);
+color:var(--gray-500);cursor:pointer;display:flex;align-items:center;
+justify-content:center;transition:background .15s,color .15s;flex-shrink:0;outline-offset:2px;
+}
+.calendar-event-delete:hover,.calendar-event-delete:focus{background:var(--red-500);color:#fff}
+.calendar-event-delete:focus-visible{outline:3px solid var(--sky-400)}
+.calendar-event-delete svg{width:16px;height:16px}
+.calendar-add-form{
+background:var(--indigo-50);border-radius:var(--radius);
+padding:16px;border:1px solid var(--indigo-200);margin-top:16px;
+}
+.calendar-add-form .form-group{margin-bottom:14px}
+.radio-group-inline{display:flex;gap:16px;flex-wrap:wrap}
+.radio-label-inline{
+display:flex;align-items:center;gap:8px;font-size:.93rem;color:var(--gray-700);
+cursor:pointer;padding:8px 12px;border-radius:var(--radius);border:2px solid var(--gray-200);
+transition:border-color .15s,background .15s;flex:1;justify-content:center;
+}
+.radio-label-inline:has(input:checked){border-color:var(--indigo-500);background:var(--indigo-50)}
+.radio-label-inline input[type="radio"]{width:16px;height:16px;accent-color:var(--indigo-600);flex-shrink:0}
+.calendar-empty-msg{text-align:center;padding:20px;color:var(--gray-500);font-size:.9rem}
+.notif-status{
+font-size:.82rem;color:var(--gray-500);margin-top:6px;
+padding:8px 12px;background:var(--gray-100);border-radius:8px;
+}
+.notif-status.granted{color:var(--green-700);background:#f0fdf4}
+.notif-status.denied{color:var(--red-600);background:#fef2f2}
 </style>
 </head>
 <body>
@@ -445,9 +581,45 @@ align-items:center;justify-content:center;
 <div class="card-value" id="balance-display">0 ₽</div>
 </div>
 
+<div class="accounts-section" role="region" aria-label="Счета">
+<button class="account-select-btn" id="btn-accounts-popup" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбрать счёт">
+<span class="account-select-name" id="selected-account-name">Основной счёт</span>
+<span class="account-select-balance" id="selected-account-balance">0 ₽</span>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<div class="account-actions-row">
+<button class="btn btn-primary" id="btn-add-account" aria-label="Добавить новый счёт" style="flex:1;padding:12px 10px;font-size:.88rem">Добавить счёт</button>
+<button class="btn btn-danger" id="btn-delete-account" aria-label="Удалить выбранный счёт" style="flex:1;padding:12px 10px;font-size:.88rem">Удалить счёт</button>
+</div>
+</div>
+
 <div class="btn-row">
 <button class="btn btn-deposit" aria-label="Пополнить баланс" id="btn-open-deposit">Пополнить</button>
 <button class="btn btn-transfer" aria-label="Сделать перевод" id="btn-open-transfer">Перевести</button>
+</div>
+</div>
+
+<div class="accounts-popup" id="accounts-popup" role="dialog" aria-modal="true" aria-label="Выбор счёта">
+<div class="accounts-popup-panel">
+<h2 class="accounts-popup-title" id="accounts-popup-title" tabindex="-1">Выберите счёт</h2>
+<ul class="accounts-list-popup" id="accounts-list-popup" role="listbox" aria-label="Список счетов"></ul>
+</div>
+</div>
+
+<div id="add-account-dialog" class="accounts-popup" role="dialog" aria-modal="true" aria-label="Добавить счёт">
+<div class="accounts-popup-panel">
+<h2 class="accounts-popup-title" id="add-account-title" tabindex="-1">Добавить счёт</h2>
+<div class="add-account-form">
+<div class="form-group" id="fg-new-account-name">
+<label for="new-account-name">Название счёта</label>
+<input type="text" id="new-account-name" placeholder="Например: Продукты" aria-required="true">
+<div class="error-text" id="err-new-account-name">Поле «Название счёта» не заполнено</div>
+</div>
+<div class="btn-row" style="margin-bottom:0">
+<button class="btn btn-primary" id="btn-confirm-add-account">Добавить счёт</button>
+<button class="btn btn-secondary" id="btn-cancel-add-account">Отмена</button>
+</div>
+</div>
 </div>
 </div>
 
@@ -462,6 +634,10 @@ align-items:center;justify-content:center;
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="transfer"> Только переводы</label>
 </div>
 </fieldset>
+<div class="filter-period-group">
+<label for="history-filter-account">Счёт</label>
+<select id="history-filter-account" class="select-field" aria-label="Фильтр по счёту"></select>
+</div>
 <div class="filter-period-group">
 <label for="history-filter-period">Период (в днях, пусто — за всё время)</label>
 <input type="number" id="history-filter-period" inputmode="numeric" placeholder="Например: 30">
@@ -478,6 +654,48 @@ align-items:center;justify-content:center;
 <div id="screen-budget" class="screen">
 <h1 class="screen-title" id="budget-title" tabindex="-1">Мой бюджет</h1>
 <div id="budget-info-block" class="content-pad"></div>
+
+<section class="calendar-section" aria-label="Календарь доходов и расходов">
+<div class="card" style="background:#fff;padding:16px">
+<h2 style="font-size:1.1rem;font-weight:700;color:var(--gray-900);margin-bottom:16px">Календарь доходов и расходов</h2>
+<div class="calendar-nav">
+<button class="calendar-nav-btn" id="cal-prev" aria-label="Предыдущий месяц">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<div class="calendar-nav-title" id="cal-month-label" aria-live="polite" aria-atomic="true"></div>
+<button class="calendar-nav-btn" id="cal-next" aria-label="Следующий месяц">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+</div>
+<div class="calendar-grid" id="cal-grid" role="grid" aria-label="Дни месяца"></div>
+<div class="calendar-events-section" id="cal-events" aria-live="polite" aria-label="События выбранного дня"></div>
+<div class="calendar-add-form" id="cal-add-form" aria-label="Добавить событие">
+<div class="form-group">
+<label id="cal-event-type-legend">Тип</label>
+<div class="radio-group-inline" role="group" aria-labelledby="cal-event-type-legend">
+<label class="radio-label-inline">
+<input type="radio" name="cal-event-type" value="expense" checked> Расходы
+</label>
+<label class="radio-label-inline">
+<input type="radio" name="cal-event-type" value="income"> Доходы
+</label>
+</div>
+</div>
+<div class="form-group" id="fg-cal-amount">
+<label for="cal-event-amount">Сумма</label>
+<input type="number" id="cal-event-amount" inputmode="decimal" placeholder="Введите сумму" aria-required="true">
+<div class="error-text" id="err-cal-amount">Поле «Сумма» не заполнено</div>
+</div>
+<div class="form-group" id="fg-cal-label">
+<label for="cal-event-label">Описание</label>
+<input type="text" id="cal-event-label" placeholder="Например: Продукты" aria-required="true">
+<div class="error-text" id="err-cal-label">Поле «Описание» не заполнено</div>
+</div>
+<div id="cal-notif-status" class="notif-status" aria-live="polite"></div>
+<button type="button" class="btn btn-primary" style="width:100%;margin-top:4px" id="btn-cal-add-event">Добавить в календарь</button>
+</div>
+</div>
+</section>
 </div>
 
 <div id="screen-services" class="screen">
@@ -511,6 +729,10 @@ align-items:center;justify-content:center;
 </button>
 <h1 class="screen-title" id="deposit-title" tabindex="-1">Пополнение</h1>
 <form id="deposit-form" novalidate>
+<div class="form-group">
+<label for="deposit-account-select">Счёт</label>
+<select id="deposit-account-select" class="select-field" aria-label="Выберите счёт для пополнения"></select>
+</div>
 <div class="form-group" id="fg-deposit-amount">
 <label for="deposit-amount">Сумма</label>
 <input type="number" id="deposit-amount" inputmode="decimal" placeholder="Введите сумму" required aria-required="true">
@@ -532,6 +754,10 @@ align-items:center;justify-content:center;
 </button>
 <h1 class="screen-title" id="transfer-title" tabindex="-1">Перевод</h1>
 <form id="transfer-form" novalidate>
+<div class="form-group">
+<label for="transfer-account-select">Счёт списания</label>
+<select id="transfer-account-select" class="select-field" aria-label="Выберите счёт для списания"></select>
+</div>
 <div class="form-group" id="fg-transfer-amount">
 <label for="transfer-amount">Сумма</label>
 <input type="number" id="transfer-amount" inputmode="decimal" placeholder="Введите сумму" required aria-required="true">
@@ -748,7 +974,16 @@ align-items:center;justify-content:center;
 var store = {
   _data: null,
   _defaults: function(){
-    return {balance:0, transactions:[], budget:null, notes:[], supportMessages:[]};
+    return {
+      balance:0,
+      transactions:[],
+      budget:null,
+      notes:[],
+      supportMessages:[],
+      accounts:[{id:'main', name:'Основной счёт', balance:0}],
+      activeAccountId:'main',
+      calendarEvents:[]
+    };
   },
   load: function(){
     try {
@@ -756,6 +991,9 @@ var store = {
       var d = raw ? JSON.parse(raw) : this._defaults();
       if(!d.notes) d.notes = [];
       if(!d.supportMessages) d.supportMessages = [];
+      if(!d.accounts) d.accounts = [{id:'main', name:'Основной счёт', balance:0}];
+      if(!d.activeAccountId) d.activeAccountId = 'main';
+      if(!d.calendarEvents) d.calendarEvents = [];
       this._data = d;
     } catch(e) {
       this._data = this._defaults();
@@ -887,8 +1125,8 @@ tabs.forEach(function(tab){
     var screenId = tab.getAttribute('aria-controls');
     var titleId = screenId.replace('screen-','') + '-title';
     showScreen(screenId, titleId);
-    if(screenId === 'screen-history') renderHistory();
-    if(screenId === 'screen-budget') renderBudgetScreen();
+    if(screenId === 'screen-history') { renderHistory(); populateAccountSelects(); }
+    if(screenId === 'screen-budget') { renderBudgetScreen(); renderCalendar(); }
     if(screenId === 'screen-home') renderHome();
     history.pushState({screen: screenId}, '');
   });
@@ -928,7 +1166,161 @@ function renderHome(){
   document.getElementById('balance-display').textContent = fmt(balance);
   document.querySelector('.card-balance').setAttribute('aria-label','Ваш текущий баланс: ' + fmt(balance));
   renderBudgetCard();
+  renderActiveAccount();
 }
+
+function getActiveAccount(){
+  var accounts = store.get('accounts') || [];
+  var activeId = store.get('activeAccountId') || 'main';
+  return accounts.find(a => a.id === activeId) || accounts[0] || {id:'main', name:'Основной счёт', balance:0};
+}
+
+function renderActiveAccount(){
+  var acc = getActiveAccount();
+  document.getElementById('selected-account-name').textContent = acc.name;
+  document.getElementById('selected-account-balance').textContent = fmt(acc.balance);
+  document.getElementById('btn-accounts-popup').setAttribute('aria-label', 'Выбрать счёт. Текущий: ' + acc.name + ', ' + fmt(acc.balance));
+}
+
+function populateAccountSelects(){
+  var accounts = store.get('accounts') || [];
+  var activeId = store.get('activeAccountId') || 'main';
+  const makeOptions = (selectedId, includeAll) => {
+    let html = includeAll ? '<option value="all">Все счета</option>' : '';
+    accounts.forEach(a => {
+      const sel = a.id === selectedId ? ' selected' : '';
+      html += `<option value="${escapeAttr(a.id)}"${sel}>${escapeHtml(a.name)} — ${fmt(a.balance)}</option>`;
+    });
+    return html;
+  };
+  const depSel = document.getElementById('deposit-account-select');
+  const traSel = document.getElementById('transfer-account-select');
+  const hisSel = document.getElementById('history-filter-account');
+  if(depSel) depSel.innerHTML = makeOptions(activeId, false);
+  if(traSel) traSel.innerHTML = makeOptions(activeId, false);
+  if(hisSel) hisSel.innerHTML = makeOptions('all', true);
+}
+
+function renderAccountsPopup(){
+  var accounts = store.get('accounts') || [];
+  var activeId = store.get('activeAccountId') || 'main';
+  const list = document.getElementById('accounts-list-popup');
+  list.innerHTML = accounts.map(a => {
+    const sel = a.id === activeId ? ' selected' : '';
+    const ariaSelected = a.id === activeId ? 'true' : 'false';
+    return `<li class="account-popup-item${sel}" role="option" aria-selected="${ariaSelected}" tabindex="0" data-account-id="${escapeAttr(a.id)}">
+      <span class="account-popup-item-name">${escapeHtml(a.name)}</span>
+      <span class="account-popup-item-balance">${fmt(a.balance)}</span>
+    </li>`;
+  }).join('');
+}
+
+function openAccountsPopup(){
+  renderAccountsPopup();
+  const popup = document.getElementById('accounts-popup');
+  popup.classList.add('active');
+  document.getElementById('btn-accounts-popup').setAttribute('aria-expanded','true');
+  setTimeout(() => {
+    const first = popup.querySelector('.account-popup-item.selected') || popup.querySelector('.account-popup-item');
+    if(first) first.focus();
+  }, 100);
+}
+
+function closeAccountsPopup(){
+  document.getElementById('accounts-popup').classList.remove('active');
+  document.getElementById('btn-accounts-popup').setAttribute('aria-expanded','false');
+  document.getElementById('btn-accounts-popup').focus();
+}
+
+document.getElementById('btn-accounts-popup').addEventListener('click', openAccountsPopup);
+document.getElementById('accounts-popup').addEventListener('click', function(e){
+  const item = e.target.closest('[data-account-id]');
+  if(item){
+    store.set('activeAccountId', item.dataset.accountId);
+    closeAccountsPopup();
+    renderHome();
+    announcePolite('Выбран счёт: ' + getActiveAccount().name);
+    return;
+  }
+  if(e.target === this) closeAccountsPopup();
+});
+document.getElementById('accounts-popup').addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeAccountsPopup();
+  if(e.key === 'Enter'){
+    const item = e.target.closest('[data-account-id]');
+    if(item){
+      store.set('activeAccountId', item.dataset.accountId);
+      closeAccountsPopup();
+      renderHome();
+      announcePolite('Выбран счёт: ' + getActiveAccount().name);
+    }
+  }
+});
+
+function openAddAccountDialog(){
+  document.getElementById('new-account-name').value = '';
+  document.getElementById('fg-new-account-name').classList.remove('has-error');
+  document.getElementById('new-account-name').classList.remove('error');
+  const dlg = document.getElementById('add-account-dialog');
+  dlg.classList.add('active');
+  setTimeout(() => document.getElementById('add-account-title').focus(), 100);
+}
+
+function closeAddAccountDialog(){
+  document.getElementById('add-account-dialog').classList.remove('active');
+  document.getElementById('btn-add-account').focus();
+}
+
+document.getElementById('btn-add-account').addEventListener('click', openAddAccountDialog);
+document.getElementById('btn-cancel-add-account').addEventListener('click', closeAddAccountDialog);
+document.getElementById('add-account-dialog').addEventListener('click', function(e){
+  if(e.target === this) closeAddAccountDialog();
+});
+document.getElementById('add-account-dialog').addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeAddAccountDialog();
+});
+document.getElementById('btn-confirm-add-account').addEventListener('click', function(){
+  const input = document.getElementById('new-account-name');
+  const name = input.value.trim();
+  if(!name){
+    document.getElementById('fg-new-account-name').classList.add('has-error');
+    input.classList.add('error');
+    announceAssertive('Произошла ошибка: Название счёта не заполнено');
+    input.focus();
+    return;
+  }
+  const accounts = store.get('accounts') || [];
+  const newId = 'acc_' + Date.now();
+  accounts.push({id: newId, name, balance: 0});
+  store.set('accounts', accounts);
+  store.set('activeAccountId', newId);
+  closeAddAccountDialog();
+  renderHome();
+  populateAccountSelects();
+  announcePolite('Счёт «' + name + '» добавлен и выбран');
+  showToast('Счёт «' + name + '» добавлен');
+});
+
+document.getElementById('btn-delete-account').addEventListener('click', function(){
+  const accounts = store.get('accounts') || [];
+  if(accounts.length <= 1){
+    announceAssertive('Нельзя удалить единственный счёт');
+    showToast('Нельзя удалить единственный счёт', 3000);
+    return;
+  }
+  const acc = getActiveAccount();
+  const confirmMsg = `Удалить счёт «${acc.name}» (${fmt(acc.balance)})? Средства на счёте будут потеряны.`;
+  if(!confirm(confirmMsg)) return;
+  const newAccounts = accounts.filter(a => a.id !== acc.id);
+  store.set('accounts', newAccounts);
+  store.set('activeAccountId', newAccounts[0].id);
+  const totalBalance = newAccounts.reduce((s, a) => s + a.balance, 0);
+  store.set('balance', totalBalance);
+  renderHome();
+  populateAccountSelects();
+  announcePolite('Счёт «' + acc.name + '» удалён');
+  showToast('Счёт удалён');
+});
 
 function renderBudgetCard(){
   var budget = store.get('budget');
@@ -987,21 +1379,31 @@ function getFilterPeriod(){
   return (isNaN(num) || num <= 0) ? null : num;
 }
 
+function getFilterAccount(){
+  const sel = document.getElementById('history-filter-account');
+  return sel ? sel.value : 'all';
+}
+
 function renderHistory(){
+  populateAccountSelects();
   var transactions = store.get('transactions') || [];
   var container = document.getElementById('history-container');
   var summaryEl = document.getElementById('history-summary');
   var filterType = getActiveFilterType();
   var filterPeriod = getFilterPeriod();
+  var filterAccount = getFilterAccount();
 
   var filtered = transactions.slice();
   if(filterType !== 'all'){
-    filtered = filtered.filter(function(t){ return t.type === filterType; });
+    filtered = filtered.filter(t => t.type === filterType);
+  }
+  if(filterAccount && filterAccount !== 'all'){
+    filtered = filtered.filter(t => t.account === filterAccount);
   }
   if(filterPeriod !== null){
     var cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - filterPeriod);
-    filtered = filtered.filter(function(t){ return new Date(t.date) >= cutoff; });
+    filtered = filtered.filter(t => new Date(t.date) >= cutoff);
   }
 
   if(filtered.length === 0){
@@ -1013,56 +1415,46 @@ function renderHistory(){
 
   var totalDeposits = 0;
   var totalTransfers = 0;
-  filtered.forEach(function(t){
+  filtered.forEach(t => {
     if(t.type === 'deposit') totalDeposits += t.amount;
     else totalTransfers += t.amount;
   });
 
   var summaryParts = [];
-  if(filterType === 'all' || filterType === 'deposit'){
-    summaryParts.push('Пополнения: ' + fmt(totalDeposits));
-  }
-  if(filterType === 'all' || filterType === 'transfer'){
-    summaryParts.push('Переводы: ' + fmt(totalTransfers));
-  }
+  if(filterType === 'all' || filterType === 'deposit') summaryParts.push('Пополнения: ' + fmt(totalDeposits));
+  if(filterType === 'all' || filterType === 'transfer') summaryParts.push('Переводы: ' + fmt(totalTransfers));
   var periodText = filterPeriod !== null ? ' за ' + filterPeriod + ' дн.' : ' за всё время';
   summaryEl.textContent = summaryParts.join(' | ') + periodText;
 
   var sorted = filtered.slice().reverse();
   var grouped = {};
   var dateOrder = [];
-  sorted.forEach(function(t){
+  sorted.forEach(t => {
     var key = formatDateKey(t.date);
-    if(!grouped[key]){
-      grouped[key] = [];
-      dateOrder.push(key);
-    }
+    if(!grouped[key]){ grouped[key] = []; dateOrder.push(key); }
     grouped[key].push(t);
   });
   var html = '';
-  dateOrder.forEach(function(dateKey){
+  dateOrder.forEach(dateKey => {
     html += '<h2 class="history-date-heading" tabindex="-1">' + dateKey + '</h2>';
     html += '<ul class="history-list" role="list">';
-    grouped[dateKey].forEach(function(t){
+    grouped[dateKey].forEach(t => {
       var typeLabel = t.type === 'deposit' ? 'Зачисление' : 'Перевод';
       var detail = t.type === 'deposit' ? 'Источник: ' + t.source : 'Получатель: ' + t.recipient;
+      var accLabel = t.accountName ? ' · Счёт: ' + t.accountName : '';
       var timeStr = formatTime(t.date);
-      var fullAriaLabel;
-      if(t.type === 'deposit'){
-        fullAriaLabel = 'Зачисление на сумму ' + fmt(t.amount) + ', источник: ' + t.source + ', ' + dateKey + ', ' + timeStr;
-      } else {
-        fullAriaLabel = 'Перевод на сумму ' + fmt(t.amount) + ', получатель: ' + t.recipient + ', ' + dateKey + ', ' + timeStr;
-      }
+      var fullAriaLabel = t.type === 'deposit'
+        ? `Зачисление на сумму ${fmt(t.amount)}, источник: ${t.source}${accLabel ? ', счёт: ' + t.accountName : ''}, ${dateKey}, ${timeStr}`
+        : `Перевод на сумму ${fmt(t.amount)}, получатель: ${t.recipient}${accLabel ? ', счёт: ' + t.accountName : ''}, ${dateKey}, ${timeStr}`;
       var typeClass = t.type === 'deposit' ? 'deposit' : 'transfer';
       var sign = t.type === 'deposit' ? '+' : '\u2212';
-      html += '<li class="history-item" role="listitem" aria-label="' + escapeAttr(fullAriaLabel) + '">';
+      html += `<li class="history-item" role="listitem" aria-label="${escapeAttr(fullAriaLabel)}">`;
       html += '<div aria-hidden="true">';
-      html += '<div class="h-type ' + typeClass + '">' + typeLabel + '</div>';
-      html += '<div class="h-amount">' + sign + ' ' + fmt(t.amount) + '</div>';
-      html += '<div class="h-detail">' + detail + '</div>';
-      html += '<div class="h-date">' + timeStr + '</div>';
-      html += '</div>';
-      html += '</li>';
+      html += `<div class="h-type ${typeClass}">${typeLabel}</div>`;
+      html += `<div class="h-amount">${sign} ${fmt(t.amount)}</div>`;
+      html += `<div class="h-detail">${detail}${accLabel}</div>`;
+      html += `<div class="h-date">${timeStr}</div>`;
+      html += '</div></li>';
     });
     html += '</ul>';
   });
@@ -1076,8 +1468,10 @@ document.getElementById('btn-apply-filters').addEventListener('click', function(
 
 document.getElementById('btn-reset-filters').addEventListener('click', function(){
   var radios = document.querySelectorAll('input[name="history-filter-type"]');
-  radios.forEach(function(r){ r.checked = r.value === 'all'; });
+  radios.forEach(r => { r.checked = r.value === 'all'; });
   document.getElementById('history-filter-period').value = '';
+  const accSel = document.getElementById('history-filter-account');
+  if(accSel) accSel.value = 'all';
   renderHistory();
   announcePolite('Фильтры сброшены');
 });
@@ -1155,6 +1549,10 @@ document.getElementById('btn-open-deposit').addEventListener('click', function()
   clearFormErrors('deposit-form');
   document.getElementById('deposit-amount').value = '';
   document.getElementById('deposit-source').value = '';
+  populateAccountSelects();
+  const acc = getActiveAccount();
+  const sel = document.getElementById('deposit-account-select');
+  if(sel) sel.value = acc.id;
   showScreen('screen-deposit','deposit-amount');
   history.pushState({screen:'screen-deposit'}, '');
 });
@@ -1163,6 +1561,10 @@ document.getElementById('btn-open-transfer').addEventListener('click', function(
   clearFormErrors('transfer-form');
   document.getElementById('transfer-amount').value = '';
   document.getElementById('transfer-recipient').value = '';
+  populateAccountSelects();
+  const acc = getActiveAccount();
+  const sel = document.getElementById('transfer-account-select');
+  if(sel) sel.value = acc.id;
   showScreen('screen-transfer','transfer-amount');
   history.pushState({screen:'screen-transfer'}, '');
 });
@@ -1180,6 +1582,7 @@ document.getElementById('btn-back-transfer').addEventListener('click', function(
 document.getElementById('btn-back-budget').addEventListener('click', function(){
   showScreen('screen-budget','budget-title');
   renderBudgetScreen();
+  renderCalendar();
   selectTab('tab-budget');
 });
 
@@ -1188,13 +1591,18 @@ document.getElementById('deposit-form').addEventListener('submit', function(e){
   clearFormErrors('deposit-form');
   if(!validateField('fg-deposit-amount','deposit-amount','Сумма')) return;
   if(!validateField('fg-deposit-source','deposit-source','Источник')) return;
-  var amount = parseFloat(document.getElementById('deposit-amount').value.trim());
-  var source = document.getElementById('deposit-source').value.trim();
-  var balance = store.get('balance') || 0;
-  balance += amount;
-  store.set('balance', balance);
-  var transactions = store.get('transactions') || [];
-  transactions.push({type:'deposit', amount:amount, source:source, date:new Date().toISOString()});
+  const amount = parseFloat(document.getElementById('deposit-amount').value.trim());
+  const source = document.getElementById('deposit-source').value.trim();
+  const accountId = document.getElementById('deposit-account-select')?.value || getActiveAccount().id;
+  const accounts = store.get('accounts') || [];
+  const accIdx = accounts.findIndex(a => a.id === accountId);
+  if(accIdx >= 0) accounts[accIdx].balance += amount;
+  store.set('accounts', accounts);
+  const totalBalance = accounts.reduce((s, a) => s + a.balance, 0);
+  store.set('balance', totalBalance);
+  const transactions = store.get('transactions') || [];
+  const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
+  transactions.push({type:'deposit', amount, source, account: accountId, accountName: accName, date:new Date().toISOString()});
   store.set('transactions', transactions);
   document.getElementById('deposit-amount').value = '';
   document.getElementById('deposit-source').value = '';
@@ -1210,15 +1618,20 @@ document.getElementById('transfer-form').addEventListener('submit', function(e){
   clearFormErrors('transfer-form');
   if(!validateField('fg-transfer-amount','transfer-amount','Сумма')) return;
   if(!validateField('fg-transfer-recipient','transfer-recipient','Получатель')) return;
-  var amount = parseFloat(document.getElementById('transfer-amount').value.trim());
-  var recipient = document.getElementById('transfer-recipient').value.trim();
-  var balance = store.get('balance') || 0;
-  balance -= amount;
-  store.set('balance', balance);
-  var transactions = store.get('transactions') || [];
-  transactions.push({type:'transfer', amount:amount, recipient:recipient, date:new Date().toISOString()});
+  const amount = parseFloat(document.getElementById('transfer-amount').value.trim());
+  const recipient = document.getElementById('transfer-recipient').value.trim();
+  const accountId = document.getElementById('transfer-account-select')?.value || getActiveAccount().id;
+  const accounts = store.get('accounts') || [];
+  const accIdx = accounts.findIndex(a => a.id === accountId);
+  if(accIdx >= 0) accounts[accIdx].balance -= amount;
+  store.set('accounts', accounts);
+  const totalBalance = accounts.reduce((s, a) => s + a.balance, 0);
+  store.set('balance', totalBalance);
+  const transactions = store.get('transactions') || [];
+  const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
+  transactions.push({type:'transfer', amount, recipient, account: accountId, accountName: accName, date:new Date().toISOString()});
   store.set('transactions', transactions);
-  var budget = store.get('budget');
+  const budget = store.get('budget');
   if(budget){
     budget.remaining -= amount;
     store.set('budget', budget);
@@ -1332,6 +1745,7 @@ document.getElementById('confirm-yes').addEventListener('click', function(){
   renderHome();
   renderHistory();
   renderBudgetScreen();
+  populateAccountSelects();
   showScreen('screen-home','home-title');
   selectTab('tab-home');
   announcePolite('Все данные очищены');
@@ -1894,6 +2308,7 @@ window.addEventListener('popstate', function(e){
     showScreen(parentScreen, parentScreen.replace('screen-','') + '-title');
     if(parentScreen === 'screen-budget'){
       renderBudgetScreen();
+      renderCalendar();
       selectTab(parentTab);
     } else {
       selectTab(parentTab);
@@ -1922,6 +2337,225 @@ window.addEventListener('popstate', function(e){
 });
 
 renderHome();
+
+var calState = {year: new Date().getFullYear(), month: new Date().getMonth(), selectedDay: null};
+
+var MONTH_NAMES_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+var WEEKDAYS_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+function calDateKey(y, m, d){ return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0'); }
+
+function renderCalendar(){
+  var year = calState.year, month = calState.month, selectedDay = calState.selectedDay;
+  document.getElementById('cal-month-label').textContent = MONTH_NAMES_RU[month] + ' ' + year;
+  var events = store.get('calendarEvents') || [];
+  var eventsByDay = {};
+  events.forEach(function(ev){
+    if(!eventsByDay[ev.date]) eventsByDay[ev.date] = [];
+    eventsByDay[ev.date].push(ev);
+  });
+  var grid = document.getElementById('cal-grid');
+  if(!grid) return;
+  var firstDay = new Date(year, month, 1).getDay();
+  var daysInMonth = new Date(year, month+1, 0).getDate();
+  var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+  var today = new Date();
+  var todayKey = calDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+  var html = WEEKDAYS_SHORT.map(function(d){ return '<div class="calendar-weekday" aria-hidden="true">' + d + '</div>'; }).join('');
+  var prevDays = new Date(year, month, 0).getDate();
+  for(var i = 0; i < startOffset; i++){
+    var dayNum = prevDays - startOffset + i + 1;
+    html += '<div class="calendar-day other-month" aria-hidden="true">' + dayNum + '</div>';
+  }
+  for(var d = 1; d <= daysInMonth; d++){
+    var key = calDateKey(year, month, d);
+    var dayEvents = eventsByDay[key] || [];
+    var hasExpense = dayEvents.some(function(e){ return e.type === 'expense'; });
+    var hasIncome = dayEvents.some(function(e){ return e.type === 'income'; });
+    var cls = 'calendar-day';
+    if(key === todayKey) cls += ' today';
+    if(key === selectedDay) cls += ' selected';
+    if(hasExpense && hasIncome) cls += ' has-both';
+    else if(hasExpense) cls += ' has-expense';
+    else if(hasIncome) cls += ' has-income';
+    var evCount = dayEvents.length;
+    var evLabel = evCount > 0 ? ', событий: ' + evCount : '';
+    var selLabel = key === selectedDay ? ', выбран' : '';
+    var todayLabel = key === todayKey ? ', сегодня' : '';
+    var pressed = key === selectedDay ? 'true' : 'false';
+    html += '<button class="' + cls + '" data-cal-day="' + key + '" aria-label="' + d + ' ' + MONTH_NAMES_RU[month] + todayLabel + evLabel + selLabel + '" aria-pressed="' + pressed + '">' + d + '</button>';
+  }
+  var totalCells = startOffset + daysInMonth;
+  var remainder = totalCells % 7;
+  if(remainder > 0){
+    for(var j = 1; j <= 7 - remainder; j++){
+      html += '<div class="calendar-day other-month" aria-hidden="true">' + j + '</div>';
+    }
+  }
+  grid.innerHTML = html;
+  renderCalendarEvents();
+}
+
+function renderCalendarEvents(){
+  var selectedDay = calState.selectedDay;
+  var eventsEl = document.getElementById('cal-events');
+  if(!eventsEl) return;
+  if(!selectedDay){ eventsEl.innerHTML = '<div class="calendar-empty-msg">Выберите день в календаре</div>'; return; }
+  var events = (store.get('calendarEvents') || []).filter(function(e){ return e.date === selectedDay; });
+  var parts = selectedDay.split('-');
+  var dateLabel = parseInt(parts[2]) + ' ' + MONTH_NAMES_RU[parseInt(parts[1])-1] + ' ' + parts[0];
+  var html = '<h3 style="font-size:.95rem;font-weight:700;color:var(--gray-700);margin-bottom:10px">' + dateLabel + '</h3>';
+  if(events.length === 0){
+    html += '<div class="calendar-empty-msg">Нет событий на этот день</div>';
+  } else {
+    events.forEach(function(ev){
+      var typeRu = ev.type === 'expense' ? 'Расходы' : 'Доходы';
+      var amountLabel = ev.amount ? ' — ' + fmt(ev.amount) : '';
+      var amountHtml = ev.amount ? '<div class="calendar-event-amount">' + fmt(ev.amount) + '</div>' : '';
+      html += '<div class="calendar-event-item ' + ev.type + '" role="article" aria-label="' + escapeAttr(typeRu + ': ' + ev.label + amountLabel) + '">';
+      html += '<div><div class="calendar-event-type ' + ev.type + '">' + typeRu + '</div>';
+      html += '<div class="calendar-event-label">' + escapeHtml(ev.label) + '</div>' + amountHtml + '</div>';
+      html += '<button class="calendar-event-delete" data-cal-delete="' + escapeAttr(ev.id) + '" aria-label="Удалить событие: ' + escapeAttr(ev.label) + '">';
+      html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+      html += '</button></div>';
+    });
+  }
+  eventsEl.innerHTML = html;
+}
+
+document.getElementById('cal-grid').addEventListener('click', function(e){
+  var btn = e.target.closest('[data-cal-day]');
+  if(!btn) return;
+  calState.selectedDay = btn.dataset.calDay;
+  renderCalendar();
+  announcePolite('Выбрано ' + btn.getAttribute('aria-label'));
+});
+
+document.getElementById('cal-events').addEventListener('click', function(e){
+  var btn = e.target.closest('[data-cal-delete]');
+  if(!btn) return;
+  var id = btn.dataset.calDelete;
+  var events = (store.get('calendarEvents') || []).filter(function(ev){ return ev.id !== id; });
+  store.set('calendarEvents', events);
+  renderCalendar();
+  scheduleCalendarNotifications();
+  announcePolite('Событие удалено');
+});
+
+document.getElementById('cal-prev').addEventListener('click', function(){
+  calState.month--;
+  if(calState.month < 0){ calState.month = 11; calState.year--; }
+  calState.selectedDay = null;
+  renderCalendar();
+});
+
+document.getElementById('cal-next').addEventListener('click', function(){
+  calState.month++;
+  if(calState.month > 11){ calState.month = 0; calState.year++; }
+  calState.selectedDay = null;
+  renderCalendar();
+});
+
+document.getElementById('btn-cal-add-event').addEventListener('click', function(){
+  if(!calState.selectedDay){
+    announceAssertive('Сначала выберите день в календаре');
+    showToast('Выберите день в календаре', 3000);
+    return;
+  }
+  var amountInput = document.getElementById('cal-event-amount');
+  var labelInput = document.getElementById('cal-event-label');
+  var amountGroup = document.getElementById('fg-cal-amount');
+  var labelGroup = document.getElementById('fg-cal-label');
+  amountGroup.classList.remove('has-error'); amountInput.classList.remove('error');
+  labelGroup.classList.remove('has-error'); labelInput.classList.remove('error');
+  var labelVal = labelInput.value.trim();
+  var amountVal = amountInput.value.trim();
+  if(!labelVal){
+    labelGroup.classList.add('has-error'); labelInput.classList.add('error');
+    announceAssertive('Произошла ошибка: Описание не заполнено');
+    labelInput.focus(); return;
+  }
+  if(!amountVal || parseFloat(amountVal) <= 0){
+    amountGroup.classList.add('has-error'); amountInput.classList.add('error');
+    announceAssertive('Произошла ошибка: Введите корректную сумму');
+    amountInput.focus(); return;
+  }
+  var typeEl = document.querySelector('input[name="cal-event-type"]:checked');
+  var type = typeEl ? typeEl.value : 'expense';
+  var events = store.get('calendarEvents') || [];
+  events.push({ id: 'cev_' + Date.now(), date: calState.selectedDay, type: type, label: labelVal, amount: parseFloat(amountVal) });
+  store.set('calendarEvents', events);
+  labelInput.value = ''; amountInput.value = '';
+  renderCalendar();
+  requestNotificationPermission().then(function(){ scheduleCalendarNotifications(); });
+  var typeRu = type === 'expense' ? 'Расходы' : 'Доходы';
+  announcePolite('Событие добавлено: ' + typeRu + ', ' + labelVal);
+  showToast('Событие добавлено в календарь');
+});
+
+function requestNotificationPermission(){
+  var statusEl = document.getElementById('cal-notif-status');
+  if(!('Notification' in window)){
+    if(statusEl){ statusEl.textContent = 'Уведомления не поддерживаются в этом браузере'; statusEl.className = 'notif-status denied'; }
+    return Promise.resolve(false);
+  }
+  if(Notification.permission === 'granted'){
+    if(statusEl){ statusEl.textContent = 'Уведомления включены ✓'; statusEl.className = 'notif-status granted'; }
+    return Promise.resolve(true);
+  }
+  if(Notification.permission === 'denied'){
+    if(statusEl){ statusEl.textContent = 'Уведомления заблокированы. Разрешите в настройках браузера'; statusEl.className = 'notif-status denied'; }
+    return Promise.resolve(false);
+  }
+  return Notification.requestPermission().then(function(perm){
+    if(statusEl){
+      if(perm === 'granted'){ statusEl.textContent = 'Уведомления включены ✓'; statusEl.className = 'notif-status granted'; }
+      else { statusEl.textContent = 'Уведомления заблокированы'; statusEl.className = 'notif-status denied'; }
+    }
+    return perm === 'granted';
+  });
+}
+
+function fmt2(n){ return n.toLocaleString('ru-RU', {style:'currency', currency:'RUB', maximumFractionDigits:2}); }
+
+function scheduleCalendarNotifications(){
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+  var events = store.get('calendarEvents') || [];
+  var now = new Date();
+  events.forEach(function(ev){
+    var parts = ev.date.split('-').map(Number);
+    var eventDate = new Date(parts[0], parts[1]-1, parts[2]);
+    var typeRu = ev.type === 'expense' ? 'расходы' : 'доходы';
+    var amountStr = ev.amount ? ', сумма: ' + fmt(ev.amount) : '';
+    var body = ev.type === 'expense' ? 'Расходы: ' : 'Доходы: ';
+    body += ev.label + amountStr;
+    var twoDaysBefore = new Date(eventDate);
+    twoDaysBefore.setDate(twoDaysBefore.getDate() - 2);
+    twoDaysBefore.setHours(12, 0, 0, 0);
+    if(twoDaysBefore > now){
+      var delay2d = twoDaysBefore.getTime() - now.getTime();
+      setTimeout(function(){
+        if(Notification.permission === 'granted'){
+          new Notification('Через 2 дня — ' + typeRu, {body: body, icon: './icon-192.svg', tag: 'cal-2d-' + ev.id});
+        }
+      }, delay2d);
+    }
+    var dayOf = new Date(eventDate);
+    dayOf.setHours(8, 0, 0, 0);
+    if(dayOf > now){
+      var delayDay = dayOf.getTime() - now.getTime();
+      setTimeout(function(){
+        if(Notification.permission === 'granted'){
+          new Notification('Сегодня — ' + typeRu, {body: body, icon: './icon-192.svg', tag: 'cal-day-' + ev.id});
+        }
+      }, delayDay);
+    }
+  });
+}
+
+renderCalendar();
+populateAccountSelects();
+requestNotificationPermission();
 
 })();
 </script>
