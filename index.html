@@ -1126,7 +1126,7 @@ tabs.forEach(function(tab){
     var titleId = screenId.replace('screen-','') + '-title';
     showScreen(screenId, titleId);
     if(screenId === 'screen-history') { renderHistory(); populateAccountSelects(); }
-    if(screenId === 'screen-budget') { renderBudgetScreen(); renderCalendar(); }
+    if(screenId === 'screen-budget') { renderBudgetScreen(); renderCalendar(); updateNotifStatus(); }
     if(screenId === 'screen-home') renderHome();
     history.pushState({screen: screenId}, '');
   });
@@ -1583,6 +1583,7 @@ document.getElementById('btn-back-budget').addEventListener('click', function(){
   showScreen('screen-budget','budget-title');
   renderBudgetScreen();
   renderCalendar();
+  updateNotifStatus();
   selectTab('tab-budget');
 });
 
@@ -2487,31 +2488,44 @@ document.getElementById('btn-cal-add-event').addEventListener('click', function(
   store.set('calendarEvents', events);
   labelInput.value = ''; amountInput.value = '';
   renderCalendar();
-  requestNotificationPermission().then(function(){ scheduleCalendarNotifications(); });
+  if(!('Notification' in window) || Notification.permission === 'granted'){
+    scheduleCalendarNotifications();
+  } else {
+    requestNotificationPermission().then(function(granted){
+      if(granted) scheduleCalendarNotifications();
+    });
+  }
   var typeRu = type === 'expense' ? 'Расходы' : 'Доходы';
   announcePolite('Событие добавлено: ' + typeRu + ', ' + labelVal);
   showToast('Событие добавлено в календарь');
 });
 
-function requestNotificationPermission(){
+function updateNotifStatus(){
   var statusEl = document.getElementById('cal-notif-status');
+  if(!statusEl) return;
   if(!('Notification' in window)){
-    if(statusEl){ statusEl.textContent = 'Уведомления не поддерживаются в этом браузере'; statusEl.className = 'notif-status denied'; }
-    return Promise.resolve(false);
+    statusEl.textContent = 'Уведомления не поддерживаются в этом браузере';
+    statusEl.className = 'notif-status denied';
+    return;
   }
   if(Notification.permission === 'granted'){
-    if(statusEl){ statusEl.textContent = 'Уведомления включены ✓'; statusEl.className = 'notif-status granted'; }
-    return Promise.resolve(true);
+    statusEl.textContent = 'Уведомления включены ✓';
+    statusEl.className = 'notif-status granted';
+  } else if(Notification.permission === 'denied'){
+    statusEl.textContent = 'Уведомления заблокированы. Разрешите в настройках браузера';
+    statusEl.className = 'notif-status denied';
+  } else {
+    statusEl.textContent = 'Нажмите «Добавить в календарь», чтобы включить уведомления';
+    statusEl.className = 'notif-status';
   }
-  if(Notification.permission === 'denied'){
-    if(statusEl){ statusEl.textContent = 'Уведомления заблокированы. Разрешите в настройках браузера'; statusEl.className = 'notif-status denied'; }
-    return Promise.resolve(false);
-  }
+}
+
+function requestNotificationPermission(){
+  if(!('Notification' in window)) return Promise.resolve(false);
+  if(Notification.permission === 'granted'){ updateNotifStatus(); return Promise.resolve(true); }
+  if(Notification.permission === 'denied'){ updateNotifStatus(); return Promise.resolve(false); }
   return Notification.requestPermission().then(function(perm){
-    if(statusEl){
-      if(perm === 'granted'){ statusEl.textContent = 'Уведомления включены ✓'; statusEl.className = 'notif-status granted'; }
-      else { statusEl.textContent = 'Уведомления заблокированы'; statusEl.className = 'notif-status denied'; }
-    }
+    updateNotifStatus();
     return perm === 'granted';
   });
 }
@@ -2555,7 +2569,7 @@ function scheduleCalendarNotifications(){
 
 renderCalendar();
 populateAccountSelects();
-requestNotificationPermission();
+updateNotifStatus();
 
 })();
 </script>
