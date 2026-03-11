@@ -644,6 +644,27 @@ outline-offset:3px;
 .slider-dot.active{background:var(--indigo-600);transform:scale(1.35)}
 .slider-dot:focus-visible{outline:3px solid var(--sky-400)}
 .slider-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+/* === переключатель баланса === */
+.balance-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.balance-label-row .card-label{margin-bottom:0}
+.balance-toggle-label{
+display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+font-size:.82rem;font-weight:600;color:rgba(255,255,255,.85);
+}
+.balance-toggle-label input[type="checkbox"]{
+width:18px;height:18px;accent-color:var(--violet-300);cursor:pointer;flex-shrink:0;
+}
+/* === чекбокс перевода между счётами === */
+.inner-transfer-row{margin-bottom:16px}
+.inner-transfer-label{
+display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+font-size:.92rem;font-weight:600;color:var(--gray-700);
+}
+.inner-transfer-label input[type="checkbox"]{
+width:18px;height:18px;accent-color:var(--indigo-600);cursor:pointer;flex-shrink:0;
+}
+/* === история: значок перевода между счётами === */
+.h-type.inner-transfer{color:var(--violet-600)}
 /* === история: шапка с кнопкой фильтров === */
 .history-header-row{
 display:flex;align-items:center;gap:10px;padding-bottom:2px;
@@ -761,9 +782,16 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <div id="budget-card-content"></div>
 </div>
 
-<div class="card card-balance" role="region" aria-label="Ваш текущий баланс">
-<div class="card-label">Баланс</div>
+<div class="card card-balance" role="region" aria-labelledby="lbl-balance">
+<div class="balance-label-row">
+<div class="card-label" id="lbl-balance">Баланс</div>
+<label class="balance-toggle-label">
+<input type="checkbox" id="chk-total-balance" checked>
+Общий баланс
+</label>
+</div>
 <div class="card-value" id="balance-display">0 ₽</div>
+
 </div>
 
 <div class="accounts-section" role="region" aria-label="Счета">
@@ -844,6 +872,7 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="all" checked> Показать все</label>
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="deposit"> Только пополнения</label>
 <label class="filter-radio-label"><input type="radio" name="history-filter-type" value="transfer"> Только переводы</label>
+<label class="filter-radio-label"><input type="radio" name="history-filter-type" value="inner-transfer"> Только переводы между счетами</label>
 </div>
 </fieldset>
 <div style="margin-bottom:20px">
@@ -975,9 +1004,19 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 </button>
 <h1 class="screen-title" id="deposit-title" tabindex="-1">Пополнение</h1>
 <form id="deposit-form" novalidate>
+<div class="inner-transfer-row">
+<label class="inner-transfer-label">
+<input type="checkbox" id="chk-deposit-inner">
+Перевод между счетами
+</label>
+</div>
 <div class="form-group">
-<label for="deposit-account-select">Счёт</label>
-<select id="deposit-account-select" class="select-field" aria-label="Выберите счёт для пополнения"></select>
+<label for="deposit-account-select" id="lbl-deposit-account">Счёт зачисления</label>
+<select id="deposit-account-select" class="select-field" aria-labelledby="lbl-deposit-account"></select>
+</div>
+<div class="form-group" id="fg-deposit-inner-src" style="display:none">
+<label for="deposit-inner-src-select">Счёт списания</label>
+<select id="deposit-inner-src-select" class="select-field" aria-label="Счёт с которого переводить деньги"></select>
 </div>
 <div class="cat-block">
 <span class="cat-block-label" id="deposit-cat-label">Категория</span>
@@ -999,10 +1038,12 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <input type="number" id="deposit-amount" inputmode="decimal" placeholder="Введите сумму" required aria-required="true">
 <div class="error-text" id="err-deposit-amount">Поле «Сумма» не заполнено</div>
 </div>
+<div id="deposit-source-block">
 <div class="form-group" id="fg-deposit-source">
 <label for="deposit-source">Источник</label>
 <input type="text" id="deposit-source" placeholder="Например: Зарплата" required aria-required="true">
 <div class="error-text" id="err-deposit-source">Поле «Источник» не заполнено</div>
+</div>
 </div>
 <button type="submit" class="btn btn-primary" style="width:100%">Подтвердить</button>
 </form>
@@ -1015,9 +1056,19 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 </button>
 <h1 class="screen-title" id="transfer-title" tabindex="-1">Перевод</h1>
 <form id="transfer-form" novalidate>
+<div class="inner-transfer-row">
+<label class="inner-transfer-label">
+<input type="checkbox" id="chk-transfer-inner">
+Перевод между счетами
+</label>
+</div>
 <div class="form-group">
 <label for="transfer-account-select">Счёт списания</label>
 <select id="transfer-account-select" class="select-field" aria-label="Выберите счёт для списания"></select>
+</div>
+<div class="form-group" id="fg-transfer-inner-dst" style="display:none">
+<label for="transfer-inner-dst-select">Счёт зачисления</label>
+<select id="transfer-inner-dst-select" class="select-field" aria-label="Счёт на который зачислить деньги"></select>
 </div>
 <div class="cat-block">
 <span class="cat-block-label" id="transfer-cat-label">Категория</span>
@@ -1039,10 +1090,12 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <input type="number" id="transfer-amount" inputmode="decimal" placeholder="Введите сумму" required aria-required="true">
 <div class="error-text" id="err-transfer-amount">Поле «Сумма» не заполнено</div>
 </div>
+<div id="transfer-recipient-block">
 <div class="form-group" id="fg-transfer-recipient">
 <label for="transfer-recipient">Получатель</label>
 <input type="text" id="transfer-recipient" placeholder="Имя получателя" required aria-required="true">
 <div class="error-text" id="err-transfer-recipient">Поле «Получатель» не заполнено</div>
+</div>
 </div>
 <button type="submit" class="btn btn-primary" style="width:100%">Подтвердить</button>
 </form>
@@ -1547,9 +1600,12 @@ function selectTab(tabId){
 }
 
 function renderHome(){
-  var balance = store.get('balance') || 0;
-  document.getElementById('balance-display').textContent = fmt(balance);
-  document.querySelector('.card-balance').setAttribute('aria-label','Ваш текущий баланс: ' + fmt(balance));
+  var chk = document.getElementById('chk-total-balance');
+  var showTotal = !chk || chk.checked;
+  var displayBalance = showTotal ? (store.get('balance') || 0) : getActiveAccount().balance;
+  var modeLabel = showTotal ? 'Общий баланс на всех счетах: ' : 'Баланс выбранного счёта: ';
+  document.getElementById('balance-display').textContent = fmt(displayBalance);
+  document.querySelector('.card-balance').setAttribute('aria-label', modeLabel + fmt(displayBalance));
   renderBudgetCard();
   renderActiveAccount();
   renderHomeUpcoming();
@@ -1620,12 +1676,16 @@ function populateAccountSelects(){
     });
     return html;
   };
-  const depSel = document.getElementById('deposit-account-select');
-  const traSel = document.getElementById('transfer-account-select');
-  const hisSel = document.getElementById('history-filter-account');
-  if(depSel) depSel.innerHTML = makeOptions(activeId, false);
-  if(traSel) traSel.innerHTML = makeOptions(activeId, false);
-  if(hisSel) hisSel.innerHTML = makeOptions('all', true);
+  const depSel    = document.getElementById('deposit-account-select');
+  const traSel    = document.getElementById('transfer-account-select');
+  const hisSel    = document.getElementById('history-filter-account');
+  const depInner  = document.getElementById('deposit-inner-src-select');
+  const traInner  = document.getElementById('transfer-inner-dst-select');
+  if(depSel)   depSel.innerHTML   = makeOptions(activeId, false);
+  if(traSel)   traSel.innerHTML   = makeOptions(activeId, false);
+  if(hisSel)   hisSel.innerHTML   = makeOptions('all', true);
+  if(depInner) depInner.innerHTML = makeOptions(activeId, false);
+  if(traInner) traInner.innerHTML = makeOptions(activeId, false);
 }
 
 function renderAccountsPopup(){
@@ -2105,14 +2165,16 @@ function renderHistory(){
     return;
   }
 
-  var totalDeposits = 0, totalTransfers = 0;
+  var totalDeposits = 0, totalTransfers = 0, totalInner = 0;
   filtered.forEach(function(t){
     if(t.type === 'deposit') totalDeposits += t.amount;
-    else totalTransfers += t.amount;
+    else if(t.type === 'transfer') totalTransfers += t.amount;
+    else if(t.type === 'inner-transfer') totalInner += t.amount;
   });
   var summaryParts = [];
   if(filterType === 'all' || filterType === 'deposit') summaryParts.push('Пополнения: ' + fmt(totalDeposits));
   if(filterType === 'all' || filterType === 'transfer') summaryParts.push('Переводы: ' + fmt(totalTransfers));
+  if(filterType === 'all' || filterType === 'inner-transfer') if(totalInner > 0 || filterType === 'inner-transfer') summaryParts.push('Между счётами: ' + fmt(totalInner));
   var periodText = filterPeriod !== null ? ' за ' + filterPeriod + ' дн.' : ' за всё время';
   summaryEl.textContent = summaryParts.join(' | ') + periodText;
 
@@ -2128,22 +2190,34 @@ function renderHistory(){
     html += '<h2 class="history-date-heading" tabindex="-1">' + dateKey + '</h2>';
     html += '<ul class="history-list" role="list">';
     grouped[dateKey].forEach(function(t){
-      var typeLabel = t.type === 'deposit' ? 'Зачисление' : 'Перевод';
-      var detail = t.type === 'deposit' ? 'Источник: ' + t.source : 'Получатель: ' + t.recipient;
-      var accPart = t.accountName ? ', счёт: ' + t.accountName : '';
-      var catPart = t.categoryName ? ', категория: ' + t.categoryName : '';
-      var accLabel = t.accountName ? ' · Счёт: ' + t.accountName : '';
-      var catLabel = t.categoryName ? ' · Категория: ' + t.categoryName : '';
+      var typeLabel, detail, fullAriaLabel, typeClass, sign;
       var timeStr = formatTime(t.date);
-      var fullAriaLabel = (t.type === 'deposit' ? 'Зачисление на сумму ' : 'Перевод на сумму ')
-        + fmt(t.amount) + ', ' + detail + accPart + catPart + ', ' + dateKey + ', ' + timeStr;
-      var typeClass = t.type === 'deposit' ? 'deposit' : 'transfer';
-      var sign = t.type === 'deposit' ? '+' : '\u2212';
+      if(t.type === 'inner-transfer'){
+        typeLabel = 'Между счётами';
+        detail = 'Из: ' + escapeHtml(t.fromAccountName || '—') + ' → ' + escapeHtml(t.toAccountName || '—');
+        typeClass = 'inner-transfer';
+        sign = '⇄';
+        fullAriaLabel = 'Перевод между счетами на сумму ' + fmt(t.amount)
+          + ', из счёта ' + (t.fromAccountName || '') + ' в счёт ' + (t.toAccountName || '')
+          + ', ' + dateKey + ', ' + timeStr;
+      } else {
+        typeLabel = t.type === 'deposit' ? 'Зачисление' : 'Перевод';
+        typeClass = t.type === 'deposit' ? 'deposit' : 'transfer';
+        sign = t.type === 'deposit' ? '+' : '\u2212';
+        var rawDetail = t.type === 'deposit' ? 'Источник: ' + t.source : 'Получатель: ' + t.recipient;
+        var accPart = t.accountName ? ', счёт: ' + t.accountName : '';
+        var catPart = t.categoryName ? ', категория: ' + t.categoryName : '';
+        var accLabel = t.accountName ? ' · Счёт: ' + t.accountName : '';
+        var catLabel = t.categoryName ? ' · Категория: ' + t.categoryName : '';
+        detail = rawDetail + accLabel + catLabel;
+        fullAriaLabel = (t.type === 'deposit' ? 'Зачисление на сумму ' : 'Перевод на сумму ')
+          + fmt(t.amount) + ', ' + rawDetail + accPart + catPart + ', ' + dateKey + ', ' + timeStr;
+      }
       html += '<li class="history-item" role="listitem" aria-label="' + escapeAttr(fullAriaLabel) + '">';
       html += '<div aria-hidden="true">';
       html += '<div class="h-type ' + typeClass + '">' + typeLabel + '</div>';
       html += '<div class="h-amount">' + sign + ' ' + fmt(t.amount) + '</div>';
-      html += '<div class="h-detail">' + detail + accLabel + catLabel + '</div>';
+      html += '<div class="h-detail">' + detail + '</div>';
       html += '<div class="h-date">' + timeStr + '</div>';
       html += '</div></li>';
     });
@@ -2242,6 +2316,39 @@ function validateField(groupId, inputId, fieldName){
   return true;
 }
 
+/* === чекбокс переключения типа баланса === */
+document.getElementById('chk-total-balance').addEventListener('change', function(){
+  renderHome();
+});
+
+/* === чекбокс перевода между счётами (форма пополнения) === */
+document.getElementById('chk-deposit-inner').addEventListener('change', function(){
+  var srcBlock = document.getElementById('fg-deposit-inner-src');
+  var sourceBlock = document.getElementById('deposit-source-block');
+  if(this.checked){
+    if(sourceBlock) sourceBlock.style.display = 'none';
+    if(srcBlock) srcBlock.style.display = '';
+    populateAccountSelects();
+  } else {
+    if(sourceBlock) sourceBlock.style.display = '';
+    if(srcBlock) srcBlock.style.display = 'none';
+  }
+});
+
+/* === чекбокс перевода между счётами (форма перевода) === */
+document.getElementById('chk-transfer-inner').addEventListener('change', function(){
+  var dstBlock = document.getElementById('fg-transfer-inner-dst');
+  var recipBlock = document.getElementById('transfer-recipient-block');
+  if(this.checked){
+    if(recipBlock) recipBlock.style.display = 'none';
+    if(dstBlock) dstBlock.style.display = '';
+    populateAccountSelects();
+  } else {
+    if(recipBlock) recipBlock.style.display = '';
+    if(dstBlock) dstBlock.style.display = 'none';
+  }
+});
+
 document.getElementById('btn-open-deposit').addEventListener('click', function(){
   clearFormErrors('deposit-form');
   document.getElementById('deposit-amount').value = '';
@@ -2249,6 +2356,10 @@ document.getElementById('btn-open-deposit').addEventListener('click', function()
   catState.depositSelected = 'all';
   var dcn = document.getElementById('deposit-cat-name');
   if(dcn) dcn.textContent = 'Все категории';
+  var chkDep = document.getElementById('chk-deposit-inner');
+  chkDep.checked = false;
+  document.getElementById('deposit-source-block').style.display = '';
+  document.getElementById('fg-deposit-inner-src').style.display = 'none';
   populateAccountSelects();
   const acc = getActiveAccount();
   const sel = document.getElementById('deposit-account-select');
@@ -2264,6 +2375,10 @@ document.getElementById('btn-open-transfer').addEventListener('click', function(
   catState.transferSelected = 'all';
   var tcn = document.getElementById('transfer-cat-name');
   if(tcn) tcn.textContent = 'Все категории';
+  var chkTra = document.getElementById('chk-transfer-inner');
+  chkTra.checked = false;
+  document.getElementById('transfer-recipient-block').style.display = '';
+  document.getElementById('fg-transfer-inner-dst').style.display = 'none';
   populateAccountSelects();
   const acc = getActiveAccount();
   const sel = document.getElementById('transfer-account-select');
@@ -2292,23 +2407,57 @@ document.getElementById('btn-back-budget').addEventListener('click', function(){
 document.getElementById('deposit-form').addEventListener('submit', function(e){
   e.preventDefault();
   clearFormErrors('deposit-form');
+  var isInner = document.getElementById('chk-deposit-inner').checked;
   if(!validateField('fg-deposit-amount','deposit-amount','Сумма')) return;
-  if(!validateField('fg-deposit-source','deposit-source','Источник')) return;
+  if(!isInner && !validateField('fg-deposit-source','deposit-source','Источник')) return;
   const amount = parseFloat(document.getElementById('deposit-amount').value.trim());
-  const source = document.getElementById('deposit-source').value.trim();
-  const accountId = document.getElementById('deposit-account-select')?.value || getActiveAccount().id;
   const accounts = store.get('accounts') || [];
-  const accIdx = accounts.findIndex(a => a.id === accountId);
-  if(accIdx >= 0) accounts[accIdx].balance += amount;
-  store.set('accounts', accounts);
-  const totalBalance = accounts.reduce((s, a) => s + a.balance, 0);
-  store.set('balance', totalBalance);
-  const transactions = store.get('transactions') || [];
-  const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
-  const catId = catState.depositSelected !== 'all' ? catState.depositSelected : null;
-  const catName = catId ? getCatName(catId) : null;
-  transactions.push({type:'deposit', amount, source, account:accountId, accountName:accName, category:catId, categoryName:catName, date:new Date().toISOString()});
-  store.set('transactions', transactions);
+
+  if(isInner){
+    const dstId = document.getElementById('deposit-account-select')?.value || getActiveAccount().id;
+    const srcId = document.getElementById('deposit-inner-src-select')?.value || getActiveAccount().id;
+    if(srcId === dstId){
+      announceAssertive('Произошла ошибка: счёт списания и зачисления совпадают');
+      showToast('Выберите разные счета', 3000);
+      return;
+    }
+    const srcIdx = accounts.findIndex(a => a.id === srcId);
+    const dstIdx = accounts.findIndex(a => a.id === dstId);
+    const srcBalance = srcIdx >= 0 ? accounts[srcIdx].balance : 0;
+    const srcName = srcIdx >= 0 ? accounts[srcIdx].name : '';
+    const dstName = dstIdx >= 0 ? accounts[dstIdx].name : '';
+    if(srcBalance <= 0){
+      announceAssertive('Произошла ошибка: баланс счёта «' + srcName + '» равен нулю');
+      showToast('Недостаточно средств на счёте «' + srcName + '»', 4000);
+      return;
+    }
+    if(amount > srcBalance){
+      announceAssertive('Произошла ошибка: на счёте «' + srcName + '» только ' + fmt(srcBalance));
+      showToast('Недостаточно средств: ' + fmt(srcBalance), 4000);
+      return;
+    }
+    if(srcIdx >= 0) accounts[srcIdx].balance -= amount;
+    if(dstIdx >= 0) accounts[dstIdx].balance += amount;
+    store.set('accounts', accounts);
+    store.set('balance', accounts.reduce((s, a) => s + a.balance, 0));
+    const transactions = store.get('transactions') || [];
+    transactions.push({type:'inner-transfer', amount, fromAccount:srcId, fromAccountName:srcName, toAccount:dstId, toAccountName:dstName, date:new Date().toISOString()});
+    store.set('transactions', transactions);
+  } else {
+    const source = document.getElementById('deposit-source').value.trim();
+    const accountId = document.getElementById('deposit-account-select')?.value || getActiveAccount().id;
+    const accIdx = accounts.findIndex(a => a.id === accountId);
+    const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
+    if(accIdx >= 0) accounts[accIdx].balance += amount;
+    store.set('accounts', accounts);
+    store.set('balance', accounts.reduce((s, a) => s + a.balance, 0));
+    const transactions = store.get('transactions') || [];
+    const catId = catState.depositSelected !== 'all' ? catState.depositSelected : null;
+    const catName = catId ? getCatName(catId) : null;
+    transactions.push({type:'deposit', amount, source, account:accountId, accountName:accName, category:catId, categoryName:catName, date:new Date().toISOString()});
+    store.set('transactions', transactions);
+  }
+
   document.getElementById('deposit-amount').value = '';
   document.getElementById('deposit-source').value = '';
   catState.depositSelected = 'all';
@@ -2325,46 +2474,80 @@ document.getElementById('deposit-form').addEventListener('submit', function(e){
 document.getElementById('transfer-form').addEventListener('submit', function(e){
   e.preventDefault();
   clearFormErrors('transfer-form');
+  var isInner = document.getElementById('chk-transfer-inner').checked;
   if(!validateField('fg-transfer-amount','transfer-amount','Сумма')) return;
-  if(!validateField('fg-transfer-recipient','transfer-recipient','Получатель')) return;
+  if(!isInner && !validateField('fg-transfer-recipient','transfer-recipient','Получатель')) return;
   const amount = parseFloat(document.getElementById('transfer-amount').value.trim());
-  const recipient = document.getElementById('transfer-recipient').value.trim();
-  const accountId = document.getElementById('transfer-account-select')?.value || getActiveAccount().id;
   const accounts = store.get('accounts') || [];
-  const accIdx = accounts.findIndex(a => a.id === accountId);
-  const accBalance = accIdx >= 0 ? accounts[accIdx].balance : 0;
-  const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
-  if(accBalance <= 0){
-    const msg = 'Недостаточно средств: баланс счёта «' + accName + '» равен нулю';
-    announceAssertive('Произошла ошибка: ' + msg);
-    showToast(msg, 4000);
-    document.getElementById('transfer-amount').focus();
-    return;
+
+  if(isInner){
+    const srcId = document.getElementById('transfer-account-select')?.value || getActiveAccount().id;
+    const dstId = document.getElementById('transfer-inner-dst-select')?.value || getActiveAccount().id;
+    if(srcId === dstId){
+      announceAssertive('Произошла ошибка: счёт списания и зачисления совпадают');
+      showToast('Выберите разные счета', 3000);
+      return;
+    }
+    const srcIdx = accounts.findIndex(a => a.id === srcId);
+    const dstIdx = accounts.findIndex(a => a.id === dstId);
+    const srcBalance = srcIdx >= 0 ? accounts[srcIdx].balance : 0;
+    const srcName = srcIdx >= 0 ? accounts[srcIdx].name : '';
+    const dstName = dstIdx >= 0 ? accounts[dstIdx].name : '';
+    if(srcBalance <= 0){
+      announceAssertive('Произошла ошибка: баланс счёта «' + srcName + '» равен нулю');
+      showToast('Недостаточно средств на счёте «' + srcName + '»', 4000);
+      document.getElementById('transfer-amount').focus();
+      return;
+    }
+    if(amount > srcBalance){
+      announceAssertive('Произошла ошибка: на счёте «' + srcName + '» только ' + fmt(srcBalance));
+      showToast('Недостаточно средств: ' + fmt(srcBalance), 4000);
+      const inp = document.getElementById('transfer-amount');
+      document.getElementById('fg-transfer-amount').classList.add('has-error');
+      inp.classList.add('error');
+      inp.focus();
+      return;
+    }
+    if(srcIdx >= 0) accounts[srcIdx].balance -= amount;
+    if(dstIdx >= 0) accounts[dstIdx].balance += amount;
+    store.set('accounts', accounts);
+    store.set('balance', accounts.reduce((s, a) => s + a.balance, 0));
+    const transactions = store.get('transactions') || [];
+    transactions.push({type:'inner-transfer', amount, fromAccount:srcId, fromAccountName:srcName, toAccount:dstId, toAccountName:dstName, date:new Date().toISOString()});
+    store.set('transactions', transactions);
+  } else {
+    const recipient = document.getElementById('transfer-recipient').value.trim();
+    const accountId = document.getElementById('transfer-account-select')?.value || getActiveAccount().id;
+    const accIdx = accounts.findIndex(a => a.id === accountId);
+    const accBalance = accIdx >= 0 ? accounts[accIdx].balance : 0;
+    const accName = accIdx >= 0 ? accounts[accIdx].name : 'Основной счёт';
+    if(accBalance <= 0){
+      announceAssertive('Произошла ошибка: баланс счёта «' + accName + '» равен нулю');
+      showToast('Недостаточно средств на счёте «' + accName + '»', 4000);
+      document.getElementById('transfer-amount').focus();
+      return;
+    }
+    if(amount > accBalance){
+      announceAssertive('Произошла ошибка: на счёте «' + accName + '» только ' + fmt(accBalance));
+      showToast('Недостаточно средств: ' + fmt(accBalance), 4000);
+      const inp = document.getElementById('transfer-amount');
+      document.getElementById('fg-transfer-amount').classList.add('has-error');
+      inp.classList.add('error');
+      inp.focus();
+      return;
+    }
+    if(accIdx >= 0) accounts[accIdx].balance -= amount;
+    store.set('accounts', accounts);
+    store.set('balance', accounts.reduce((s, a) => s + a.balance, 0));
+    const transactions = store.get('transactions') || [];
+    const catId = catState.transferSelected !== 'all' ? catState.transferSelected : null;
+    const catName = catId ? getCatName(catId) : null;
+    transactions.push({type:'transfer', amount, recipient, account:accountId, accountName:accName, category:catId, categoryName:catName, date:new Date().toISOString()});
+    store.set('transactions', transactions);
+    const budget = store.get('budget');
+    if(budget){ budget.remaining -= amount; store.set('budget', budget); }
   }
-  if(amount > accBalance){
-    const msg = 'Недостаточно средств: на счёте «' + accName + '» только ' + fmt(accBalance);
-    announceAssertive('Произошла ошибка: ' + msg);
-    showToast(msg, 4000);
-    const inp = document.getElementById('transfer-amount');
-    document.getElementById('fg-transfer-amount').classList.add('has-error');
-    inp.classList.add('error');
-    inp.focus();
-    return;
-  }
-  if(accIdx >= 0) accounts[accIdx].balance -= amount;
-  store.set('accounts', accounts);
-  const totalBalance = accounts.reduce((s, a) => s + a.balance, 0);
-  store.set('balance', totalBalance);
-  const transactions = store.get('transactions') || [];
-  const catId = catState.transferSelected !== 'all' ? catState.transferSelected : null;
-  const catName = catId ? getCatName(catId) : null;
-  transactions.push({type:'transfer', amount, recipient, account:accountId, accountName:accName, category:catId, categoryName:catName, date:new Date().toISOString()});
-  store.set('transactions', transactions);
-  const budget = store.get('budget');
-  if(budget){
-    budget.remaining -= amount;
-    store.set('budget', budget);
-  }
+
   document.getElementById('transfer-amount').value = '';
   document.getElementById('transfer-recipient').value = '';
   catState.transferSelected = 'all';
