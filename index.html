@@ -786,7 +786,7 @@ background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:400px;
 <div class="balance-label-row">
 <div class="card-label" id="lbl-balance">Баланс</div>
 <label class="balance-toggle-label">
-<input type="checkbox" id="chk-total-balance" checked>
+<input type="checkbox" id="chk-total-balance">
 Общий баланс
 </label>
 </div>
@@ -2318,6 +2318,7 @@ function validateField(groupId, inputId, fieldName){
 
 /* === чекбокс переключения типа баланса === */
 document.getElementById('chk-total-balance').addEventListener('change', function(){
+  store.set('totalBalanceMode', this.checked);
   renderHome();
 });
 
@@ -3277,6 +3278,10 @@ window.addEventListener('popstate', function(e){
     history.back();
   }
 });
+
+var _savedBalanceMode = store.get('totalBalanceMode');
+var _chkBalance = document.getElementById('chk-total-balance');
+if(_chkBalance) _chkBalance.checked = (_savedBalanceMode === null || _savedBalanceMode === undefined) ? true : _savedBalanceMode;
 
 renderHome();
 
