@@ -1,4 +1,4 @@
-const CACHE_NAME = 'd-bank-v2.4';
+const CACHE_NAME = 'd-bank-v2.4.1';
 const FILES_TO_CACHE = [
   './',
   './index.html',
