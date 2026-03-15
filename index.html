@@ -591,7 +591,7 @@ class NavigationBlock{
       if(!this.#backOnce){
         this.#backOnce=true;
         announcer.polite('Нажмите ещё раз, чтобы выйти');
-        bus.emit('app:toast',{detail:{msg:'Нажмите ещё раз, чтобы выйти',dur:BACK_DOUBLE_MS}});
+        bus.emit('app:toast',{msg:'Нажмите ещё раз, чтобы выйти',dur:BACK_DOUBLE_MS});
         history.pushState({screen:'screen-home'},'');
         this.#backTimer=setTimeout(()=>{this.#backOnce=false;},BACK_DOUBLE_MS);
       } else {clearTimeout(this.#backTimer);this.#backOnce=false;history.back();}
@@ -641,7 +641,7 @@ class ConfirmBlock{
   isOpen(){return this.#dlg.open;}
 }
 const confirm=new ConfirmBlock();
-bus.on('app:popstate',()=>{if(confirm.isOpen()){ge('confirm-dialog').close();bus.emit('app:toast',{detail:{msg:''}});}});
+bus.on('app:popstate',()=>{if(confirm.isOpen()){ge('confirm-dialog').close();bus.emit('app:toast',{msg:''});}});
 
 
 class CategoriesBlock{
@@ -715,20 +715,20 @@ class CategoriesBlock{
     cats.push({id:nid,name});store.set('categories',cats);
     const sk=this.#STATE_KEY[this.#addCtx];if(sk)this.#state[sk]=nid;
     const ne=ge(this.#NAME_MAP[this.#addCtx]);if(ne)ne.textContent=name;
-    this.#closeAdd();this.refreshCalFilter();announcer.polite(`Категория «${name}» добавлена`);bus.emit('app:toast',{detail:{msg:`Категория «${name}» добавлена`}});
+    this.#closeAdd();this.refreshCalFilter();announcer.polite(`Категория «${name}» добавлена`);bus.emit('app:toast',{msg:`Категория «${name}» добавлена`});
   }
 
   #deleteCat(ctx){
     const selId=this.#state[this.#STATE_KEY[ctx]]??'all';
-    if(!selId||selId==='all'){announcer.assertive('Выберите конкретную категорию для удаления');bus.emit('app:toast',{detail:{msg:'Выберите конкретную категорию для удаления'}});return;}
+    if(!selId||selId==='all'){announcer.assertive('Выберите конкретную категорию для удаления');bus.emit('app:toast',{msg:'Выберите конкретную категорию для удаления'});return;}
     const cat=this.getAll().find(c=>c.id===selId);if(!cat)return;
-    bus.emit('app:confirm',{detail:{title:`Удалить категорию «${cat.name}»?`,text:'Категория будет удалена из всех записей.',yesText:'Удалить',returnFocusId:ctx==='calendar'?'btn-cal-cat-del':`btn-${ctx}-cat-del`,onYes:()=>{
+    bus.emit('app:confirm',{title:`Удалить категорию «${cat.name}»?`,text:'Категория будет удалена из всех записей.',yesText:'Удалить',returnFocusId:ctx==='calendar'?'btn-cal-cat-del':`btn-${ctx}-cat-del`,onYes:()=>{
       store.set('categories',this.getAll().filter(c=>c.id!==selId));
       Object.entries(this.#STATE_KEY).forEach(([k,sk])=>{if(this.#state[sk]===selId){this.#state[sk]='all';const ne=ge(this.#NAME_MAP[k]);if(ne)ne.textContent='Все категории';}});
       const evs=store.get('calendarEvents')||[];evs.forEach(ev=>{if(ev.category===selId){ev.category=null;ev.categoryName=null;}});store.set('calendarEvents',evs);
       const cf=ge('cal-cat-filter');if(cf?.value===selId)cf.value='all';
-      this.refreshCalFilter();announcer.polite(`Категория «${cat.name}» удалена`);bus.emit('app:toast',{detail:{msg:'Категория удалена'}});
-    }}});
+      this.refreshCalFilter();announcer.polite(`Категория «${cat.name}» удалена`);bus.emit('app:toast',{msg:'Категория удалена'});
+    }});
   }
 
   refreshCalFilter(){
@@ -812,19 +812,19 @@ class AccountsBlock{
     const accs=store.get('accounts')||[];const nid='acc_'+Date.now();
     accs.push({id:nid,name,balance:0});store.set('accounts',accs);store.set('activeAccountId',nid);
     this.#closeAdd();bus.emit('app:accounts-refresh');
-    announcer.polite(`Счёт «${name}» добавлен и выбран`);bus.emit('app:toast',{detail:{msg:`Счёт «${name}» добавлен`}});
+    announcer.polite(`Счёт «${name}» добавлен и выбран`);bus.emit('app:toast',{msg:`Счёт «${name}» добавлен`});
   }
 
   #deleteActive(){
     const accs=store.get('accounts')||[];
-    if(accs.length<=1){announcer.assertive('Нельзя удалить единственный счёт');bus.emit('app:toast',{detail:{msg:'Нельзя удалить единственный счёт'}});return;}
+    if(accs.length<=1){announcer.assertive('Нельзя удалить единственный счёт');bus.emit('app:toast',{msg:'Нельзя удалить единственный счёт'});return;}
     const acc=this.getActive();this.#delTarget=acc.id;
-    bus.emit('app:confirm',{detail:{title:`Удалить счёт «${acc.name}»?`,text:`Баланс счёта: ${fmt(acc.balance)}. Средства будут потеряны. Это действие нельзя отменить.`,yesText:'Удалить',returnFocusId:'btn-delete-account',onYes:()=>{
+    bus.emit('app:confirm',{title:`Удалить счёт «${acc.name}»?`,text:`Баланс счёта: ${fmt(acc.balance)}. Средства будут потеряны. Это действие нельзя отменить.`,yesText:'Удалить',returnFocusId:'btn-delete-account',onYes:()=>{
       const accs2=store.get('accounts')||[];const kept=accs2.filter(a=>a.id!==this.#delTarget);
       const name=accs2.find(a=>a.id===this.#delTarget)?.name??'';
       store.set('accounts',kept);store.set('activeAccountId',kept[0].id);store.set('balance',kept.reduce((s,a)=>s+a.balance,0));
-      this.#delTarget=null;bus.emit('app:accounts-refresh');announcer.polite(`Счёт «${name}» удалён`);bus.emit('app:toast',{detail:{msg:'Счёт удалён'}});
-    }}});
+      this.#delTarget=null;bus.emit('app:accounts-refresh');announcer.polite(`Счёт «${name}» удалён`);bus.emit('app:toast',{msg:'Счёт удалён'});
+    }});
   }
 }
 const accounts=new AccountsBlock();
@@ -833,8 +833,8 @@ const accounts=new AccountsBlock();
 class HomeBlock{
   constructor(){
     ge('chk-total-balance').addEventListener('change',function(){store.set('totalBalanceMode',this.checked);bus.emit('app:home-refresh');});
-    ge('btn-open-deposit').addEventListener('click',()=>bus.emit('app:navigate',{detail:{screen:'screen-deposit',focus:'deposit-title',tab:null}}));
-    ge('btn-open-transfer').addEventListener('click',()=>bus.emit('app:navigate',{detail:{screen:'screen-transfer',focus:'transfer-title',tab:null}}));
+    ge('btn-open-deposit').addEventListener('click',()=>bus.emit('app:navigate',{screen:'screen-deposit',focus:'deposit-title',tab:null}));
+    ge('btn-open-transfer').addEventListener('click',()=>bus.emit('app:navigate',{screen:'screen-transfer',focus:'transfer-title',tab:null}));
     bus.on('app:home-refresh',()=>this.render());
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-home')this.render();});
   }
@@ -935,8 +935,8 @@ class TransferBlock{
       const recipient=ge('transfer-recipient').value.trim();const accId=ge('transfer-account-select').value;
       const accs=store.get('accounts')||[];const ai=accs.findIndex(a=>a.id===accId);
       const accBal=accs[ai]?.balance??0;const accName=accs[ai]?.name??'Основной счёт';
-      if(accBal<=0){announcer.assertive(`Ошибка: баланс счёта «${accName}» равен нулю`);bus.emit('app:toast',{detail:{msg:`Недостаточно средств на счёте «${accName}»`}});ge('transfer-amount').focus();return;}
-      if(amount>accBal){announcer.assertive(`Ошибка: на счёте «${accName}» только ${fmt(accBal)}`);bus.emit('app:toast',{detail:{msg:`Недостаточно средств: ${fmt(accBal)}`}});const inp=ge('transfer-amount');ge('fg-transfer-amount').classList.add('has-error');inp.classList.add('error');inp.focus();return;}
+      if(accBal<=0){announcer.assertive(`Ошибка: баланс счёта «${accName}» равен нулю`);bus.emit('app:toast',{msg:`Недостаточно средств на счёте «${accName}»`});ge('transfer-amount').focus();return;}
+      if(amount>accBal){announcer.assertive(`Ошибка: на счёте «${accName}» только ${fmt(accBal)}`);bus.emit('app:toast',{msg:`Недостаточно средств: ${fmt(accBal)}`});const inp=ge('transfer-amount');ge('fg-transfer-amount').classList.add('has-error');inp.classList.add('error');inp.focus();return;}
       if(ai>=0)accs[ai].balance-=amount;store.set('accounts',accs);store.set('balance',accs.reduce((s,a)=>s+a.balance,0));
       const catId=cats.getSelected(this.#catCtx)!=='all'?cats.getSelected(this.#catCtx):null;
       const txs=store.get('transactions')||[];txs.push({type:'transfer',amount,recipient,account:accId,accountName:accName,category:catId,categoryName:catId?cats.getName(catId):null,date:new Date().toISOString()});store.set('transactions',txs);
@@ -950,14 +950,14 @@ new TransferBlock();
 bus.on('app:operation-complete',()=>{
   nav.navigate('screen-home','home-title','tab-home',false);
   bus.emit('app:home-refresh');announcer.polite('Операция успешно выполнена');
-  announcer.focusStatus('Операция успешно выполнена');bus.emit('app:toast',{detail:{msg:'Операция успешно выполнена'}});
+  announcer.focusStatus('Операция успешно выполнена');bus.emit('app:toast',{msg:'Операция успешно выполнена'});
   bus.emit('app:accounts-refresh');
 });
 
 
 class BudgetBlock{
   constructor(){
-    ge('budget-info-block').addEventListener('click',e=>{if(!e.target.closest('#btn-setup-budget,#btn-edit-budget'))return;const b=store.get('budget');if(b){ge('budget-period').value=b.period;ge('budget-amount').value=b.amount;}bus.emit('app:navigate',{detail:{screen:'screen-budget-manage',focus:'budget-period',tab:null}});});
+    ge('budget-info-block').addEventListener('click',e=>{if(!e.target.closest('#btn-setup-budget,#btn-edit-budget'))return;const b=store.get('budget');if(b){ge('budget-period').value=b.period;ge('budget-amount').value=b.amount;}bus.emit('app:navigate',{screen:'screen-budget-manage',focus:'budget-period',tab:null});});
     ge('budget-form').addEventListener('submit',e=>this.#save(e));
     ge('btn-reset-budget').addEventListener('click',()=>this.#reset());
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-budget')this.render();});
@@ -976,13 +976,13 @@ class BudgetBlock{
     if(!validateField('fg-budget-amount','budget-amount','Сумма бюджета'))return;
     store.set('budget',{period:parseInt(ge('budget-period').value.trim()),amount:parseFloat(ge('budget-amount').value.trim()),remaining:parseFloat(ge('budget-amount').value.trim()),startDate:new Date().toISOString()});
     nav.navigate('screen-budget','budget-title','tab-budget',false);
-    this.render();bus.emit('app:home-refresh');announcer.polite('Настройки бюджета сохранены');bus.emit('app:toast',{detail:{msg:'Настройки бюджета сохранены'}});
+    this.render();bus.emit('app:home-refresh');announcer.polite('Настройки бюджета сохранены');bus.emit('app:toast',{msg:'Настройки бюджета сохранены'});
   }
 
   #reset(){
     store.set('budget',null);ge('budget-period').value='';ge('budget-amount').value='';
     nav.navigate('screen-budget','budget-title','tab-budget',false);
-    this.render();bus.emit('app:home-refresh');announcer.polite('Бюджет сброшен');bus.emit('app:toast',{detail:{msg:'Бюджет сброшен'}});
+    this.render();bus.emit('app:home-refresh');announcer.polite('Бюджет сброшен');bus.emit('app:toast',{msg:'Бюджет сброшен'});
   }
 }
 const budget=new BudgetBlock();
@@ -1055,7 +1055,7 @@ class CalendarBlock{
   }
 
   #addEvent(){
-    if(!this.#state.selectedDay){announcer.assertive('Сначала выберите день в календаре');bus.emit('app:toast',{detail:{msg:'Выберите день в календаре'}});return;}
+    if(!this.#state.selectedDay){announcer.assertive('Сначала выберите день в календаре');bus.emit('app:toast',{msg:'Выберите день в календаре'});return;}
     ge('fg-cal-amount').classList.remove('has-error');ge('cal-event-amount').classList.remove('error');
     ge('fg-cal-label').classList.remove('has-error');ge('cal-event-label').classList.remove('error');
     const lv=ge('cal-event-label').value.trim();const av=ge('cal-event-amount').value.trim();
@@ -1067,7 +1067,7 @@ class CalendarBlock{
     evs.push({id:`cev_${Date.now()}`,date:this.#state.selectedDay,type,label:lv,amount:parseFloat(av),category:catId,categoryName:catId?cats.getName(catId):null});
     store.set('calendarEvents',evs);ge('cal-event-label').value='';ge('cal-event-amount').value='';
     ge('cal-cat-name').textContent='Все категории';
-    this.render();this.#scheduleNotifications();announcer.polite(`Событие добавлено: ${type==='expense'?'Расходы':'Доходы'}, ${lv}`);bus.emit('app:toast',{detail:{msg:'Событие добавлено в календарь'}});
+    this.render();this.#scheduleNotifications();announcer.polite(`Событие добавлено: ${type==='expense'?'Расходы':'Доходы'}, ${lv}`);bus.emit('app:toast',{msg:'Событие добавлено в календарь'});
     bus.emit('app:home-refresh');
   }
 
@@ -1098,7 +1098,7 @@ const calendar=new CalendarBlock();
 
 class HistoryBlock{
   constructor(){
-    ge('btn-open-filters').addEventListener('click',()=>{accounts.populateSelects();bus.emit('app:navigate',{detail:{screen:'screen-filters',focus:'filters-title',tab:null}});});
+    ge('btn-open-filters').addEventListener('click',()=>{accounts.populateSelects();bus.emit('app:navigate',{screen:'screen-filters',focus:'filters-title',tab:null});});
     ge('btn-apply-filters').addEventListener('click',()=>{nav.navigate('screen-history','history-title','tab-history',false);this.render();announcer.polite('Фильтры применены');});
     ge('btn-reset-filters').addEventListener('click',()=>this.#resetFilters());
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-history'){accounts.populateSelects();this.render();}});
@@ -1159,10 +1159,10 @@ class ProfileBlock{
     this.#dlg.addEventListener('click',e=>{if(e.target===this.#dlg)this.#close();});
     this.#dlg.addEventListener('cancel',e=>{e.preventDefault();this.#close();});
     ge('menu-close').addEventListener('click',()=>this.#close());
-    ge('menu-support').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{detail:{screen:'screen-support',focus:'support-title',tab:null}});bus.emit('app:support-open');});
-    ge('menu-notes').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{detail:{screen:'screen-notes',focus:'notes-title',tab:null}});bus.emit('app:notes-refresh');});
-    ge('menu-about').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{detail:{screen:'screen-about',focus:'about-title',tab:null}});bus.emit('app:about-open');});
-    ge('menu-clear-data').addEventListener('click',()=>{this.#close();bus.emit('app:confirm',{detail:{title:'Очистить все данные?',text:'Все транзакции, заметки, сообщения поддержки и настройки бюджета будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-profile',onYes:()=>{store.clearAll(DEFAULTS);shStore.clearAll();bus.emit('app:home-refresh');bus.emit('app:accounts-refresh');nav.navigate('screen-home',null,'tab-home',false);announcer.polite('Все данные очищены');announcer.focusStatus('Все данные очищены');bus.emit('app:toast',{detail:{msg:'Все данные очищены'}});}}});});
+    ge('menu-support').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{screen:'screen-support',focus:'support-title',tab:null});bus.emit('app:support-open');});
+    ge('menu-notes').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{screen:'screen-notes',focus:'notes-title',tab:null});bus.emit('app:notes-refresh');});
+    ge('menu-about').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{screen:'screen-about',focus:'about-title',tab:null});bus.emit('app:about-open');});
+    ge('menu-clear-data').addEventListener('click',()=>{this.#close();bus.emit('app:confirm',{title:'Очистить все данные?',text:'Все транзакции, заметки, сообщения поддержки и настройки бюджета будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-profile',onYes:()=>{store.clearAll(DEFAULTS);shStore.clearAll();bus.emit('app:home-refresh');bus.emit('app:accounts-refresh');nav.navigate('screen-home',null,'tab-home',false);announcer.polite('Все данные очищены');announcer.focusStatus('Все данные очищены');bus.emit('app:toast',{msg:'Все данные очищены'});}});});
     bus.on('app:popstate',()=>{if(this.#dlg.open)this.#close();});
   }
 
@@ -1223,7 +1223,7 @@ class NotesBlock{
     const ci=e.target.closest('.note-ctx-item');
     if(ci){const action=ci.dataset.action;const idx=parseInt(ci.dataset.idx);const notes=store.get('notes')||[];const mb2=qs(`[data-note-menu="${idx}"]`);this.#closeMenus();
       if(action==='edit')this.#openEdit(idx);
-      else if(action==='delete'){notes.splice(idx,1);store.set('notes',notes);this.render();announcer.polite('Заметка удалена');bus.emit('app:toast',{detail:{msg:'Заметка удалена'}});}
+      else if(action==='delete'){notes.splice(idx,1);store.set('notes',notes);this.render();announcer.polite('Заметка удалена');bus.emit('app:toast',{msg:'Заметка удалена'});}
       else if(action==='cancel')mb2?.focus();}
   }
 
@@ -1232,7 +1232,7 @@ class NotesBlock{
     ge('note-edit-title').textContent=idx>=0?'Редактировать заметку':'Новая заметка';
     ge('note-name').value=idx>=0?notes[idx].title:'';ge('note-body').value=idx>=0?notes[idx].body:'';
     this.#updateCounter();clearErrors('note-form');
-    bus.emit('app:navigate',{detail:{screen:'screen-note-edit',focus:'note-name',tab:null}});
+    bus.emit('app:navigate',{screen:'screen-note-edit',focus:'note-name',tab:null});
   }
 
   #updateCounter(){const l=this.#bodyInput.value.length;const c=ge('note-body-counter');c.textContent=`${l} из 500 символов`;c.classList.toggle('near-limit',l>=450);}
@@ -1246,7 +1246,7 @@ class NotesBlock{
     if(this.#editIdx>=0&&this.#editIdx<notes.length)notes[this.#editIdx]={...notes[this.#editIdx],title:nv,body:bv,updatedDate:new Date().toISOString()};
     else notes.push({title:nv,body:bv,date:new Date().toISOString(),updatedDate:null});
     store.set('notes',notes);this.#editIdx=-1;this.render();
-    nav.navigate('screen-notes','notes-title',null,false);announcer.polite('Заметка сохранена');bus.emit('app:toast',{detail:{msg:'Заметка сохранена'}});
+    nav.navigate('screen-notes','notes-title',null,false);announcer.polite('Заметка сохранена');bus.emit('app:toast',{msg:'Заметка сохранена'});
   }
 }
 new NotesBlock();
@@ -1257,7 +1257,7 @@ class ShoppingBlock{
 
   constructor(){
     ge('btn-shopping-show-add').addEventListener('click',()=>{this.#addVisible=!this.#addVisible;this.render();if(this.#addVisible)setTimeout(()=>ge('shopping-product-input')?.focus(),FOCUS_DELAY);});
-    ge('btn-shopping-clear-all').addEventListener('click',()=>{bus.emit('app:confirm',{detail:{title:'Очистить весь список?',text:'Все продукты будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-shopping-clear-all',onYes:()=>{shStore.clearAll();this.render();announcer.polite('Список покупок очищен');bus.emit('app:toast',{detail:{msg:'Список покупок очищен'}});}}});});
+    ge('btn-shopping-clear-all').addEventListener('click',()=>{bus.emit('app:confirm',{title:'Очистить весь список?',text:'Все продукты будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-shopping-clear-all',onYes:()=>{shStore.clearAll();this.render();announcer.polite('Список покупок очищен');bus.emit('app:toast',{msg:'Список покупок очищен'});}});});
     ge('shopping-add-container').addEventListener('click',e=>this.#onAddClick(e));
     ge('shopping-list-container').addEventListener('click',e=>this.#onListClick(e));
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-shopping'){this.#addVisible=false;this.#qty=1;this.render();}});
@@ -1283,7 +1283,7 @@ class ShoppingBlock{
       inp.classList.remove('error');const names=val.split(',').map(s=>s.trim()).filter(Boolean);
       names.forEach(n=>shStore.add(n,this.#qty));inp.value='';this.#qty=1;this.render();
       if(this.#addVisible)setTimeout(()=>{ge('shopping-product-input')?.focus();const d=ge('qty-display');if(d)d.textContent=1;},100);
-      const w=names.length===1?'продукт добавлен':'продукты добавлены';announcer.polite(`${names.length} ${w} в список`);bus.emit('app:toast',{detail:{msg:`${names.length} ${w}`}});
+      const w=names.length===1?'продукт добавлен':'продукты добавлены';announcer.polite(`${names.length} ${w} в список`);bus.emit('app:toast',{msg:`${names.length} ${w}`});
     }
   }
 
@@ -1291,7 +1291,7 @@ class ShoppingBlock{
     const tb=e.target.closest('[data-sh-toggle]');
     if(tb){const id=parseFloat(tb.dataset.shToggle);shStore.toggle(id);this.render();const it=shStore.getAll().find(i=>i.id===id);if(it)announcer.polite(it.bought?`${it.name} в корзине`:`${it.name} не в корзине`);return;}
     const db=e.target.closest('[data-sh-delete]');
-    if(db){const id=parseFloat(db.dataset.shDelete);const it=shStore.getAll().find(i=>i.id===id);bus.emit('app:confirm',{detail:{title:it?`Удалить «${it.name}»?`:'Удалить продукт?',text:it?`Вы уверены, что хотите удалить «${it.name}» из списка покупок?`:'Продукт будет удалён.',yesText:'Удалить',onYes:()=>{shStore.remove(id);this.render();announcer.polite('Продукт удалён из списка');bus.emit('app:toast',{detail:{msg:'Продукт удалён'}});}}});}
+    if(db){const id=parseFloat(db.dataset.shDelete);const it=shStore.getAll().find(i=>i.id===id);bus.emit('app:confirm',{title:it?`Удалить «${it.name}»?`:'Удалить продукт?',text:it?`Вы уверены, что хотите удалить «${it.name}» из списка покупок?`:'Продукт будет удалён.',yesText:'Удалить',onYes:()=>{shStore.remove(id);this.render();announcer.polite('Продукт удалён из списка');bus.emit('app:toast',{msg:'Продукт удалён'});}});}
   }
 }
 new ShoppingBlock();
@@ -1299,7 +1299,7 @@ new ShoppingBlock();
 
 class CalculatorBlock{
   constructor(){
-    ge('btn-service-calc').addEventListener('click',()=>{clearErrors('calc-form');['calc-amount','calc-rate','calc-term'].forEach(id=>{ge(id).value='';});ge('calc-results-container').innerHTML='';bus.emit('app:navigate',{detail:{screen:'screen-calculator',focus:'calc-title',tab:null}});});
+    ge('btn-service-calc').addEventListener('click',()=>{clearErrors('calc-form');['calc-amount','calc-rate','calc-term'].forEach(id=>{ge(id).value='';});ge('calc-results-container').innerHTML='';bus.emit('app:navigate',{screen:'screen-calculator',focus:'calc-title',tab:null});});
     ge('calc-form').addEventListener('submit',e=>this.#calc(e));
   }
 
@@ -1322,7 +1322,7 @@ class AboutBlock{
   #state={current:0};
 
   constructor(){
-    ge('btn-service-shopping').addEventListener('click',()=>bus.emit('app:navigate',{detail:{screen:'screen-shopping',focus:'shopping-title',tab:null}}));
+    ge('btn-service-shopping').addEventListener('click',()=>bus.emit('app:navigate',{screen:'screen-shopping',focus:'shopping-title',tab:null}));
     ge('slider-prev').addEventListener('click',()=>{if(this.#state.current>0){this.#state.current--;this.#update();}});
     ge('slider-next').addEventListener('click',()=>{if(this.#state.current<SLIDER_TOTAL-1){this.#state.current++;this.#update();}});
     ge('slider-dots').addEventListener('click',e=>{const dot=e.target.closest('[data-slide-dot]');if(!dot)return;this.#state.current=parseInt(dot.dataset.slideDot);this.#update();});
@@ -1356,11 +1356,11 @@ function validateField(gid,iid,label){
   return true;
 }
 function execInnerTransfer(srcId,dstId,amount){
-  if(srcId===dstId){announcer.assertive('Ошибка: счёт списания и зачисления совпадают');bus.emit('app:toast',{detail:{msg:'Выберите разные счета'}});return false;}
+  if(srcId===dstId){announcer.assertive('Ошибка: счёт списания и зачисления совпадают');bus.emit('app:toast',{msg:'Выберите разные счета'});return false;}
   const accs=store.get('accounts')||[];const si=accs.findIndex(a=>a.id===srcId);const di=accs.findIndex(a=>a.id===dstId);
   const srcBal=si>=0?accs[si].balance:0;const srcName=accs[si]?.name??'';const dstName=accs[di]?.name??'';
-  if(srcBal<=0){announcer.assertive(`Ошибка: баланс счёта «${srcName}» равен нулю`);bus.emit('app:toast',{detail:{msg:`Недостаточно средств на счёте «${srcName}»`}});return false;}
-  if(amount>srcBal){announcer.assertive(`Ошибка: на счёте «${srcName}» только ${fmt(srcBal)}`);bus.emit('app:toast',{detail:{msg:`Недостаточно средств: ${fmt(srcBal)}`}});return false;}
+  if(srcBal<=0){announcer.assertive(`Ошибка: баланс счёта «${srcName}» равен нулю`);bus.emit('app:toast',{msg:`Недостаточно средств на счёте «${srcName}»`});return false;}
+  if(amount>srcBal){announcer.assertive(`Ошибка: на счёте «${srcName}» только ${fmt(srcBal)}`);bus.emit('app:toast',{msg:`Недостаточно средств: ${fmt(srcBal)}`});return false;}
   if(si>=0)accs[si].balance-=amount;if(di>=0)accs[di].balance+=amount;
   store.set('accounts',accs);store.set('balance',accs.reduce((s,a)=>s+a.balance,0));
   const txs=store.get('transactions')||[];txs.push({type:'inner-transfer',amount,fromAccount:srcId,fromAccountName:srcName,toAccount:dstId,toAccountName:dstName,date:new Date().toISOString()});store.set('transactions',txs);
