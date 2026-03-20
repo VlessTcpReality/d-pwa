@@ -1,4 +1,4 @@
-const CACHE_NAME = 'd-bank-v2.4.1';
+const CACHE_NAME = 'd-bank-v2.5.0';
 const FILES_TO_CACHE = [
   './',
   './index.html',
@@ -33,4 +33,4 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request)
       .then(networkResponse => {
-        return caches.open(CACHE_NAME).then(cache =
+        return caches.open(CACHE_NAME).then(cache
