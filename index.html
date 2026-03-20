@@ -44,22 +44,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 @layer layout{
 .app{max-width:430px;margin-inline:auto;height:100dvh;display:flex;flex-direction:column;position:relative;background:light-dark(linear-gradient(180deg,#f8faff 0%,#f0f0ff 100%),oklch(14% .02 255));overflow:hidden}
 main{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;min-block-size:0}
-.screen{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:20px 20px 0}
+.screen{display:none;flex-direction:column;flex:1;overflow-y:auto;padding-block:20px 0;padding-inline:20px}
 .screen.active{display:flex}
 @supports(display:flex){.screen.active{opacity:1;transform:translateY(0);transition:opacity var(--tn),transform var(--tn);@starting-style{opacity:0;transform:translateY(6px)}}}
 .tab-bar{display:flex;background:light-dark(rgba(255,255,255,.95),rgba(20,25,40,.95));backdrop-filter:blur(10px);border-block-start:1px solid light-dark(var(--cn-200),oklch(28% .02 255));padding:6px 0 env(safe-area-inset-bottom,8px);flex-shrink:0}
 .tab-bar--hidden{display:none!important}
 }
 @layer components{
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;cursor:pointer;min-block-size:44px;transition:background var(--tf),transform var(--tf);color:inherit;&:active{transform:scale(.97)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding-block:14px;padding-inline:20px;border:none;border-radius:var(--radius);font-size:1rem;font-weight:600;cursor:pointer;min-block-size:44px;transition:background var(--tf),transform var(--tf);color:inherit;&:active{transform:scale(.97)}}
 .btn-full{width:100%}
-.btn-sm{padding:12px 10px;font-size:.88rem}
+.btn-sm{padding-block:12px;padding-inline:10px;font-size:.88rem}
 .btn-deposit{background:linear-gradient(135deg,var(--ct-500),var(--cc-600));color:#fff;&:hover,&:focus-visible{background:linear-gradient(135deg,var(--ct-600),var(--ct-700))}}
 .btn-transfer{background:linear-gradient(135deg,var(--cv-500),var(--cv-700));color:#fff;&:hover,&:focus-visible{background:linear-gradient(135deg,var(--cv-600),var(--cv-800))}}
 .btn-primary{background:linear-gradient(135deg,var(--cb-600),var(--ci-600));color:#fff;&:hover,&:focus-visible{background:linear-gradient(135deg,var(--cb-700),var(--cv-700))}}
 .btn-danger{background:var(--cr-500);color:#fff;&:hover,&:focus-visible{background:var(--cr-600)}}
 .btn-secondary{background:light-dark(var(--cn-200),oklch(30% .02 255));color:light-dark(var(--cn-700),oklch(80% .01 255));&:hover,&:focus-visible{background:light-dark(var(--cn-300),oklch(35% .02 255))}}
-.btn-back{background:none;border:none;color:var(--cb-600);font-size:1rem;font-weight:600;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:6px;margin-block-end:12px;outline-offset:3px;min-block-size:44px;svg{width:20px;height:20px}}
+.btn-back{background:none;border:none;color:var(--cb-600);font-size:1rem;font-weight:600;cursor:pointer;padding-block:8px;padding-inline:0;display:inline-flex;align-items:center;gap:6px;margin-block-end:12px;outline-offset:3px;min-block-size:44px;svg{width:20px;height:20px}}
 .btn-row{display:flex;gap:12px;margin-block-end:20px;.btn{flex:1}}
 .btn-row--flush{margin-block-end:0}
 .tab-bar [role=tab]{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border:none;background:none;cursor:pointer;color:light-dark(var(--cn-400),oklch(50% .03 255));font-size:.72rem;font-weight:600;transition:color var(--tf);outline-offset:3px;min-block-size:44px;svg{width:24px;height:24px}&[aria-selected=true]{color:var(--ci-600)}&[aria-selected=true] svg{stroke:var(--ci-600)}}
@@ -86,22 +86,22 @@ dialog{border:none;padding:0;background:transparent;&::backdrop{background:oklch
 dialog.dlg-bottom{width:100%;max-inline-size:430px;margin:auto auto 0}
 dialog.dlg-cat{width:100%;max-inline-size:480px;margin:auto auto 0}
 dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
-.overlay-panel{background:light-dark(#fff,oklch(18% .02 255));border-radius:var(--radius-lg) var(--radius-lg) 0 0;width:100%;max-inline-size:430px;max-block-size:75vh;padding:24px 20px env(safe-area-inset-bottom,20px);box-shadow:var(--shadow-lg);overflow-y:auto}
+.overlay-panel{background:light-dark(#fff,oklch(18% .02 255));border-radius:var(--radius-lg) var(--radius-lg) 0 0;width:100%;max-inline-size:430px;max-block-size:75vh;padding-block:24px env(safe-area-inset-bottom,20px);padding-inline:20px;box-shadow:var(--shadow-lg);overflow-y:auto}
 .overlay-title{font-size:1.2rem;font-weight:700;color:light-dark(var(--cn-900),oklch(93% .01 255));margin-block-end:16px;outline:none}
 .dialog-title{font-size:1.05rem;font-weight:700;margin-block-end:16px;color:light-dark(var(--cn-900),oklch(93% .01 255));outline:none}
-.confirm-dialog{background:light-dark(#fff,oklch(20% .02 255));border-radius:var(--radius-lg);padding:28px 24px;max-inline-size:340px;width:90%;box-shadow:var(--shadow-lg);text-align:center;.confirm-dialog-title{font-size:1.15rem;font-weight:700;color:light-dark(var(--cn-900),oklch(93% .01 255));margin-block-end:8px}.confirm-dialog-text{font-size:.93rem;color:var(--cn-600);margin-block-end:24px;line-height:1.5}.confirm-dialog-actions{display:flex;gap:12px;.btn{flex:1}}}
-.menu-item{display:flex;align-items:center;gap:14px;width:100%;padding:16px 12px;border:none;background:none;border-radius:var(--radius);cursor:pointer;font-size:1rem;color:light-dark(var(--cn-800),oklch(88% .01 255));text-align:start;font-weight:500;transition:background var(--tf);outline-offset:3px;min-block-size:44px;svg{width:22px;height:22px;flex-shrink:0;color:var(--ci-500)}&:hover,&:focus-visible{background:var(--ci-50)}&.danger{color:var(--cr-600);svg{color:var(--cr-500)}}}
+.confirm-dialog{background:light-dark(#fff,oklch(20% .02 255));border-radius:var(--radius-lg);padding-block:28px;padding-inline:24px;max-inline-size:340px;width:90%;box-shadow:var(--shadow-lg);text-align:center;.confirm-dialog-title{font-size:1.15rem;font-weight:700;color:light-dark(var(--cn-900),oklch(93% .01 255));margin-block-end:8px}.confirm-dialog-text{font-size:.93rem;color:var(--cn-600);margin-block-end:24px;line-height:1.5}.confirm-dialog-actions{display:flex;gap:12px;.btn{flex:1}}}
+.menu-item{display:flex;align-items:center;gap:14px;width:100%;padding-block:16px;padding-inline:12px;border:none;background:none;border-radius:var(--radius);cursor:pointer;font-size:1rem;color:light-dark(var(--cn-800),oklch(88% .01 255));text-align:start;font-weight:500;transition:background var(--tf);outline-offset:3px;min-block-size:44px;svg{width:22px;height:22px;flex-shrink:0;color:var(--ci-500)}&:hover,&:focus-visible{background:var(--ci-50)}&.danger{color:var(--cr-600);svg{color:var(--cr-500)}}}
 .menu-divider{block-size:1px;background:light-dark(var(--cn-200),oklch(28% .02 255));margin:4px 0}
-.toast{position:fixed;inset-block-start:20px;inset-inline-start:50%;translate:-50% -120px;background:light-dark(var(--cn-800),oklch(25% .02 255));color:#fff;padding:14px 24px;border-radius:var(--radius);font-size:.9rem;font-weight:500;z-index:9999;transition:translate var(--ts) ease;max-inline-size:90%;text-align:center;box-shadow:var(--shadow-lg);pointer-events:none;&.visible{translate:-50% 0}}
+.toast{position:fixed;inset-block-start:20px;inset-inline-start:50%;translate:-50% -120px;background:light-dark(var(--cn-800),oklch(25% .02 255));color:#fff;padding-block:14px;padding-inline:24px;border-radius:var(--radius);font-size:.9rem;font-weight:500;z-index:9999;transition:translate var(--ts) ease;max-inline-size:90%;text-align:center;box-shadow:var(--shadow-lg);pointer-events:none;&.visible{translate:-50% 0}}
 .budget-actions{display:flex;gap:12px;margin-block-start:8px;.btn{flex:1}}
 .no-budget-msg{text-align:center;padding:30px 20px;color:var(--cn-500);font-size:.95rem}
 .budget-edit-row{margin-block-start:16px}
 .accounts-section{margin-block-end:16px}
 .account-select-btn{width:100%;padding:14px 16px;border:2px solid var(--ci-200);border-radius:var(--radius);background:light-dark(#fff,oklch(20% .02 255));font-size:1rem;font-weight:600;color:inherit;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:border-color var(--tf);outline-offset:3px;min-block-size:44px;.account-select-name{flex:1;text-align:start}.account-select-balance{font-size:.85rem;color:var(--ci-600);font-weight:700}svg{width:20px;height:20px;color:var(--cn-500);flex-shrink:0;transition:transform var(--tn)}&[aria-expanded=true] svg{transform:rotate(180deg)}&:hover{border-color:var(--ci-400)}}
-.account-actions-row{display:flex;gap:12px;margin-block-start:10px;.btn{flex:1;padding:12px 10px;font-size:.88rem}}
+.account-actions-row{display:flex;gap:12px;margin-block-start:10px;.btn{flex:1;padding-block:12px;padding-inline:10px;font-size:.88rem}}
 .accounts-popup-title{font-size:1.1rem;font-weight:700;color:light-dark(var(--cn-900),oklch(93% .01 255));margin-block-end:16px;outline:none}
 .accounts-list-popup{list-style:none;padding:0;margin-block-end:16px}
-.account-popup-item{display:flex;align-items:center;justify-content:space-between;padding:14px 12px;border-radius:var(--radius);cursor:pointer;border:2px solid transparent;transition:border-color var(--tf),background var(--tf);margin-block-end:6px;outline-offset:3px;&:hover,&:focus-visible{background:var(--ci-50);outline:none}&.selected{border-color:var(--ci-400);background:var(--ci-50)}.account-popup-item-name{font-size:1rem;font-weight:600}.account-popup-item-balance{font-size:.85rem;color:var(--ci-600);font-weight:700}}
+.account-popup-item{display:flex;align-items:center;justify-content:space-between;padding-block:14px;padding-inline:12px;border-radius:var(--radius);cursor:pointer;border:2px solid transparent;transition:border-color var(--tf),background var(--tf);margin-block-end:6px;outline-offset:3px;&:hover{background:var(--ci-50)}&:focus-visible{background:var(--ci-50);outline:2px solid var(--focus);outline-offset:2px}&.selected{border-color:var(--ci-400);background:var(--ci-50)}.account-popup-item-name{font-size:1rem;font-weight:600}.account-popup-item-balance{font-size:.85rem;color:var(--ci-600);font-weight:700}}
 .add-account-form{background:var(--ci-50);border-radius:var(--radius);padding:16px;border:1px solid var(--ci-200);.form-group{margin-block-end:12px;&:last-of-type{margin-block-end:0}}}
 .inner-transfer-row{margin-block-end:16px}
 .inner-transfer-label{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.92rem;font-weight:600;color:light-dark(var(--cn-700),oklch(80% .01 255));input[type=checkbox]{width:18px;height:18px;accent-color:var(--ci-600);cursor:pointer;flex-shrink:0}}
@@ -115,10 +115,10 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 .form-block--lg{margin-block-end:24px}
 .chat-container{display:flex;flex-direction:column;flex:1;overflow:hidden}
 .chat-messages{flex:1;overflow-y:auto;padding-block-end:12px}
-.chat-msg{max-inline-size:85%;padding:12px 16px;border-radius:var(--radius-lg);margin-block-end:8px;font-size:.93rem;line-height:1.45;word-wrap:break-word;&.user{background:linear-gradient(135deg,var(--ci-500),var(--cv-600));color:#fff;margin-inline-start:auto;border-end-end-radius:4px}&.system{background:light-dark(var(--cn-100),oklch(25% .02 255));color:light-dark(var(--cn-700),oklch(80% .01 255));margin-inline-end:auto;border-end-start-radius:4px}.chat-time{font-size:.72rem;opacity:.7;margin-block-start:4px}}
+.chat-msg{max-inline-size:85%;padding-block:12px;padding-inline:16px;border-radius:var(--radius-lg);margin-block-end:8px;font-size:.93rem;line-height:1.45;word-wrap:break-word;&.user{background:linear-gradient(135deg,var(--ci-500),var(--cv-600));color:#fff;margin-inline-start:auto;border-end-end-radius:4px}&.system{background:light-dark(var(--cn-100),oklch(25% .02 255));color:light-dark(var(--cn-700),oklch(80% .01 255));margin-inline-end:auto;border-end-start-radius:4px}.chat-time{font-size:.72rem;opacity:.7;margin-block-start:4px}&.ai-user{margin-inline-start:auto;max-inline-size:100%;.chat-msg-label{color:var(--cv-300)}}&.ai-response{background:light-dark(oklch(97% .008 245),oklch(22% .02 245));border-inline-start:3px solid var(--ct-500);margin-inline-end:auto;max-inline-size:100%;border-end-start-radius:4px;.chat-msg-label{color:var(--ct-500)}}&.chat-msg--loading p::after{content:'';display:inline-block;animation:chat-dots 1.4s steps(4,end) infinite}}
 .chat-input-row{display:flex;gap:8px;padding-block-start:12px;border-block-start:1px solid light-dark(var(--cn-200),oklch(28% .02 255));flex-shrink:0;input{flex:1;padding:12px 16px;border:2px solid light-dark(var(--cn-200),oklch(35% .02 255));border-radius:var(--radius);font-size:1rem;background:light-dark(var(--cn-50),oklch(18% .015 255));color:inherit;outline:none;transition:border-color var(--tf);&:focus{border-color:var(--ci-500)}}}
 .chat-send-btn{width:48px;height:48px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--ci-500),var(--cv-600));color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity var(--tf);flex-shrink:0;&:hover{opacity:.9}svg{width:20px;height:20px}}
-.notes-list{list-style:none;padding:0}
+.chat-msg-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;display:block;margin-block-end:4px}.chat-ai-status{font-size:.78rem;color:var(--cn-500);padding-block:4px;min-block-size:1rem;text-align:center;flex-shrink:0}.chat-ai-select{padding-block:10px;padding-inline:10px;border:2px solid light-dark(var(--cn-200),oklch(35% .02 255));border-radius:var(--radius);font-size:.78rem;background:light-dark(var(--cn-50),oklch(18% .015 255));color:inherit;outline:none;font-family:inherit;cursor:pointer;flex-shrink:0;min-block-size:44px;&:focus{border-color:var(--ci-500)}}.chat-ai-img{display:block;max-inline-size:100%;border-radius:var(--radius);margin-block-start:6px}@keyframes chat-dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}100%{content:''}}.notes-list{list-style:none;padding:0}
 .note-card{background:light-dark(#fff,oklch(20% .02 255));border-radius:var(--radius);padding:16px;margin-block-end:12px;box-shadow:var(--shadow);border-inline-start:4px solid var(--cv-400);position:relative;.note-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.note-card-title{font-size:1rem;font-weight:700;color:light-dark(var(--cn-900),oklch(93% .01 255));flex:1}.note-card-body{font-size:.9rem;color:var(--cn-600);margin-block-start:6px;white-space:pre-wrap}.note-card-date{font-size:.75rem;color:var(--cn-400);margin-block-start:8px}}
 .note-menu-btn{width:36px;height:36px;border:none;background:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--cn-500);transition:background var(--tf);flex-shrink:0;svg{width:20px;height:20px}&:hover,&:focus-visible{background:light-dark(var(--cn-100),oklch(30% .02 255))}}
 .note-menu-btn-abs{position:absolute;inset-block-start:12px;inset-inline-end:12px}
@@ -221,7 +221,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 }
 @media(prefers-reduced-motion:reduce){
 *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-.slider-list{transition:none!important}.toast{transition:none!important}.screen.active{transition:none!important}
+.slider-list{transition:none!important}.toast{transition:none!important}.screen.active{transition:none!important}.chat-msg--loading p::after{animation:none!important}
 }
 </style>
 </head>
@@ -229,7 +229,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 <div class="app">
 <main id="main-content">
 
-<div id="screen-home" class="screen active">
+<div id="screen-home" class="screen active" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
 <div class="screen-header">
 <h1 class="screen-title-inline" id="home-title" tabindex="-1">Главная</h1>
 <button class="profile-btn" id="btn-profile" aria-label="Профиль" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
@@ -250,7 +250,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 </div>
 </div>
 
-<div id="screen-history" class="screen">
+<div id="screen-history" class="screen" role="tabpanel" aria-labelledby="tab-history" tabindex="0">
 <div class="history-header-row"><h1 class="screen-title" id="history-title" tabindex="-1">История</h1><button class="btn-open-filters" id="btn-open-filters" aria-label="Открыть фильтры"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg>Фильтры<span id="filters-badge" class="filters-badge hidden" aria-hidden="true"></span></button></div>
 <div id="history-summary" class="history-summary" aria-live="polite"></div>
 <div id="history-container" class="content-pad"></div>
@@ -268,7 +268,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 </div>
 </div>
 
-<div id="screen-budget" class="screen">
+<div id="screen-budget" class="screen" role="tabpanel" aria-labelledby="tab-budget" tabindex="0">
 <h1 class="screen-title" id="budget-title" tabindex="-1">Мой бюджет</h1>
 <div id="budget-info-block" class="content-pad"></div>
 <section class="calendar-section" aria-labelledby="cal-section-title">
@@ -290,7 +290,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 </section>
 </div>
 
-<div id="screen-services" class="screen">
+<div id="screen-services" class="screen" role="tabpanel" aria-labelledby="tab-services" tabindex="0">
 <h1 class="screen-title" id="services-title" tabindex="-1">Сервисы</h1>
 <div class="content-pad">
 <button class="service-card" id="btn-service-shopping"><div class="service-card-icon icon-shopping" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></div><div class="service-card-text"><div class="service-card-title">Список покупок</div><div class="service-card-desc">Создавайте списки покупок и отмечайте купленные товары</div></div></button>
@@ -341,7 +341,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 <h1 class="screen-title" id="support-title" tabindex="-1">Поддержка</h1>
 <div class="chat-container">
 <div class="chat-messages" id="chat-messages" role="log" aria-label="Сообщения чата поддержки" aria-live="polite"></div>
-<div class="chat-input-row"><input type="text" id="chat-input" placeholder="Напишите сообщение..." aria-label="Текст сообщения" autocomplete="off"><button class="chat-send-btn" id="btn-chat-send" aria-label="Отправить сообщение"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button></div>
+<div id="ai-status-bar" class="chat-ai-status" role="status" aria-live="polite" aria-atomic="true"></div><div class="chat-input-row"><select id="ai-model-select" class="chat-ai-select" aria-label="Режим чата"><option value="support">Поддержка</option><option value="chat">Qwen 397B</option><option value="image">FLUX.1</option></select><input type="text" id="chat-input" placeholder="Напишите сообщение..." aria-label="Текст сообщения" autocomplete="off"><button class="chat-send-btn" id="btn-chat-send" aria-label="Отправить сообщение"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button></div>
 </div>
 </div>
 
@@ -426,7 +426,7 @@ dialog.dlg-wide{width:100%;max-inline-size:430px;margin:auto auto 0}
 <div id="aria-live-polite" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 <div id="aria-live-assertive" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div id="action-status" class="sr-only" tabindex="-1" aria-label=""></div>
+<div id="action-status" class="sr-only" tabindex="-1"></div>
 </div>
 
 <script>
@@ -499,14 +499,14 @@ bus.on('app:toast',e=>toast.show(e.detail.msg,e.detail.dur));
 
 class AnnounceBlock{
   #polite=ge('aria-live-polite');#assertive=ge('aria-live-assertive');
+  constructor(){
+    bus.on('app:announce-polite',e=>this.#announce(this.#polite,e.detail.msg));
+    bus.on('app:announce-assertive',e=>this.#announce(this.#assertive,e.detail.msg));
+  }
   #announce(el,msg){el.textContent='';setTimeout(()=>{el.textContent=msg;},100);setTimeout(()=>{el.textContent='';},ANNOUNCE_MS);}
-  polite(msg){this.#announce(this.#polite,msg);}
-  assertive(msg){this.#announce(this.#assertive,msg);}
-  focusStatus(msg){const el=ge('action-status');el.setAttribute('aria-label',msg);setTimeout(()=>el.focus(),200);setTimeout(()=>el.setAttribute('aria-label',''),ANNOUNCE_MS);}
+  focusStatus(msg){const el=ge('action-status');el.setAttribute('aria-label',msg);setTimeout(()=>el.focus(),200);setTimeout(()=>el.removeAttribute('aria-label'),ANNOUNCE_MS);}
 }
 const announcer=new AnnounceBlock();
-bus.on('app:announce-polite',e=>announcer.polite(e.detail.msg));
-bus.on('app:announce-assertive',e=>announcer.assertive(e.detail.msg));
 
 
 class NavigationBlock{
@@ -590,7 +590,7 @@ class NavigationBlock{
     if(this.#current==='screen-home'){
       if(!this.#backOnce){
         this.#backOnce=true;
-        announcer.polite('Нажмите ещё раз, чтобы выйти');
+        bus.emit('app:announce-polite',{msg:'Нажмите ещё раз, чтобы выйти'});
         bus.emit('app:toast',{msg:'Нажмите ещё раз, чтобы выйти',dur:BACK_DOUBLE_MS});
         history.pushState({screen:'screen-home'},'');
         this.#backTimer=setTimeout(()=>{this.#backOnce=false;},BACK_DOUBLE_MS);
@@ -693,7 +693,7 @@ class CategoriesBlock{
     const ctx=this.#openerCtx;const sk=this.#STATE_KEY[ctx];
     if(sk)this.#state[sk]=catId;
     const ne=ge(this.#NAME_MAP[ctx]);if(ne)ne.textContent=this.getName(catId);
-    this.close();announcer.polite(`Выбрана категория: ${this.getName(catId)}`);
+    this.close();bus.emit('app:announce-polite',{msg:`Выбрана категория: ${this.getName(catId)}`});
   }
 
   #openAdd(ctx){
@@ -710,24 +710,24 @@ class CategoriesBlock{
 
   #confirmAdd(){
     const inp=ge('new-cat-name');const name=inp.value.trim();
-    if(!name){ge('fg-new-cat-name').classList.add('has-error');inp.classList.add('error');announcer.assertive('Ошибка: Название категории не заполнено');inp.focus();return;}
+    if(!name){ge('fg-new-cat-name').classList.add('has-error');inp.classList.add('error');bus.emit('app:announce-assertive',{msg:'Ошибка: Название категории не заполнено'});inp.focus();return;}
     const cats=this.getAll();const nid='cat_'+Date.now();
     cats.push({id:nid,name});store.set('categories',cats);
     const sk=this.#STATE_KEY[this.#addCtx];if(sk)this.#state[sk]=nid;
     const ne=ge(this.#NAME_MAP[this.#addCtx]);if(ne)ne.textContent=name;
-    this.#closeAdd();this.refreshCalFilter();announcer.polite(`Категория «${name}» добавлена`);bus.emit('app:toast',{msg:`Категория «${name}» добавлена`});
+    this.#closeAdd();bus.emit('app:categories-refresh');bus.emit('app:announce-polite',{msg:`Категория «${name}» добавлена`});bus.emit('app:toast',{msg:`Категория «${name}» добавлена`});
   }
 
   #deleteCat(ctx){
     const selId=this.#state[this.#STATE_KEY[ctx]]??'all';
-    if(!selId||selId==='all'){announcer.assertive('Выберите конкретную категорию для удаления');bus.emit('app:toast',{msg:'Выберите конкретную категорию для удаления'});return;}
+    if(!selId||selId==='all'){bus.emit('app:announce-assertive',{msg:'Выберите конкретную категорию для удаления'});bus.emit('app:toast',{msg:'Выберите конкретную категорию для удаления'});return;}
     const cat=this.getAll().find(c=>c.id===selId);if(!cat)return;
     bus.emit('app:confirm',{title:`Удалить категорию «${cat.name}»?`,text:'Категория будет удалена из всех записей.',yesText:'Удалить',returnFocusId:ctx==='calendar'?'btn-cal-cat-del':`btn-${ctx}-cat-del`,onYes:()=>{
       store.set('categories',this.getAll().filter(c=>c.id!==selId));
       Object.entries(this.#STATE_KEY).forEach(([k,sk])=>{if(this.#state[sk]===selId){this.#state[sk]='all';const ne=ge(this.#NAME_MAP[k]);if(ne)ne.textContent='Все категории';}});
       const evs=store.get('calendarEvents')||[];evs.forEach(ev=>{if(ev.category===selId){ev.category=null;ev.categoryName=null;}});store.set('calendarEvents',evs);
       const cf=ge('cal-cat-filter');if(cf?.value===selId)cf.value='all';
-      this.refreshCalFilter();announcer.polite(`Категория «${cat.name}» удалена`);bus.emit('app:toast',{msg:'Категория удалена'});
+      bus.emit('app:categories-refresh');bus.emit('app:announce-polite',{msg:`Категория «${cat.name}» удалена`});bus.emit('app:toast',{msg:'Категория удалена'});
     }});
   }
 
@@ -790,13 +790,13 @@ class AccountsBlock{
 
   #onPopupClick(e){
     const item=e.target.closest('[data-account-id]');
-    if(item){store.set('activeAccountId',item.dataset.accountId);this.#closePopup();bus.emit('app:home-refresh');announcer.polite('Выбран счёт: '+this.getActive().name);return;}
+    if(item){store.set('activeAccountId',item.dataset.accountId);this.#closePopup();bus.emit('app:home-refresh');bus.emit('app:announce-polite',{msg:'Выбран счёт: '+this.getActive().name});return;}
     if(e.target===this.#popup)this.#closePopup();
   }
 
   #onPopupKey(e){
     if(e.key==='Escape'){e.preventDefault();this.#closePopup();return;}
-    if(e.key==='Enter'){const item=e.target.closest('[data-account-id]');if(item){store.set('activeAccountId',item.dataset.accountId);this.#closePopup();bus.emit('app:home-refresh');announcer.polite('Выбран счёт: '+this.getActive().name);}}
+    if(e.key==='Enter'){const item=e.target.closest('[data-account-id]');if(item){store.set('activeAccountId',item.dataset.accountId);this.#closePopup();bus.emit('app:home-refresh');bus.emit('app:announce-polite',{msg:'Выбран счёт: '+this.getActive().name});}}
   }
 
   #openAdd(){
@@ -808,22 +808,22 @@ class AccountsBlock{
 
   #confirmAdd(){
     const inp=ge('new-account-name');const name=inp.value.trim();
-    if(!name){ge('fg-new-account-name').classList.add('has-error');inp.classList.add('error');announcer.assertive('Ошибка: Название счёта не заполнено');inp.focus();return;}
+    if(!name){ge('fg-new-account-name').classList.add('has-error');inp.classList.add('error');bus.emit('app:announce-assertive',{msg:'Ошибка: Название счёта не заполнено'});inp.focus();return;}
     const accs=store.get('accounts')||[];const nid='acc_'+Date.now();
     accs.push({id:nid,name,balance:0});store.set('accounts',accs);store.set('activeAccountId',nid);
     this.#closeAdd();bus.emit('app:accounts-refresh');
-    announcer.polite(`Счёт «${name}» добавлен и выбран`);bus.emit('app:toast',{msg:`Счёт «${name}» добавлен`});
+    bus.emit('app:announce-polite',{msg:`Счёт «${name}» добавлен и выбран`});bus.emit('app:toast',{msg:`Счёт «${name}» добавлен`});
   }
 
   #deleteActive(){
     const accs=store.get('accounts')||[];
-    if(accs.length<=1){announcer.assertive('Нельзя удалить единственный счёт');bus.emit('app:toast',{msg:'Нельзя удалить единственный счёт'});return;}
+    if(accs.length<=1){bus.emit('app:announce-assertive',{msg:'Нельзя удалить единственный счёт'});bus.emit('app:toast',{msg:'Нельзя удалить единственный счёт'});return;}
     const acc=this.getActive();this.#delTarget=acc.id;
     bus.emit('app:confirm',{title:`Удалить счёт «${acc.name}»?`,text:`Баланс счёта: ${fmt(acc.balance)}. Средства будут потеряны. Это действие нельзя отменить.`,yesText:'Удалить',returnFocusId:'btn-delete-account',onYes:()=>{
       const accs2=store.get('accounts')||[];const kept=accs2.filter(a=>a.id!==this.#delTarget);
       const name=accs2.find(a=>a.id===this.#delTarget)?.name??'';
       store.set('accounts',kept);store.set('activeAccountId',kept[0].id);store.set('balance',kept.reduce((s,a)=>s+a.balance,0));
-      this.#delTarget=null;bus.emit('app:accounts-refresh');announcer.polite(`Счёт «${name}» удалён`);bus.emit('app:toast',{msg:'Счёт удалён'});
+      this.#delTarget=null;bus.emit('app:accounts-refresh');bus.emit('app:announce-polite',{msg:`Счёт «${name}» удалён`});bus.emit('app:toast',{msg:'Счёт удалён'});
     }});
   }
 }
@@ -935,8 +935,8 @@ class TransferBlock{
       const recipient=ge('transfer-recipient').value.trim();const accId=ge('transfer-account-select').value;
       const accs=store.get('accounts')||[];const ai=accs.findIndex(a=>a.id===accId);
       const accBal=accs[ai]?.balance??0;const accName=accs[ai]?.name??'Основной счёт';
-      if(accBal<=0){announcer.assertive(`Ошибка: баланс счёта «${accName}» равен нулю`);bus.emit('app:toast',{msg:`Недостаточно средств на счёте «${accName}»`});ge('transfer-amount').focus();return;}
-      if(amount>accBal){announcer.assertive(`Ошибка: на счёте «${accName}» только ${fmt(accBal)}`);bus.emit('app:toast',{msg:`Недостаточно средств: ${fmt(accBal)}`});const inp=ge('transfer-amount');ge('fg-transfer-amount').classList.add('has-error');inp.classList.add('error');inp.focus();return;}
+      if(accBal<=0){bus.emit('app:announce-assertive',{msg:`Ошибка: баланс счёта «${accName}» равен нулю`});bus.emit('app:toast',{msg:`Недостаточно средств на счёте «${accName}»`});ge('transfer-amount').focus();return;}
+      if(amount>accBal){bus.emit('app:announce-assertive',{msg:`Ошибка: на счёте «${accName}» только ${fmt(accBal)}`});bus.emit('app:toast',{msg:`Недостаточно средств: ${fmt(accBal)}`});const inp=ge('transfer-amount');ge('fg-transfer-amount').classList.add('has-error');inp.classList.add('error');inp.focus();return;}
       if(ai>=0)accs[ai].balance-=amount;store.set('accounts',accs);store.set('balance',accs.reduce((s,a)=>s+a.balance,0));
       const catId=cats.getSelected(this.#catCtx)!=='all'?cats.getSelected(this.#catCtx):null;
       const txs=store.get('transactions')||[];txs.push({type:'transfer',amount,recipient,account:accId,accountName:accName,category:catId,categoryName:catId?cats.getName(catId):null,date:new Date().toISOString()});store.set('transactions',txs);
@@ -949,7 +949,7 @@ new TransferBlock();
 
 bus.on('app:operation-complete',()=>{
   nav.navigate('screen-home','home-title','tab-home',false);
-  bus.emit('app:home-refresh');announcer.polite('Операция успешно выполнена');
+  bus.emit('app:home-refresh');bus.emit('app:announce-polite',{msg:'Операция успешно выполнена'});
   announcer.focusStatus('Операция успешно выполнена');bus.emit('app:toast',{msg:'Операция успешно выполнена'});
   bus.emit('app:accounts-refresh');
 });
@@ -976,13 +976,13 @@ class BudgetBlock{
     if(!validateField('fg-budget-amount','budget-amount','Сумма бюджета'))return;
     store.set('budget',{period:parseInt(ge('budget-period').value.trim()),amount:parseFloat(ge('budget-amount').value.trim()),remaining:parseFloat(ge('budget-amount').value.trim()),startDate:new Date().toISOString()});
     nav.navigate('screen-budget','budget-title','tab-budget',false);
-    this.render();bus.emit('app:home-refresh');announcer.polite('Настройки бюджета сохранены');bus.emit('app:toast',{msg:'Настройки бюджета сохранены'});
+    this.render();bus.emit('app:home-refresh');bus.emit('app:announce-polite',{msg:'Настройки бюджета сохранены'});bus.emit('app:toast',{msg:'Настройки бюджета сохранены'});
   }
 
   #reset(){
     store.set('budget',null);ge('budget-period').value='';ge('budget-amount').value='';
     nav.navigate('screen-budget','budget-title','tab-budget',false);
-    this.render();bus.emit('app:home-refresh');announcer.polite('Бюджет сброшен');bus.emit('app:toast',{msg:'Бюджет сброшен'});
+    this.render();bus.emit('app:home-refresh');bus.emit('app:announce-polite',{msg:'Бюджет сброшен'});bus.emit('app:toast',{msg:'Бюджет сброшен'});
   }
 }
 const budget=new BudgetBlock();
@@ -992,11 +992,11 @@ class CalendarBlock{
   #state={year:new Date().getFullYear(),month:new Date().getMonth(),selectedDay:null};
 
   constructor(){
-    ge('cal-grid').addEventListener('click',e=>{const btn=e.target.closest('[data-cal-day]');if(!btn)return;this.#state.selectedDay=btn.dataset.calDay;this.render();const re=document.querySelector(`[data-cal-day="${this.#state.selectedDay}"]`);re?.focus();announcer.polite(`Выбрано ${re?.getAttribute('aria-label')??this.#state.selectedDay}`);});
-    ge('cal-events').addEventListener('click',e=>{const btn=e.target.closest('[data-cal-delete]');if(!btn)return;store.set('calendarEvents',(store.get('calendarEvents')||[]).filter(ev=>ev.id!==btn.dataset.calDelete));this.render();this.#scheduleNotifications();announcer.polite('Событие удалено');});
+    ge('cal-grid').addEventListener('click',e=>{const btn=e.target.closest('[data-cal-day]');if(!btn)return;this.#state.selectedDay=btn.dataset.calDay;this.render();const re=document.querySelector(`[data-cal-day="${this.#state.selectedDay}"]`);re?.focus();bus.emit('app:announce-polite',{msg:`Выбрано ${re?.getAttribute('aria-label')??this.#state.selectedDay}`});});
+    ge('cal-events').addEventListener('click',e=>{const btn=e.target.closest('[data-cal-delete]');if(!btn)return;store.set('calendarEvents',(store.get('calendarEvents')||[]).filter(ev=>ev.id!==btn.dataset.calDelete));this.render();this.#scheduleNotifications();bus.emit('app:announce-polite',{msg:'Событие удалено'});});
     ge('cal-prev').addEventListener('click',()=>{this.#state.month--;if(this.#state.month<0){this.#state.month=11;this.#state.year--;}this.#state.selectedDay=null;this.render();});
     ge('cal-next').addEventListener('click',()=>{this.#state.month++;if(this.#state.month>11){this.#state.month=0;this.#state.year++;}this.#state.selectedDay=null;this.render();});
-    ge('cal-cat-filter').addEventListener('change',function(){bus.emit('app:calendar-refresh');announcer.polite(`Фильтр: ${this.options[this.selectedIndex].text}`);});
+    ge('cal-cat-filter').addEventListener('change',function(){bus.emit('app:calendar-refresh');bus.emit('app:announce-polite',{msg:`Фильтр: ${this.options[this.selectedIndex].text}`});});
     ge('btn-cal-add-event').addEventListener('click',()=>this.#addEvent());
     bus.on('app:calendar-refresh',()=>this.render());
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-budget')this.render();});
@@ -1022,7 +1022,7 @@ class CalendarBlock{
       html+=`<button class="${cls}" data-cal-day="${k}" aria-label="${d} ${MONTH_NAMES[month]}${k===tk?', сегодня':''}${de.length?', событий: '+de.length:''}${k===selectedDay?', выбран':''}" aria-pressed="${k===selectedDay}">${d}</button>`;
     }
     const rem=(off+dim)%7;if(rem>0)for(let j=1;j<=7-rem;j++)html+=`<div class="calendar-day other-month" aria-hidden="true">${j}</div>`;
-    grid.innerHTML=html;cats.refreshCalFilter();this.#renderUpcoming();this.#renderEvents();
+    grid.innerHTML=html;bus.emit('app:categories-refresh');this.#renderUpcoming();this.#renderEvents();
   }
 
   #key(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
@@ -1055,19 +1055,19 @@ class CalendarBlock{
   }
 
   #addEvent(){
-    if(!this.#state.selectedDay){announcer.assertive('Сначала выберите день в календаре');bus.emit('app:toast',{msg:'Выберите день в календаре'});return;}
+    if(!this.#state.selectedDay){bus.emit('app:announce-assertive',{msg:'Сначала выберите день в календаре'});bus.emit('app:toast',{msg:'Выберите день в календаре'});return;}
     ge('fg-cal-amount').classList.remove('has-error');ge('cal-event-amount').classList.remove('error');
     ge('fg-cal-label').classList.remove('has-error');ge('cal-event-label').classList.remove('error');
     const lv=ge('cal-event-label').value.trim();const av=ge('cal-event-amount').value.trim();
-    if(!lv){ge('fg-cal-label').classList.add('has-error');ge('cal-event-label').classList.add('error');announcer.assertive('Ошибка: Описание не заполнено');ge('cal-event-label').focus();return;}
-    if(!av||parseFloat(av)<=0){ge('fg-cal-amount').classList.add('has-error');ge('cal-event-amount').classList.add('error');announcer.assertive('Ошибка: Введите корректную сумму');ge('cal-event-amount').focus();return;}
+    if(!lv){ge('fg-cal-label').classList.add('has-error');ge('cal-event-label').classList.add('error');bus.emit('app:announce-assertive',{msg:'Ошибка: Описание не заполнено'});ge('cal-event-label').focus();return;}
+    if(!av||parseFloat(av)<=0){ge('fg-cal-amount').classList.add('has-error');ge('cal-event-amount').classList.add('error');bus.emit('app:announce-assertive',{msg:'Ошибка: Введите корректную сумму'});ge('cal-event-amount').focus();return;}
     const type=qs('input[name=cal-event-type]:checked')?.value??'expense';
     const catId=cats.getSelected('calendar')!=='all'?cats.getSelected('calendar'):null;
     const evs=store.get('calendarEvents')||[];
     evs.push({id:`cev_${Date.now()}`,date:this.#state.selectedDay,type,label:lv,amount:parseFloat(av),category:catId,categoryName:catId?cats.getName(catId):null});
     store.set('calendarEvents',evs);ge('cal-event-label').value='';ge('cal-event-amount').value='';
     ge('cal-cat-name').textContent='Все категории';
-    this.render();this.#scheduleNotifications();announcer.polite(`Событие добавлено: ${type==='expense'?'Расходы':'Доходы'}, ${lv}`);bus.emit('app:toast',{msg:'Событие добавлено в календарь'});
+    this.render();this.#scheduleNotifications();bus.emit('app:announce-polite',{msg:`Событие добавлено: ${type==='expense'?'Расходы':'Доходы'}, ${lv}`});bus.emit('app:toast',{msg:'Событие добавлено в календарь'});
     bus.emit('app:home-refresh');
   }
 
@@ -1099,7 +1099,7 @@ const calendar=new CalendarBlock();
 class HistoryBlock{
   constructor(){
     ge('btn-open-filters').addEventListener('click',()=>{accounts.populateSelects();bus.emit('app:navigate',{screen:'screen-filters',focus:'filters-title',tab:null});});
-    ge('btn-apply-filters').addEventListener('click',()=>{nav.navigate('screen-history','history-title','tab-history',false);this.render();announcer.polite('Фильтры применены');});
+    ge('btn-apply-filters').addEventListener('click',()=>{nav.navigate('screen-history','history-title','tab-history',false);this.render();bus.emit('app:announce-polite',{msg:'Фильтры применены'});});
     ge('btn-reset-filters').addEventListener('click',()=>this.#resetFilters());
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-history'){accounts.populateSelects();this.render();}});
   }
@@ -1145,7 +1145,7 @@ class HistoryBlock{
     qsa('input[name=history-filter-type]').forEach(r=>{r.checked=r.value==='all';});
     ge('history-filter-period').value='';const as=ge('history-filter-account');if(as)as.value='all';
     const fn=ge('filter-cat-name');if(fn)fn.textContent='Все категории';
-    nav.navigate('screen-history','history-title','tab-history',false);this.render();announcer.polite('Фильтры сброшены');
+    nav.navigate('screen-history','history-title','tab-history',false);this.render();bus.emit('app:announce-polite',{msg:'Фильтры сброшены'});
   }
 }
 const history_=new HistoryBlock();
@@ -1162,7 +1162,7 @@ class ProfileBlock{
     ge('menu-support').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{screen:'screen-support',focus:'support-title',tab:null});bus.emit('app:support-open');});
     ge('menu-notes').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{screen:'screen-notes',focus:'notes-title',tab:null});bus.emit('app:notes-refresh');});
     ge('menu-about').addEventListener('click',()=>{this.#close();bus.emit('app:navigate',{screen:'screen-about',focus:'about-title',tab:null});bus.emit('app:about-open');});
-    ge('menu-clear-data').addEventListener('click',()=>{this.#close();bus.emit('app:confirm',{title:'Очистить все данные?',text:'Все транзакции, заметки, сообщения поддержки и настройки бюджета будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-profile',onYes:()=>{store.clearAll(DEFAULTS);shStore.clearAll();bus.emit('app:home-refresh');bus.emit('app:accounts-refresh');nav.navigate('screen-home',null,'tab-home',false);announcer.polite('Все данные очищены');announcer.focusStatus('Все данные очищены');bus.emit('app:toast',{msg:'Все данные очищены'});}});});
+    ge('menu-clear-data').addEventListener('click',()=>{this.#close();bus.emit('app:confirm',{title:'Очистить все данные?',text:'Все транзакции, заметки, сообщения поддержки и настройки бюджета будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-profile',onYes:()=>{store.clearAll(DEFAULTS);shStore.clearAll();bus.emit('app:home-refresh');bus.emit('app:accounts-refresh');nav.navigate('screen-home',null,'tab-home',false);bus.emit('app:announce-polite',{msg:'Все данные очищены'});announcer.focusStatus('Все данные очищены');bus.emit('app:toast',{msg:'Все данные очищены'});}});});
     bus.on('app:popstate',()=>{if(this.#dlg.open)this.#close();});
   }
 
@@ -1187,12 +1187,155 @@ class SupportBlock{
 
   #send(){
     const inp=ge('chat-input');const text=inp.value.trim();
-    if(!text){announcer.assertive('Ошибка: введите текст сообщения');inp.focus();return;}
+    if(!text){bus.emit('app:announce-assertive',{msg:'Ошибка: введите текст сообщения'});inp.focus();return;}
+    if(ge('ai-model-select')?.value!=='support'){bus.emit('app:ai-send',{text});inp.value='';inp.focus();return;}
     const msgs=store.get('supportMessages')||[];msgs.push({text,date:new Date().toISOString()});store.set('supportMessages',msgs);
-    inp.value='';this.render();announcer.polite('Сообщение отправлено');inp.focus();
+    inp.value='';this.render();bus.emit('app:announce-polite',{msg:'Сообщение отправлено'});inp.focus();
   }
 }
 new SupportBlock();
+
+class AiChatBlock{
+  static #HF_TOKEN='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';
+  static #CHAT_MODEL='Qwen/Qwen3.5-397B-A17B';
+  static #IMAGE_MODEL='black-forest-labs/FLUX.1-schnell';
+  static #CHAT_URL='https://router.huggingface.co/v1/chat/completions';
+  static #IMAGE_BASE='https://router.huggingface.co/hf-inference/models/';
+
+  #history=[];
+  #isLoading=false;
+  #msgsEl;#statusEl;#inputEl;#sendBtn;
+
+  constructor(){
+    this.#msgsEl=ge('chat-messages');
+    this.#statusEl=ge('ai-status-bar');
+    this.#inputEl=ge('chat-input');
+    this.#sendBtn=ge('btn-chat-send');
+    bus.on('app:ai-send',e=>this.#handleSend(e.detail.text));
+    bus.on('app:support-open',()=>this.#onOpen());
+  }
+
+  #onOpen(){
+    this.#history=[];
+    this.#setStatus('');
+    this.#setLoading(false);
+  }
+
+  #handleSend(text){
+    if(this.#isLoading)return;
+    const mode=ge('ai-model-select')?.value??'chat';
+    this.#appendUserMsg(text);
+    this.#setLoading(true);
+    (mode==='image'?this.#sendImage(text):this.#sendChat(text))
+      .then(()=>this.#setStatus(''))
+      .catch(err=>{this.#appendAiMsg(`Ошибка: ${err.message}`);this.#setStatus('Произошла ошибка при запросе');})
+      .finally(()=>this.#setLoading(false));
+  }
+
+  async #sendChat(text){
+    this.#history.push({role:'user',content:text});
+    this.#setStatus('Ожидаю ответа модели…');
+    const loading=this.#appendLoading('Генерирую ответ…');
+    try{
+      const res=await fetch(AiChatBlock.#CHAT_URL,{
+        method:'POST',
+        headers:{'Authorization':`Bearer ${AiChatBlock.#HF_TOKEN}`,'Content-Type':'application/json'},
+        body:JSON.stringify({model:AiChatBlock.#CHAT_MODEL,messages:this.#history,max_tokens:1024})
+      });
+      loading.remove();
+      if(!res.ok){const e=await res.text();throw new Error(`HTTP ${res.status}: ${e}`);}
+      const data=await res.json();
+      const reply=data.choices[0].message.content;
+      this.#history.push({role:'assistant',content:reply});
+      this.#appendAiMsg(reply);
+    }catch(err){loading.remove();throw err;}
+  }
+
+  async #sendImage(prompt){
+    this.#setStatus('Генерация может занять 15–60 секунд…');
+    const loading=this.#appendLoading('Генерирую изображение…');
+    try{
+      const res=await fetch(`${AiChatBlock.#IMAGE_BASE}${AiChatBlock.#IMAGE_MODEL}`,{
+        method:'POST',
+        headers:{'Authorization':`Bearer ${AiChatBlock.#HF_TOKEN}`,'Content-Type':'application/json'},
+        body:JSON.stringify({inputs:prompt})
+      });
+      loading.remove();
+      if(!res.ok){const e=await res.text();throw new Error(`HTTP ${res.status}: ${e}`);}
+      const blob=await res.blob();
+      this.#appendImageMsg(URL.createObjectURL(blob));
+    }catch(err){loading.remove();throw err;}
+  }
+
+  #appendUserMsg(text){
+    const div=document.createElement('div');
+    div.className='chat-msg ai-user';
+    div.setAttribute('aria-label',`Моё сообщение: ${text}`);
+    const h5=document.createElement('h5');
+    h5.className='chat-msg-label';
+    h5.textContent='Моё сообщение';
+    const p=document.createElement('p');
+    p.textContent=text;
+    div.append(h5,p);
+    this.#msgsEl.appendChild(div);
+    div.scrollIntoView({behavior:'smooth',block:'end'});
+  }
+
+  #appendLoading(text){
+    const div=document.createElement('div');
+    div.className='chat-msg ai-response chat-msg--loading';
+    div.setAttribute('aria-label','Ответ загружается');
+    const h6=document.createElement('h6');
+    h6.className='chat-msg-label';
+    h6.textContent='Ответ';
+    const p=document.createElement('p');
+    p.setAttribute('aria-hidden','true');
+    p.textContent=text;
+    div.append(h6,p);
+    this.#msgsEl.appendChild(div);
+    div.scrollIntoView({behavior:'smooth',block:'end'});
+    return div;
+  }
+
+  #appendAiMsg(text){
+    const div=document.createElement('div');
+    div.className='chat-msg ai-response';
+    div.setAttribute('aria-label',`Ответ ИИ: ${text}`);
+    const h6=document.createElement('h6');
+    h6.className='chat-msg-label';
+    h6.textContent='Ответ';
+    const p=document.createElement('p');
+    p.textContent=text;
+    div.append(h6,p);
+    this.#msgsEl.appendChild(div);
+    div.scrollIntoView({behavior:'smooth',block:'end'});
+  }
+
+  #appendImageMsg(url){
+    const div=document.createElement('div');
+    div.className='chat-msg ai-response';
+    div.setAttribute('aria-label','Ответ ИИ: сгенерированное изображение');
+    const h6=document.createElement('h6');
+    h6.className='chat-msg-label';
+    h6.textContent='Ответ';
+    const img=document.createElement('img');
+    img.src=url;
+    img.alt='Сгенерированное изображение';
+    img.className='chat-ai-img';
+    div.append(h6,img);
+    this.#msgsEl.appendChild(div);
+    div.scrollIntoView({behavior:'smooth',block:'end'});
+  }
+
+  #setStatus(text){if(this.#statusEl)this.#statusEl.textContent=text;}
+
+  #setLoading(state){
+    this.#isLoading=state;
+    if(this.#sendBtn)this.#sendBtn.disabled=state;
+    if(this.#inputEl)this.#inputEl.disabled=state;
+  }
+}
+new AiChatBlock();
 
 
 class NotesBlock{
@@ -1223,7 +1366,7 @@ class NotesBlock{
     const ci=e.target.closest('.note-ctx-item');
     if(ci){const action=ci.dataset.action;const idx=parseInt(ci.dataset.idx);const notes=store.get('notes')||[];const mb2=qs(`[data-note-menu="${idx}"]`);this.#closeMenus();
       if(action==='edit')this.#openEdit(idx);
-      else if(action==='delete'){notes.splice(idx,1);store.set('notes',notes);this.render();announcer.polite('Заметка удалена');bus.emit('app:toast',{msg:'Заметка удалена'});}
+      else if(action==='delete'){notes.splice(idx,1);store.set('notes',notes);this.render();bus.emit('app:announce-polite',{msg:'Заметка удалена'});bus.emit('app:toast',{msg:'Заметка удалена'});}
       else if(action==='cancel')mb2?.focus();}
   }
 
@@ -1240,13 +1383,13 @@ class NotesBlock{
   #save(e){
     e.preventDefault();clearErrors('note-form');
     const nv=ge('note-name').value.trim();const bv=ge('note-body').value.trim();
-    if(!nv){ge('fg-note-name').classList.add('has-error');ge('note-name').classList.add('error');announcer.assertive('Ошибка: Название не заполнено');ge('note-name').focus();return;}
-    if(!bv){ge('fg-note-body').classList.add('has-error');ge('note-body').classList.add('error');announcer.assertive('Ошибка: Текст заметки не заполнен');ge('note-body').focus();return;}
+    if(!nv){ge('fg-note-name').classList.add('has-error');ge('note-name').classList.add('error');bus.emit('app:announce-assertive',{msg:'Ошибка: Название не заполнено'});ge('note-name').focus();return;}
+    if(!bv){ge('fg-note-body').classList.add('has-error');ge('note-body').classList.add('error');bus.emit('app:announce-assertive',{msg:'Ошибка: Текст заметки не заполнен'});ge('note-body').focus();return;}
     const notes=store.get('notes')||[];
     if(this.#editIdx>=0&&this.#editIdx<notes.length)notes[this.#editIdx]={...notes[this.#editIdx],title:nv,body:bv,updatedDate:new Date().toISOString()};
     else notes.push({title:nv,body:bv,date:new Date().toISOString(),updatedDate:null});
     store.set('notes',notes);this.#editIdx=-1;this.render();
-    nav.navigate('screen-notes','notes-title',null,false);announcer.polite('Заметка сохранена');bus.emit('app:toast',{msg:'Заметка сохранена'});
+    nav.navigate('screen-notes','notes-title',null,false);bus.emit('app:announce-polite',{msg:'Заметка сохранена'});bus.emit('app:toast',{msg:'Заметка сохранена'});
   }
 }
 new NotesBlock();
@@ -1257,7 +1400,7 @@ class ShoppingBlock{
 
   constructor(){
     ge('btn-shopping-show-add').addEventListener('click',()=>{this.#addVisible=!this.#addVisible;this.render();if(this.#addVisible)setTimeout(()=>ge('shopping-product-input')?.focus(),FOCUS_DELAY);});
-    ge('btn-shopping-clear-all').addEventListener('click',()=>{bus.emit('app:confirm',{title:'Очистить весь список?',text:'Все продукты будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-shopping-clear-all',onYes:()=>{shStore.clearAll();this.render();announcer.polite('Список покупок очищен');bus.emit('app:toast',{msg:'Список покупок очищен'});}});});
+    ge('btn-shopping-clear-all').addEventListener('click',()=>{bus.emit('app:confirm',{title:'Очистить весь список?',text:'Все продукты будут удалены. Это действие нельзя отменить.',yesText:'Очистить',returnFocusId:'btn-shopping-clear-all',onYes:()=>{shStore.clearAll();this.render();bus.emit('app:announce-polite',{msg:'Список покупок очищен'});bus.emit('app:toast',{msg:'Список покупок очищен'});}});});
     ge('shopping-add-container').addEventListener('click',e=>this.#onAddClick(e));
     ge('shopping-list-container').addEventListener('click',e=>this.#onListClick(e));
     bus.on('app:screen-entered',e=>{if(e.detail.screen==='screen-shopping'){this.#addVisible=false;this.#qty=1;this.render();}});
@@ -1279,19 +1422,19 @@ class ShoppingBlock{
     if(e.target.id==='qty-plus'){this.#qty++;ge('qty-display').textContent=this.#qty;return;}
     if(e.target.id==='btn-shopping-add-confirm'){
       const inp=ge('shopping-product-input');const val=inp.value.trim();
-      if(!val){announcer.assertive('Ошибка: Название продукта не заполнено');inp.classList.add('error');inp.focus();return;}
+      if(!val){bus.emit('app:announce-assertive',{msg:'Ошибка: Название продукта не заполнено'});inp.classList.add('error');inp.focus();return;}
       inp.classList.remove('error');const names=val.split(',').map(s=>s.trim()).filter(Boolean);
       names.forEach(n=>shStore.add(n,this.#qty));inp.value='';this.#qty=1;this.render();
       if(this.#addVisible)setTimeout(()=>{ge('shopping-product-input')?.focus();const d=ge('qty-display');if(d)d.textContent=1;},100);
-      const w=names.length===1?'продукт добавлен':'продукты добавлены';announcer.polite(`${names.length} ${w} в список`);bus.emit('app:toast',{msg:`${names.length} ${w}`});
+      const w=names.length===1?'продукт добавлен':'продукты добавлены';bus.emit('app:announce-polite',{msg:`${names.length} ${w} в список`});bus.emit('app:toast',{msg:`${names.length} ${w}`});
     }
   }
 
   #onListClick(e){
     const tb=e.target.closest('[data-sh-toggle]');
-    if(tb){const id=parseFloat(tb.dataset.shToggle);shStore.toggle(id);this.render();const it=shStore.getAll().find(i=>i.id===id);if(it)announcer.polite(it.bought?`${it.name} в корзине`:`${it.name} не в корзине`);return;}
+    if(tb){const id=parseFloat(tb.dataset.shToggle);shStore.toggle(id);this.render();const it=shStore.getAll().find(i=>i.id===id);if(it)bus.emit('app:announce-polite',{msg:it.bought?`${it.name} в корзине`:`${it.name} не в корзине`});return;}
     const db=e.target.closest('[data-sh-delete]');
-    if(db){const id=parseFloat(db.dataset.shDelete);const it=shStore.getAll().find(i=>i.id===id);bus.emit('app:confirm',{title:it?`Удалить «${it.name}»?`:'Удалить продукт?',text:it?`Вы уверены, что хотите удалить «${it.name}» из списка покупок?`:'Продукт будет удалён.',yesText:'Удалить',onYes:()=>{shStore.remove(id);this.render();announcer.polite('Продукт удалён из списка');bus.emit('app:toast',{msg:'Продукт удалён'});}});}
+    if(db){const id=parseFloat(db.dataset.shDelete);const it=shStore.getAll().find(i=>i.id===id);bus.emit('app:confirm',{title:it?`Удалить «${it.name}»?`:'Удалить продукт?',text:it?`Вы уверены, что хотите удалить «${it.name}» из списка покупок?`:'Продукт будет удалён.',yesText:'Удалить',onYes:()=>{shStore.remove(id);this.render();bus.emit('app:announce-polite',{msg:'Продукт удалён из списка'});bus.emit('app:toast',{msg:'Продукт удалён'});}});}
   }
 }
 new ShoppingBlock();
@@ -1312,7 +1455,7 @@ class CalculatorBlock{
     const mr=ar/100/12;const mp=mr===0?p/tm:p*(mr*Math.pow(1+mr,tm))/(Math.pow(1+mr,tm)-1);
     const tp=mp*tm;const op=tp-p;const opPct=(op/p*100).toFixed(2);
     ge('calc-results-container').innerHTML=`<div class="calc-results" role="region" aria-label="Результаты расчёта"><div class="calc-row"><div class="calc-label">Ежемесячный платёж</div><div class="calc-value">${fmt(mp.toFixed(2))}</div></div><div class="calc-row"><div class="calc-label">Общая сумма выплат</div><div class="calc-value">${fmt(tp.toFixed(2))}</div></div><div class="calc-row"><div class="calc-label">Сумма переплаты</div><div class="calc-value">${fmt(op.toFixed(2))}</div></div><div class="calc-row"><div class="calc-label">Процент переплаты</div><div class="calc-value">${opPct}%</div></div></div>`;
-    announcer.polite(`Результаты: ежемесячный платёж ${fmt(mp.toFixed(2))}, переплата ${fmt(op.toFixed(2))}, ${opPct}%`);
+    bus.emit('app:announce-polite',{msg:`Результаты: ежемесячный платёж ${fmt(mp.toFixed(2))}, переплата ${fmt(op.toFixed(2))}, ${opPct}%`});
   }
 }
 new CalculatorBlock();
@@ -1352,15 +1495,15 @@ new AboutBlock();
 function clearErrors(fid){qsa(`#${fid} .form-group`).forEach(g=>{g.classList.remove('has-error');g.querySelector(':is(input,textarea)')?.classList.remove('error');});}
 function validateField(gid,iid,label){
   const inp=ge(iid);const grp=ge(gid);const v=inp.value.trim();
-  if(!v||(inp.type==='number'&&(isNaN(parseFloat(v))||parseFloat(v)<=0))){grp.classList.add('has-error');inp.classList.add('error');announcer.assertive(`Ошибка: ${label} ${!v?'не заполнено':'— введите корректное значение'}`);inp.focus();return false;}
+  if(!v||(inp.type==='number'&&(isNaN(parseFloat(v))||parseFloat(v)<=0))){grp.classList.add('has-error');inp.classList.add('error');bus.emit('app:announce-assertive',{msg:`Ошибка: ${label} ${!v?'не заполнено':'— введите корректное значение'}`});inp.focus();return false;}
   return true;
 }
 function execInnerTransfer(srcId,dstId,amount){
-  if(srcId===dstId){announcer.assertive('Ошибка: счёт списания и зачисления совпадают');bus.emit('app:toast',{msg:'Выберите разные счета'});return false;}
+  if(srcId===dstId){bus.emit('app:announce-assertive',{msg:'Ошибка: счёт списания и зачисления совпадают'});bus.emit('app:toast',{msg:'Выберите разные счета'});return false;}
   const accs=store.get('accounts')||[];const si=accs.findIndex(a=>a.id===srcId);const di=accs.findIndex(a=>a.id===dstId);
   const srcBal=si>=0?accs[si].balance:0;const srcName=accs[si]?.name??'';const dstName=accs[di]?.name??'';
-  if(srcBal<=0){announcer.assertive(`Ошибка: баланс счёта «${srcName}» равен нулю`);bus.emit('app:toast',{msg:`Недостаточно средств на счёте «${srcName}»`});return false;}
-  if(amount>srcBal){announcer.assertive(`Ошибка: на счёте «${srcName}» только ${fmt(srcBal)}`);bus.emit('app:toast',{msg:`Недостаточно средств: ${fmt(srcBal)}`});return false;}
+  if(srcBal<=0){bus.emit('app:announce-assertive',{msg:`Ошибка: баланс счёта «${srcName}» равен нулю`});bus.emit('app:toast',{msg:`Недостаточно средств на счёте «${srcName}»`});return false;}
+  if(amount>srcBal){bus.emit('app:announce-assertive',{msg:`Ошибка: на счёте «${srcName}» только ${fmt(srcBal)}`});bus.emit('app:toast',{msg:`Недостаточно средств: ${fmt(srcBal)}`});return false;}
   if(si>=0)accs[si].balance-=amount;if(di>=0)accs[di].balance+=amount;
   store.set('accounts',accs);store.set('balance',accs.reduce((s,a)=>s+a.balance,0));
   const txs=store.get('transactions')||[];txs.push({type:'inner-transfer',amount,fromAccount:srcId,fromAccountName:srcName,toAccount:dstId,toAccountName:dstName,date:new Date().toISOString()});store.set('transactions',txs);
